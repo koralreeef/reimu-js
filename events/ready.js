@@ -66,7 +66,7 @@ module.exports = {
 					let i = 0;
 					let mapNM = beatmaps[i];
 					let mapHR = hrBeatmaps[i];
-					console.log("new map: https://osu.ppy.sh/b/"+mapNM.beatmap_id);
+					console.log("new map: https://osu.ppy.sh/b/"+mapNM.beatmap_id+" SR: "+mapNM.difficultyrating.toFixed(2));
 
 					//processes nm/hr stats if star rating > 5.5 else if sr > 4.3 spits out dt
 					if(mapNM.difficultyrating.toFixed(2) > 5.49){

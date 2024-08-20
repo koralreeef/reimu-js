@@ -87,3 +87,4 @@ module.exports = {
 }
 }
 
+//https://stackoverflow.com/questions/37614649/how-can-i-download-and-save-a-file-using-the-fetch-api-node-js

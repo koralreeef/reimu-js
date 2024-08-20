@@ -7,9 +7,6 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 const Tags = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
-const pookieCollection = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
-require('./models/Users.js')(sequelize, Sequelize.DataTypes);
-require('./models/UserPookies.js')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 sequelize.sync({ force }).then(async () => {
@@ -45,8 +42,6 @@ sequelize.sync({ force }).then(async () => {
 	];
 
 	await Promise.all(shop);
-	console.log('Database synced');
-
 	console.log('Database synced');
 
 	sequelize.close();

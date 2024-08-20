@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         description: {
             type: DataTypes.TEXT,
-            defaultValue: "https://shorturl.at/sQ4mY",
+            defaultValue: "https://shorturl.at/sQ4mY", //file path goes here
         },
         username: {
             type: DataTypes.STRING,
