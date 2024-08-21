@@ -1,9 +1,9 @@
-const { Events, EmbedBuilder } = require('discord.js');
-const { Users, Tags} = require('../db/dbObjects.js');
+const { Events, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const { Users, Pookiebears } = require('../db/dbObjects.js');
 const { blue, gold } = require('color-name');
 const h = require('../helper.js')
 
-let latestID, latestTag;
+let latestID, latestPookie;
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -11,10 +11,10 @@ module.exports = {
         if (message.author.bot) return;
         if(message.content === 'pookiebear')
         {
-            latestTag = await Tags.findOne({
+            latestPookie = await Pookiebears.findOne({
                 order: [[ 'id', 'DESC' ]]
             })
-            latestID = latestTag.id;
+            latestID = latestPookie.id;
             h.addBalance(message.author.id, 1);
             if(h.getRandomInt(100) > h.commonSR) {
     
@@ -22,64 +22,66 @@ module.exports = {
             let userID = message.author.id;
             let userUsername = message.author.username;
             
-            let pookiebearz = await Tags.findAll({where: {rarity: "common"}} );
-            let pookiebearID = h.getRandomInt(pookiebearz.length);
+            let pookieCommons = await Pookiebears.findAll({where: {rarity: "common"}} );
+            let pookiebearID = h.getRandomInt(pookieCommons.length);
     
-            let currentTag = pookiebearz[pookiebearID];
-    
+            const currentPookie = pookieCommons[pookiebearID];
+            const pookieFileName = currentPookie.file_path.substring(9)
+
                 if(h.getRandomInt(100) > h.SSR)
                 {
-                    let ssrName = currentTag.name+" SSR";
-                    const ssrTag = await Tags.findOne({ where: {name: ssrName, rarity: "SSR"}});
+                    let ssrName = currentPookie.name+" SSR";
+                    const ssrPookie = await Pookiebears.findOne({ where: {pookie_name: ssrName, rarity: "SSR"}});
     
-                let newCount = ssrTag.usage_count + 1;
+                    let newCount = ssrPookie.summon_count + 1;
     
-                Tags.update({ 
-                    usage_count: newCount
-                 }, {
-                     where: {id: ssrTag.id} 
-                 });
+                    Pookiebears.update({ 
+                        summon_count: newCount
+                    }, {
+                        where: {id: ssrPookie.id} 
+                    });
     
-                console.log(await ssrTag);
+                console.log(await ssrPookie);
+                const attachment = new AttachmentBuilder(ssrPookie.file_path)
+                
                 let embedSSR = new EmbedBuilder()
-                .setImage(currentTag.description)
+                .setImage('attachment://'+pookieFileName)
                 .setColor(gold)
-                .setFooter({ text: `Holy shit! ${userUsername} just summoned ${ssrTag.name} in ${h.getBalance(userID)} attempt(s)!
+                .setFooter({ text: `Holy shit! ${userUsername} just summoned ${ssrPookie.pookie_name} in ${h.getBalance(userID)} attempt(s)!
                             \nThis rare pookiebear has been summoned ${newCount} time(s).`, 
-                            iconURL: ssrTag.description })
+                            iconURL: 'attachment://'+pookieFileName })
     
-                console.log(await ssrTag.id);
-                const pookie = await Tags.findOne({ where: { id: ssrTag.id} } );
+                const pookie = await Pookiebears.findOne({ where: { id: ssrPookie.id} } );
                 const user = await Users.findOne({ where: { user_id: userID } });
                 user.addPookie(pookie, userID);
     
-                message.channel.send({ embeds: [embedSSR] });
+                message.channel.send({ embeds: [embedSSR], attachments: [attachment]});
                 h.wipeBalance(userID);
                 return;
                 }
                 
-            let newCount = currentTag.usage_count + 1;
+            let newCount = currentPookie.summon_count + 1;
             
-            Tags.update({ 
-                usage_count: newCount
-             }, {
-                 where: {id: currentTag.id} 
+            Pookiebears.update({ summon_count: newCount }, 
+                { where: {id: currentPookie.id} 
              });
                 
+            const attachment = new AttachmentBuilder(currentPookie.file_path)
             let embed = new EmbedBuilder()
-                .setImage(currentTag.description)
+                .setImage('attachment://'+pookieFileName)
                 .setColor(blue)
-                .setFooter({ text: `${userUsername} took ${h.getBalance(userID)} attempt(s) to summon ${currentTag.name}!
+                .setFooter({ text: `${userUsername} took ${h.getBalance(userID)} attempt(s) to summon ${currentPookie.pookie_name}!
                             \nThis pookiebear has been summoned ${newCount} time(s).`, 
-                            iconURL: currentTag.description })
+                            iconURL: 'attachment://'+pookieFileName })
     
             //add pookiebear to inventory
-            const pookie = await Tags.findOne({ where: { id: currentTag.id} } );
+            const pookie = await Pookiebears.findOne({ where: { id: currentPookie.id} } );
             const user = await Users.findOne({ where: { user_id: userID } });
             user.addPookie(pookie, userID);
-    
+            
+            console.log(await Pookiebears.findAll());
             //console.log(await UserPookies.findAll());
-            message.channel.send({ embeds: [embed] });
+            message.channel.send({ embeds: [embed], files: [attachment] });
             h.wipeBalance(userID);
             return;
             }

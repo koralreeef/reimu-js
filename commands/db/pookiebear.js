@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Tags } = require('../../db/dbObjects.js');
+const { Pookiebears } = require('../../db/dbObjects.js');
+const { downloadFile } = require('../../helper.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,44 +16,43 @@ module.exports = {
 				.setRequired(true)),
 
 	async execute(interaction) {
-        
-        const link = interaction.options.getString('link');
-		
-        if(!link.startsWith("https")) 
-		return await interaction.reply({ content: "we need regular links man ", ephemeral: true});
 
-			const tagName = interaction.options.getString('name');
-			const tagDescription = interaction.options.getString('link');
-			let avatarURL = interaction.user.displayAvatarURL();
+		const name = interaction.options.getString('name');
+		const url = interaction.options.getString('link');
+		
+        if(!url.startsWith("https://cdn.discordapp.com/attachments/")) 
+		return await interaction.reply({ content: "only discord image links will be accepted (post your image in a channel and copy its link)", ephemeral: true});
+		let avatarURL = interaction.user.displayAvatarURL();
 			try {
 				// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-				const tag = await Tags.create({
-					name: tagName,
-					description: tagDescription,
-					username: interaction.user.username,
-					userAvatar: avatarURL, 
-					usage_count: 0,
+				const pookie = await Pookiebears.create({
+					pookie_name: name,
+					file_path: "./images/"+name+".jpg",
+					creator: interaction.user.username,
+					creatorURL: avatarURL,
+					summon_count: 0,
 					rarity: "common"
 				});
-				await Tags.create({
-					name: tagName+" SSR",
-					description: tagDescription,
-					username: interaction.user.username,
-					userAvatar: avatarURL, 
-					usage_count: 0,
+				await Pookiebears.create({
+					pookie_name: name+" SSR",
+					file_path: "./images/"+name+".jpg",
+					creator: interaction.user.username,
+					creatorURL: avatarURL,
+					summon_count: 0,
 					rarity: "SSR"
 				})
-	
-				interaction.reply(`pookiebear ${tag.name} added.`);
+
+				downloadFile(url, name+".jpg");
+				interaction.reply(`pookiebear ${pookie.pookie_name} added.`);
         		let user = interaction.client.users.cache.get(interaction.user.id);
-				return await interaction.client.users.send('109299841519099904', user.username+" just sent this epic pookiebear hell yaah brother \n"+link);
+				return await interaction.client.users.send('109299841519099904', user.username+" just sent this epic pookiebear hell yaah brother \n"+url);
 			}
 			catch (error) {
+				console.log(error);
 				if (error.name === 'SequelizeUniqueConstraintError') {
 					return interaction.reply('That pookiebear already exists.');
 				}
-	
-				return interaction.reply('Something went wrong with adding a tag.');
+				return interaction.reply('Something went wrong with adding a pookiebear.');
 			}	
 	},
 };

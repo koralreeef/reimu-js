@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { Tags } = require('../../db/dbObjects.js');
+const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const { Pookiebears } = require('../../db/dbObjects.js');
 const { blue, gold } = require('color-name');
 
 let embedColor = blue;
@@ -15,20 +15,22 @@ module.exports = {
 	async execute(interaction) {
 		
 		const n = interaction.options.getString('name');
-		const currentTag = await Tags.findOne(
-			{ where: {name: n}});
-		if(currentTag.rarity == "SSR") embedColor = gold;
+		const pookie = await Pookiebears.findOne(
+			{ where: {pookie_name: n}});
 
-		let tagDate = currentTag.createdAt;
+		if(pookie.rarity == "SSR") embedColor = gold;
+
+		const attachment = new AttachmentBuilder(pookie.file_path);
+		let pookieDate = pookie.createdAt;
 		let pookieEmbed = new EmbedBuilder()
-				.setAuthor({name: "pookiebear #"+currentTag.id })
+				.setAuthor({name: "pookiebear #"+pookie.id })
 											//DUDE
-				.setTitle(currentTag.name+"\t\t\t\t\t\tsummon count: "+currentTag.usage_count)
-                .setImage(currentTag.description)
+				.setTitle(pookie.pookie_name+"\t\t\t\t\t\tsummon count: "+pookie.summon_count)
+                .setImage('attachment://'+pookie.file_path.substring(9))
                 .setColor(embedColor)
-                .setFooter({ text: `Creator: `+currentTag.username+" at "+tagDate.toLocaleString(), 
-                            iconURL: currentTag.userAvatar })
+                .setFooter({ text: `Creator: `+pookie.creator+" at "+pookieDate.toLocaleString(), 
+                            iconURL: pookie.creatorURL })
     
-		return interaction.reply({ embeds: [pookieEmbed]});
+		return interaction.reply({ embeds: [pookieEmbed], files: [attachment]});
 	},
 };

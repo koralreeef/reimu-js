@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Tags } = require('../../db/dbObjects.js');
+const { Pookiebears } = require('../../db/dbObjects.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,9 +7,9 @@ module.exports = {
 		.setDescription('see all pookiebears registered'),
 
 	async execute(interaction) {
-		const tagList = await Tags.findAll({ attributes: ['name'] });
-        const tagString = tagList.map(t => t.name).join(', ') || 'No pookiebears found.';
+		const pookieList = await Pookiebears.findAll({ attributes: ['pookie_name'], where: { rarity: "common"}}); //find all where rarity common and rarity ssr + summon_count > 0
+        const pookieString = pookieList.map(t => t.pookie_name).join(', ') || 'No pookiebears found.';
     
-        return interaction.reply(`current list of pookiebears: ${tagString}`);
+        return interaction.reply(`current list of pookiebears: ${pookieString}`);
 	},
 };

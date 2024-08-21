@@ -1,7 +1,9 @@
 const { Events, EmbedBuilder } = require('discord.js');
-const { LegacyClient, getModsEnum, calcAccuracy, calcModStat  } = require('osu-web.js');
+const { LegacyClient, calcAccuracy, calcModStat  } = require('osu-web.js');
 const { AccessToken } = require('../config.json');
 const { coral } = require('color-name');
+const { osuUsers } = require('../db/dbObjects.js');
+const interactionCreate = require('./interactionCreate.js');
 const { hr, dt, ez, ht } = calcModStat;
 const legacyApi = new LegacyClient(AccessToken);
 
@@ -74,9 +76,14 @@ module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
         let msg = message.content;
-        if(regex.test(msg)) {
+        let self = false;
+        if(msg === ".rs") self = true; 
+        if(regex.test(msg) || self) {
             let usr = msg.substring(4);
-            console.log(usr);
+            let selfName = await osuUsers.findOne({ where: {user_id: message.author.id }});
+
+            if(self && selfName) usr = selfName.username;
+
             try{
             const r = await legacyApi.getUserRecentScores({
                 u: usr,
@@ -113,7 +120,7 @@ module.exports = {
             const accuracy = calcAccuracy.osu(rs.count300, rs.count100, rs.count50, rs.countmiss) * 100;
             let diffValues = findMapStats(mapCS, mapAR, mapOD, mapBPM, mapLength, dtLength, htLength, map, mod);
 
-            console.log(diffValues);
+            //console.log(diffValues);
 
             let t = rs.date;
             let date = Date.parse(t);

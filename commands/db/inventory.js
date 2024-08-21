@@ -18,6 +18,6 @@ module.exports = {
 
         const pookies = await user.getPookies(target.id);
 
-        return interaction.reply(`${target.tag} currently has ${pookies.map(i => `${i?.amount} ${i?.pookie.name}`).join(', ')}`);
+        return interaction.reply(`${target.tag} currently has ${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join(', ')}`);
 	},
 };

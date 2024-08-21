@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const { Op } = require('sequelize');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
@@ -10,10 +9,11 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const Users = require('./models/Users.js')(sequelize, Sequelize.DataTypes);
 const UserPookies = require('./models/UserPookies.js')(sequelize, Sequelize.DataTypes);
-const Tags = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
+const Pookiebears = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
+const osuUsers = require('./models/osuUsers.js')(sequelize, Sequelize.DataTypes);
 
-Tags.hasMany(UserPookies, {foreignKey: 'pookie_id'});
-UserPookies.belongsTo(Tags, {foreignKey: 'pookie_id', as: 'pookie'});
+Pookiebears.hasMany(UserPookies, {foreignKey: 'pookie_id'});
+UserPookies.belongsTo(Pookiebears, {foreignKey: 'pookie_id', as: 'pookie'});
 
 Reflect.defineProperty(Users.prototype, 'addPookie', {
 	value: async (pookie, userID) => {
@@ -39,4 +39,4 @@ Reflect.defineProperty(Users.prototype, 'getPookies', {
 	},
 });
 
-module.exports = { Users, UserPookies, Tags };
+module.exports = { Users, UserPookies, Pookiebears, osuUsers };

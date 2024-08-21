@@ -1,18 +1,5 @@
-const fs = require("fs");
-const { Readable } = require('stream');
-const { finished } = require('stream/promises');
+const { downloadFile } = require('../../helper.js');
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const path = require("path");
-
-const downloadFile = (async (url, fileName) => {
-    const res = await fetch(url);
-
-    const destination = path.resolve("./images", fileName);
-    if (!fs.existsSync("./images")) fs.mkdirSync("./images"); //make downloads directory if none
-    const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
-    await finished(Readable.fromWeb(res.body).pipe(fileStream));
-    }
-);
 
 module.exports = {
 	data: new SlashCommandBuilder()

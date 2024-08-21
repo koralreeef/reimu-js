@@ -1,5 +1,10 @@
 const { Collection } = require('discord.js');
+const { Readable } = require('stream');
+const { finished } = require('stream/promises');
+const { Users } = require('./db/dbObjects.js')
+const path = require("path");
 const currency = new Collection();
+const fs = require("fs");
 
 var commonSR = 60;
 var SSR = 90;
@@ -38,4 +43,21 @@ function wipeBalance(id) {
 	return user.save()
 }   
 
-module.exports = { currency, commonSR, SSR, getLifetime, getRandomInt, addBalance, wipeBalance, getBalance  };
+const downloadFile = (async (url, fileName) => {
+    const res = await fetch(url);
+
+    const destination = path.resolve("./images", fileName);
+    if (!fs.existsSync("./images")) fs.mkdirSync("./images"); //make downloads directory if none
+    const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
+    await finished(Readable.fromWeb(res.body).pipe(fileStream));
+    }
+);
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+module.exports = { currency, commonSR, SSR, 
+				   getLifetime, getRandomInt, 
+				   addBalance, wipeBalance, getBalance, 
+				   downloadFile, sleep };

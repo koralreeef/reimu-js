@@ -4,11 +4,6 @@ const Canvas = require('@napi-rs/canvas');
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
-        if (message.content === 'gif'){
-            const file = new AttachmentBuilder('images\\pookiebear4.gif');
-            message.channel.send({ files: [file] });
-        }
-
         if (message.content === '.utc'){
             let currentDate = new Date();
             let currentDatetime = currentDate.toUTCString();

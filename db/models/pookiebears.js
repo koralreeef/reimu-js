@@ -1,24 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-     return sequelize.define('tags', {
-        name: {
+     return sequelize.define('pookiebears', {
+        pookie_name: {
             type: DataTypes.STRING,
             defaultValue: "hakurei gooner",
             unique: true,
             allowNull: false,
         },
-        description: {
+        file_path: {
             type: DataTypes.TEXT,
-            defaultValue: "https://shorturl.at/sQ4mY", //file path goes here
+            defaultValue: "", // will always be called as 'attachment://'+fileName 
         },
-        username: {
+        creator: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        userAvatar: {
+        creatorURL: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        usage_count: {
+        summon_count: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: false,
