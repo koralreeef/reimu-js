@@ -77,6 +77,8 @@ module.exports = {
 	async execute(message) {
         let msg = message.content;
         let self = false;
+
+        //REALLY WEIRD CHECK FIX LATER (.rs vs .rs <username>)
         if(msg === ".rs") self = true; 
         if(regex.test(msg) || self) {
             let usr = msg.substring(4);

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Users } = require('../../db/dbObjects.js');
+const { Users, UserPookies } = require('../../db/dbObjects.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,8 +13,10 @@ module.exports = {
         const target = interaction.options.getUser('user') ?? interaction.user;
         console.log("chosen user: "+target.id);
 
+        //check if someone is a user but doesnt have any pookiebears
+        const unlucky = await UserPookies.findOne({ where: { user_id: target.id } }); 
         const user = await Users.findOne({ where: { user_id: target.id } });
-        if (user == null) return interaction.reply(`${target.tag} has nothing!`);
+        if (unlucky == null) return interaction.reply(`${target.tag} has nothing!`);
 
         const pookies = await user.getPookies(target.id);
 
