@@ -1,0 +1,53 @@
+const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const { Users, UserPookies, Pookiebears } = require('../../db/dbObjects.js');
+
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('givepookie')
+		.setDescription('give another user some pookies')
+        .addStringOption(option =>
+			option.setName('pookie')
+				.setDescription('what pookie are you giving')
+				.setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('amount')
+                .setDescription('how many are you giving')
+                .setMinValue(1)
+                .setRequired(true))
+        .addUserOption(option =>
+            option.setName('target')
+                .setDescription('who is recieving these pookies')
+                .setRequired(true)),  
+
+	async execute(interaction) {
+        const tar = interaction.options.getUser('target');
+        const senderID = interaction.user.id;
+        const pookie = interaction.options.getString('pookie');
+        const amount = interaction.options.getInteger('amount');
+        const loss = -amount;
+        try{
+            const senderPookie = await Pookiebears.findOne({ where: { pookie_name: pookie} } );
+            const sender = await Users.findOne({ where: { user_id: senderID } });
+            const target = await Users.findOne({ where: { user_id: tar.id } });
+            const check = sender.checkPookies(senderPookie, senderID, loss);
+            console.log(await check);
+            if(await check == true)
+                {
+                    sender.addPookies(senderPookie, senderID, loss);
+                    target.addPookies(senderPookie, tar.id, amount);
+                    if(amount + loss == 0)
+                    {
+                        sender.destroyPookies(senderPookie, senderID);
+                        return interaction.reply("gave **ALL "+amount+" of their "+pookie+"** to <@"+tar+">! WHAT A GREAT PERSON!!!"); 
+                    }
+                    return interaction.reply("gave **"+amount+" "+pookie+"** to <@"+tar+">! what a nice person!!");
+                } else {
+                    return interaction.reply({ content: "you dont have enough of those brokie", ephemeral: true })
+                }  
+            } catch(err)
+            {
+                console.log(err);
+                return interaction.reply({ content: "it broke", ephemeral: true })
+            }
+	},
+};

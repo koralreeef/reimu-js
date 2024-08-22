@@ -8,7 +8,7 @@ let latestID, latestPookie;
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
-        if (message.author.bot) return;
+        //if (message.author.bot) return;
         if(message.content === 'pookiebear')
         {
             latestPookie = await Pookiebears.findOne({
@@ -30,16 +30,14 @@ module.exports = {
 
                 if(h.getRandomInt(100) > h.SSR)
                 {
-                    let ssrName = currentPookie.name+" SSR";
+                    let ssrName = currentPookie.pookie_name+" SSR";
                     const ssrPookie = await Pookiebears.findOne({ where: {pookie_name: ssrName, rarity: "SSR"}});
     
                     let newCount = ssrPookie.summon_count + 1;
     
-                    Pookiebears.update({ 
-                        summon_count: newCount
-                    }, {
-                        where: {id: ssrPookie.id} 
-                    });
+                    Pookiebears.update({ summon_count: newCount }, 
+                        { where: {id: ssrPookie.id} 
+                     });
     
                 console.log(await ssrPookie);
                 const attachment = new AttachmentBuilder(ssrPookie.file_path)
@@ -53,9 +51,9 @@ module.exports = {
     
                 const pookie = await Pookiebears.findOne({ where: { id: ssrPookie.id} } );
                 const user = await Users.findOne({ where: { user_id: userID } });
-                user.addPookie(pookie, userID);
+                user.addPookies(pookie, userID, 1);
     
-                message.channel.send({ embeds: [embedSSR], attachments: [attachment]});
+                message.channel.send({ embeds: [embedSSR], files: [attachment]});
                 h.wipeBalance(userID);
                 return;
                 }
@@ -67,6 +65,7 @@ module.exports = {
              });
                 
             const attachment = new AttachmentBuilder(currentPookie.file_path)
+            //console.log(attachment);
             let embed = new EmbedBuilder()
                 .setImage('attachment://'+pookieFileName)
                 .setColor(blue)
@@ -77,9 +76,8 @@ module.exports = {
             //add pookiebear to inventory
             const pookie = await Pookiebears.findOne({ where: { id: currentPookie.id} } );
             const user = await Users.findOne({ where: { user_id: userID } });
-            user.addPookie(pookie, userID);
+            user.addPookies(pookie, userID, 1);
             
-            console.log(await Pookiebears.findAll());
             //console.log(await UserPookies.findAll());
             message.channel.send({ embeds: [embed], files: [attachment] });
             h.wipeBalance(userID);

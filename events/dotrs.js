@@ -17,9 +17,8 @@ function getLength(s) {
 }
 
 function scrub(mods) {
-    return mods.filter( //NF HD
-        (x) => {
-            console.log(x)
+    return mods.filter((x) => {
+            //console.log(x)
             return diff_increasing_mods.includes(x);
         }
     )
@@ -78,7 +77,7 @@ module.exports = {
         let msg = message.content;
         let self = false;
 
-        //REALLY WEIRD CHECK FIX LATER (.rs vs .rs <username>)
+        //REALLY WEIRD CHECK FIX LATER (.rs vs .rs <username>) fix later with msg substring ?? message.author.username
         if(msg === ".rs") self = true; 
         if(regex.test(msg) || self) {
             let usr = msg.substring(4);

@@ -30,6 +30,7 @@ module.exports = {
         option.setName('number')
             .setDescription('number to set max roll to')
 			.setMaxValue(1000)
+			.setMinValue(1)
 			.setRequired(true)),
 			
 	async execute(interaction) {

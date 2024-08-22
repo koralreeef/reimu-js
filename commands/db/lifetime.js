@@ -4,7 +4,11 @@ const { getLifetime } = require('../../helper.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('lifetime')
-		.setDescription('check pookiebear attempts'),
+		.setDescription('check pookiebear attempts')
+		.addUserOption(option => (
+			option.setName('user')
+                .setDescription('check a user\'s lifetime attempts')
+		)),
 
 	async execute(interaction) {
 		const target = interaction.options.getUser('user') ?? interaction.user;

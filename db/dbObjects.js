@@ -15,18 +15,32 @@ const osuUsers = require('./models/osuUsers.js')(sequelize, Sequelize.DataTypes)
 Pookiebears.hasMany(UserPookies, {foreignKey: 'pookie_id'});
 UserPookies.belongsTo(Pookiebears, {foreignKey: 'pookie_id', as: 'pookie'});
 
-Reflect.defineProperty(Users.prototype, 'addPookie', {
+Reflect.defineProperty(Users.prototype, 'addPookies', {
+	value: async (pookie, userID, amount) => {
+		const userPookie = await UserPookies.findOne({
+			where: { user_id: userID, pookie_id: pookie.id },
+		});
+
+		if (userPookie) {
+			userPookie.amount += amount;
+			return userPookie.save();
+		}
+
+		return UserPookies.create({ user_id: userID, pookie_id: pookie.id, amount: amount });
+	},
+});
+
+Reflect.defineProperty(Users.prototype, 'destroyPookies', {
 	value: async (pookie, userID) => {
 		const userPookie = await UserPookies.findOne({
 			where: { user_id: userID, pookie_id: pookie.id },
 		});
 
 		if (userPookie) {
-			userPookie.amount += 1;
-			return userPookie.save();
+			console.log(pookie.pookie_name+" destroyed.");
+			return userPookie.destroy();
 		}
-
-		return UserPookies.create({ user_id: userID, pookie_id: pookie.id, amount: 1 });
+		return;
 	},
 });
 
@@ -36,6 +50,46 @@ Reflect.defineProperty(Users.prototype, 'getPookies', {
 			where: { user_id: userID },
 			include: ['pookie'],
 		});
+	},
+});
+
+Reflect.defineProperty(Users.prototype, 'checkAmount', {
+	value: async (pookie, userID, amount) => {			
+		const userPookie = await UserPookies.findOne({
+			where: { user_id: userID, pookie_id: pookie.id },
+		});
+
+		if (userPookie) {
+			userPookie.amount += amount;
+			if(userPookie.amount == 0) {
+				return true;
+			} else {
+			return false;
+			}
+		} 
+
+		return false;
+	},
+});
+
+
+Reflect.defineProperty(Users.prototype, 'checkPookies', {
+	value: async (pookie, userID, amount) => {			
+		const userPookie = await UserPookies.findOne({
+			where: { user_id: userID, pookie_id: pookie.id },
+		});
+
+		if (userPookie) {
+			userPookie.amount += amount;
+			console.log(userPookie.amount);
+			if(userPookie.amount <= -1) {
+				return false;
+			} else {
+			return true;
+			}
+		} 
+
+		return false;
 	},
 });
 

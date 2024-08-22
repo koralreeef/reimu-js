@@ -31,7 +31,7 @@ module.exports = {
 		setInterval(async () => {
 
 			//30s per 2 (or 3) api calls
-			const ms = Date.now() - 30*1000;
+			const ms = Date.now() - 35*1000;
 			const date = new Date(ms);
 			const startTimestamp = Math.floor(Date.now()/1000);
 			//const newdate = addDays(new Date, -1);

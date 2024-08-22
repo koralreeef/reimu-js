@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
-const { blue, gold } = require('color-name');
+const { blue, gold, white } = require('color-name');
 
 let embedColor = blue;
 module.exports = {
@@ -18,8 +18,11 @@ module.exports = {
 		const pookie = await Pookiebears.findOne(
 			{ where: {pookie_name: n}});
 
+		console.log(await pookie);
 		if(pookie.rarity == "SSR") embedColor = gold;
+		if(pookie.rarity.includes("+")) embedColor = white;
 
+		console.log(await Pookiebears.findAll());
 		const attachment = new AttachmentBuilder(pookie.file_path);
 		let pookieDate = pookie.createdAt;
 		let pookieEmbed = new EmbedBuilder()
