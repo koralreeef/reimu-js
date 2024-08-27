@@ -3,6 +3,7 @@ const { Users, Pookiebears } = require('../../db/dbObjects.js');
 const { blue, gold, white } = require('color-name');
 const { getRandomInt, sleep } = require('../../helper.js');
 
+const regex = /\+/gm;
 
 async function makeStarPookie(pookie, interaction)
 {
@@ -22,7 +23,7 @@ async function makeStarPookie(pookie, interaction)
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('starforce')
-		.setDescription('summon a special version of your pookie (odds: amount/50)')
+		.setDescription('summon a special version of your pookie (odds: amount*2/50 (scales after every + on rarity))')
         .addStringOption(option =>
 			option.setName('pookie')
 				.setDescription('what pookie are you using')
@@ -39,7 +40,8 @@ module.exports = {
         const p = interaction.options.getString('pookie');
         const amount = interaction.options.getInteger('amount');
 		let roll = getRandomInt(100);
-		let allIn = false;
+		let scaler = (p.match(regex)||[]).length;
+		let allIn = 0;
 		let str = "the";
         const loss = -amount;
 		try{
@@ -49,32 +51,34 @@ module.exports = {
 			if(await check == true)
 			{
 				user.addPookies(pookie, userID, loss);
-				let rollToBeat = 100 - amount*2;
+				
 				if(await user.checkAmount(pookie, userID, loss) == true) 
 				{
 					user.destroyPookies(pookie, userID);
-					allIn = true;
+					allIn = 3;
 					//this fucking sucks idk what the allin boolean is for yet
 					str = "**ALL** of the";
 				}
-				const message = await interaction.reply({ content: "good luck! goodbye to "+str+" "+pookie.pookie_name+"(s)...", fetchReply: true });
+				let rollToBeat = 50 - amount*2 - allIn + (10 * scaler);
+				if(rollToBeat >= 70) rollToBeat = 70;
+				const message = await interaction.reply({ content: "good luck to <@"+userID+">! goodbye to "+str+" **"+amount+"** "+pookie.pookie_name+"(s)...", fetchReply: true });
 					//GUYS IS THERE ANY BETTER WAY TO DO THIS
 					await message.react('🇵');
-					await sleep(2000);
+					await sleep(1000);
 					await message.react('0️⃣');
-					await sleep(2000);
+					await sleep(1000);
 					await message.react('🇴');
-					await sleep(2000);
+					await sleep(1000);
 					await message.react('🇰');
-					await sleep(2000);
+					await sleep(1000);
 					await message.react('🇮');
-					await sleep(2000);
+					await sleep(1000);
 					await message.react('🇪');
 
 					//100 - amount*2
 					if(roll > rollToBeat){
 						console.log("hey guys");
-						await interaction.followUp({ content: "congrats on the new **"+pookie.pookie_name+"+**!!! \nyour winning roll: "+roll+" > "+rollToBeat}); 
+						//await interaction.followUp({ content: "congrats <@"+userID+"> on the new **"+pookie.pookie_name+"+**!!! \nyour winning roll: "+roll+" > "+rollToBeat}); 
 
 						let newpookie = await Pookiebears.findOne({ where: {pookie_name: pookie.pookie_name+"\+"}});
 						if(newpookie){
@@ -98,7 +102,7 @@ module.exports = {
 							.setTitle(newpookie.pookie_name+"\t\t\t\t\t\tsummon count: "+newCount)
 							.setImage('attachment://'+newpookie.file_path.substring(9))
 							.setColor(white)
-							.setFooter({ text: `Creator: `+newpookie.creator+" at "+pookieDate.toLocaleString(), 
+							.setFooter({ text: `Summoned by: `+interaction.user.username+" at "+pookieDate.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
 										iconURL: newpookie.creatorURL })
 
 								

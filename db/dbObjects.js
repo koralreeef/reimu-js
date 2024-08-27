@@ -48,6 +48,9 @@ Reflect.defineProperty(Users.prototype, 'getPookies', {
 	value: async (userID) => {			
 		return UserPookies.findAll({
 			where: { user_id: userID },
+			order: [
+				['amount', 'DESC'],
+			],	
 			include: ['pookie'],
 		});
 	},

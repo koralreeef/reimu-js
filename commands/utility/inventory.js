@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Users, UserPookies } = require('../../db/dbObjects.js');
 
 module.exports = {
@@ -19,7 +19,13 @@ module.exports = {
         if (unlucky == null) return interaction.reply(`${target.tag} has nothing!`);
 
         const pookies = await user.getPookies(target.id);
+        const invEmbed = new EmbedBuilder()
+                .setTitle(target.tag+"\'s inventory:")
+                .setDescription(`\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``);
 
-        return interaction.reply(`${target.tag} currently has ${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join(', ')}`);
+        console.log(await pookies.map);
+        //how to sort by asc
+        //interaction.reply(`${target.tag} currently has \n\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``);
+        return interaction.reply({ embeds: [invEmbed]});
 	},
 };
