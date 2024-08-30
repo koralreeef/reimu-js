@@ -71,16 +71,16 @@ module.exports = {
 						let pookieEmbed = new EmbedBuilder()
 							.setAuthor({name: "pookiebear #"+pookie.id })
 														//DUDE
-							.setTitle(pookie.pookie_name+"\t\t\t\t\t\tresult: +"+amount)
+							.setTitle(pookie.pookie_name+"\nresult: +"+amount)
 							.setImage('attachment://'+pookie.file_path.substring(9))
 							.setColor(green)
 							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+pookieDate.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
 										iconURL: pookie.creatorURL })
 
 								
-						return interaction.followUp({ embeds: [pookieEmbed], files: [attachment]});
+						return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
 					} else {
-						return interaction.followUp({ content: "unlucky... you just lost "+amount+" "+pookie.pookie_name+"(s)...." 
+						return interaction.editReply({ content: "unlucky... you just lost "+amount+" "+pookie.pookie_name+"(s)...." 
 													  +"\nyour unlucky roll: "+roll+" < "+rollToBeat}); 
 					}
 			} else {

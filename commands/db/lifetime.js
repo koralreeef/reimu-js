@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getLifetime } = require('../../helper.js');
-
+//turn this into userinfo embed
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('lifetime')

@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, Events, GatewayIntentBits, EmbedBuilder, AttachmentBuilder, User } = require('discord.js');
 const { Users, Pookiebears } = require('../../db/dbObjects.js');
 const { blue, gold, white } = require('color-name');
-const { getRandomInt, sleep } = require('../../helper.js');
+const { getRandomInt, sleep, getStarnight } = require('../../helper.js');
 
 const regex = /\+/gm;
 
@@ -41,6 +41,9 @@ module.exports = {
         const amount = interaction.options.getInteger('amount');
 		let roll = getRandomInt(100);
 		let scaler = (p.match(regex)||[]).length;
+		let starMultiplier = 0;
+		if (getStarnight()) starMultiplier = 30;
+		roll =+ starMultiplier;
 		let allIn = 0;
 		let str = "the";
         const loss = -amount;
@@ -99,16 +102,16 @@ module.exports = {
 						let pookieEmbed = new EmbedBuilder()
 							.setAuthor({name: "pookiebear #"+newpookie.id })
 														//DUDE
-							.setTitle(newpookie.pookie_name+"\t\t\t\t\t\tsummon count: "+newCount)
+							.setTitle(newpookie.pookie_name+"\nsummon count: "+newCount)
 							.setImage('attachment://'+newpookie.file_path.substring(9))
 							.setColor(white)
 							.setFooter({ text: `Summoned by: `+interaction.user.username+" at "+pookieDate.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
 										iconURL: newpookie.creatorURL })
 
 								
-						return interaction.followUp({ embeds: [pookieEmbed], files: [attachment]});
+						return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
 					} else {
-						return interaction.followUp({ content: "unlucky... you just boomed "+amount+" "+pookie.pookie_name+"(s) away...." 
+						return interaction.editReply({ content: "unlucky... you just boomed "+amount+" "+pookie.pookie_name+"(s) away...." 
 													  +"\nyour unlucky roll: "+roll+" < "+rollToBeat}); 
 					}
 			} else {

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
-const { blue, gold, white } = require('color-name');
+const { blue, gold, white, yellow, cornsilk } = require('color-name');
 
 let embedColor = blue;
 module.exports = {
@@ -21,14 +21,15 @@ module.exports = {
 		console.log(await pookie);
 		if(pookie.rarity == "SSR") embedColor = gold;
 		if(pookie.rarity.includes("+")) embedColor = white;
+		if(pookie.rarity == "starry SSR") embedColor = cornsilk;
+		if(pookie.rarity == "starry") embedColor = yellow;
 
 		console.log(await Pookiebears.findAll());
 		const attachment = new AttachmentBuilder(pookie.file_path);
 		let pookieDate = pookie.createdAt;
 		let pookieEmbed = new EmbedBuilder()
 				.setAuthor({name: "pookiebear #"+pookie.id })
-											//DUDE
-				.setTitle(pookie.pookie_name+"\t\t\t\t\t\tsummon count: "+pookie.summon_count)
+				.setTitle(pookie.pookie_name+"\nsummon count: "+pookie.summon_count)
                 .setImage('attachment://'+pookie.file_path.substring(9))
                 .setColor(embedColor)
                 .setFooter({ text: `Creator: `+pookie.creator+" at "+pookieDate.toLocaleString(), 

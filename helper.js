@@ -8,6 +8,34 @@ const fs = require("fs");
 
 var commonSR = 60;
 var SSR = 90;
+let rainy = false, snowy = false, starnight = false; 
+
+function getSnowy(){
+	return snowy;
+}
+
+function setSnowy(bool){
+	snowy = bool;
+	return snowy;
+}
+
+function getRainy(){
+	return rainy;
+}
+
+function setRainy(bool){
+	rainy = bool;
+	return rainy;
+}
+
+function getStarnight(){
+	return starnight;
+}
+
+function setStarnight(bool){
+	starnight = bool;
+	return starnight;
+}
 
 function getLifetime(id) {
 	const user = currency.get(id);
@@ -60,4 +88,6 @@ function sleep(ms) {
 module.exports = { currency, commonSR, SSR, 
 				   getLifetime, getRandomInt, 
 				   addBalance, wipeBalance, getBalance, 
-				   downloadFile, sleep };
+				   downloadFile, sleep,
+				   getSnowy, getRainy, getStarnight,
+				   setSnowy, setRainy, setStarnight };
