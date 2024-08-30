@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
-
+//something with buttons
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('gallery')

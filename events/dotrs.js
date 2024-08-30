@@ -78,6 +78,7 @@ module.exports = {
         let self = false;
 
         //REALLY WEIRD CHECK FIX LATER (.rs vs .rs <username>) fix later with msg substring ?? message.author.username
+        //implement rs2 3 4 5 somehow
         if(msg === ".rs") self = true; 
         if(regex.test(msg) || self) {
             let usr = msg.substring(4);

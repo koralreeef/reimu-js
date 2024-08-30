@@ -1,4 +1,6 @@
 const { Events } = require('discord.js');
+const { ActivityType } = require('discord.js');
+const { getTotalPookies } = require('../helper.js');
 const { getRandomInt, getSnowy, setSnowy, getRainy, setRainy, getStarnight, setStarnight } = require('../helper.js');
 
 var rainyChance = 900;
@@ -46,7 +48,7 @@ module.exports = {
                 if(starCheck > starNightChance && getStarnight() == false){
                     setStarnight(true);
                     starnightDuration = Math.floor((ms + 60*1000 + getRandomInt(300*1000))/1000);
-                    otherChannel.send("# Look above everyone! A starry sky has appeared for us!");
+                    otherChannel.send("# Look above everyone! A starry sky has appeared!");
                     starString = "Latest **Starry** sighting: ending <t:"+starnightDuration+":R>\n";
                 } 
             }
@@ -54,22 +56,27 @@ module.exports = {
                 if(currentTimestamp > rainDuration && getRainy() == true)
                 {
                     setRainy(false);
+                    otherChannel.send("## The rain has cleared!");
                     rainString = "Last rain sighting was <t:"+rainDuration+":R>\n";
                 }
                 if(currentTimestamp > snowDuration && getSnowy() == true)
                 {
                     setSnowy(false);
+                    otherChannel.send("## The snowfall has stopped!");
                     snowString = "Last snow sighting was <t:"+snowDuration+":R>\n";
                 }
                 if(currentTimestamp > starnightDuration && getStarnight() == true)
                 {
                     setStarnight(false);
+                    otherChannel.send("## The starry sky has disappeared...");
                     starString = "Last starry sighting was <t:"+starnightDuration+":R>\n";
                 }
             const next = currentTimestamp + 15;
             targetChannel.messages.fetch(messageID)
             .then(message => message.edit(weatherString+rainString+snowString+starString+"Next weather check: <t:"+next+":R>"))
             .catch(console.error);
+            //put this somewhere else maybe
+            client.user.setActivity('activity', { type: ActivityType.Custom, name: "custom", state: getTotalPookies()+" pookies down in the fantastic blowhole"});
 		}, 15000);
 
 		console.log(`Weather watch in progress...`);

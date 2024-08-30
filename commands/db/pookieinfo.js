@@ -10,8 +10,17 @@ module.exports = {
         .addStringOption(option =>
 			option.setName('name')
 				.setDescription('what\'s their name')
+				.setAutocomplete(true)
 				.setRequired(true)),
-
+	async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused();
+		const pookies = await Pookiebears.findAll({ attributes: ['pookie_name'] });
+		const choices = pookies.map(i => i.pookie_name);
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		);
+	},
 	async execute(interaction) {
 		
 		const n = interaction.options.getString('name');

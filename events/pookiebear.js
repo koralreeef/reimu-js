@@ -46,8 +46,9 @@ async function buildEmbed(message, file_path, pookieFileName, userUsername, pook
         const pookie = await Pookiebears.findOne({ where: { id: pookie_id} } );
         const user = await Users.findOne({ where: { user_id: userID } });
         user.addPookies(pookie, userID, 1);
-
         message.channel.send({ embeds: [embed], files: [attachment]});
+        
+        h.addTotalPookies(1);
         h.wipeBalance(userID);}
         return;
 }
@@ -69,7 +70,7 @@ module.exports = {
             })
             latestID = latestPookie.id;
             h.addBalance(message.author.id, 1);
-            if(h.getRandomInt(100) + rainMultiplier > h.commonSR) {
+            if(h.getRandomInt(100) > (h.commonSR - rainMultiplier)) {
                 
             let userID = message.author.id;
             let userUsername = message.author.username;
@@ -82,7 +83,7 @@ module.exports = {
             const currentPookie = pookieCommons[pookiebearID];
             const pookieFileName = currentPookie.file_path.substring(9)
 
-                if(h.getRandomInt(100) + snowMultiplier > h.SSR)
+                if(h.getRandomInt(100) > (h.SSR - snowMultiplier))
                 {              
                         if(star){
                         let starName = "starry night "+currentPookie.pookie_name+" SSR";

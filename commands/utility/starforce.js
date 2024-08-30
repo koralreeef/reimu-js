@@ -27,6 +27,7 @@ module.exports = {
         .addStringOption(option =>
 			option.setName('pookie')
 				.setDescription('what pookie are you using')
+				.setAutocomplete(true)
 				.setRequired(true))
 		.addIntegerOption(option =>
 			option.setName('amount')
@@ -34,6 +35,17 @@ module.exports = {
 				.setMinValue(1)
 				.setMaxValue(25)
 				.setRequired(true)),
+	async autocomplete(interaction) {
+		//find a way to autocomplete all in?
+		const focusedValue = interaction.options.getFocused();
+		const user = await Users.findOne({ where: { user_id: interaction.user.id } });
+		const pookies = await user.getPookies(interaction.user.id);
+		const choices = pookies.map(i => i.pookie.pookie_name);
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		);
+	},
 
 	async execute(interaction) {
         const userID = interaction.user.id;
@@ -43,7 +55,6 @@ module.exports = {
 		let scaler = (p.match(regex)||[]).length;
 		let starMultiplier = 0;
 		if (getStarnight()) starMultiplier = 30;
-		roll =+ starMultiplier;
 		let allIn = 0;
 		let str = "the";
         const loss = -amount;
@@ -51,6 +62,7 @@ module.exports = {
 			const pookie = await Pookiebears.findOne({ where: { pookie_name: p} } );
 			const user = await Users.findOne({ where: { user_id: userID } });
 			const check = user.checkPookies(pookie, userID, loss);
+			const date = new Date();
 			if(await check == true)
 			{
 				user.addPookies(pookie, userID, loss);
@@ -79,7 +91,7 @@ module.exports = {
 					await message.react('🇪');
 
 					//100 - amount*2
-					if(roll > rollToBeat){
+					if(roll + starMultiplier > rollToBeat){
 						console.log("hey guys");
 						//await interaction.followUp({ content: "congrats <@"+userID+"> on the new **"+pookie.pookie_name+"+**!!! \nyour winning roll: "+roll+" > "+rollToBeat}); 
 
@@ -105,14 +117,14 @@ module.exports = {
 							.setTitle(newpookie.pookie_name+"\nsummon count: "+newCount)
 							.setImage('attachment://'+newpookie.file_path.substring(9))
 							.setColor(white)
-							.setFooter({ text: `Summoned by: `+interaction.user.username+" at "+pookieDate.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
+							.setFooter({ text: `Summoned by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" (\+"+starMultiplier+") > "+rollToBeat, 
 										iconURL: newpookie.creatorURL })
 
 								
 						return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
 					} else {
 						return interaction.editReply({ content: "unlucky... you just boomed "+amount+" "+pookie.pookie_name+"(s) away...." 
-													  +"\nyour unlucky roll: "+roll+" < "+rollToBeat}); 
+													  +"\nyour unlucky roll: "+roll+" (\+"+starMultiplier+") < "+rollToBeat}); 
 					}
 			} else {
 				return interaction.reply({ content: "you dont have enough of those brokie", ephemeral: true })

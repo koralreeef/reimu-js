@@ -8,6 +8,7 @@ module.exports = {
         .addStringOption(option =>
 			option.setName('pookie')
 				.setDescription('what pookie are you giving')
+                .setAutocomplete(true)
 				.setRequired(true))
         .addIntegerOption(option =>
             option.setName('amount')
@@ -18,7 +19,16 @@ module.exports = {
             option.setName('target')
                 .setDescription('who is recieving these pookies')
                 .setRequired(true)),  
-
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const user = await Users.findOne({ where: { user_id: interaction.user.id } });
+        const pookies = await user.getPookies(interaction.user.id);
+        const choices = pookies.map(i => i.pookie.pookie_name);
+        const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice, value: choice })),
+        );
+    },
 	async execute(interaction) {
         const tar = interaction.options.getUser('target');
         const senderID = interaction.user.id;
@@ -35,7 +45,7 @@ module.exports = {
                 {
                     sender.addPookies(senderPookie, senderID, loss);
                     target.addPookies(senderPookie, tar.id, amount);
-                    if(amount + loss == 0)
+                    if(await sender.checkAmount(senderPookie, senderID, loss) == true)
                     {
                         sender.destroyPookies(senderPookie, senderID);
                         return interaction.reply("gave **ALL "+amount+" of their "+pookie+"** to <@"+tar+">! WHAT A GREAT PERSON!!!"); 

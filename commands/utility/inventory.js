@@ -23,7 +23,7 @@ module.exports = {
                 .setTitle(target.tag+"\'s inventory:")
                 .setDescription(`\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``);
 
-        console.log(await pookies.map);
+        console.log(pookies.map(i => i.pookie.pookie_name));
         //how to sort by asc
         //interaction.reply(`${target.tag} currently has \n\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``);
         return interaction.reply({ embeds: [invEmbed]});

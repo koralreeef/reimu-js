@@ -8,7 +8,16 @@ const fs = require("fs");
 
 var commonSR = 60;
 var SSR = 90;
+let totalPookies = 0;
 let rainy = false, snowy = false, starnight = false; 
+
+function addTotalPookies(i){
+	totalPookies += i;
+}
+
+function getTotalPookies(){
+	return totalPookies;
+}
 
 function getSnowy(){
 	return snowy;
@@ -16,7 +25,6 @@ function getSnowy(){
 
 function setSnowy(bool){
 	snowy = bool;
-	return snowy;
 }
 
 function getRainy(){
@@ -25,7 +33,6 @@ function getRainy(){
 
 function setRainy(bool){
 	rainy = bool;
-	return rainy;
 }
 
 function getStarnight(){
@@ -34,7 +41,6 @@ function getStarnight(){
 
 function setStarnight(bool){
 	starnight = bool;
-	return starnight;
 }
 
 function getLifetime(id) {
@@ -90,4 +96,5 @@ module.exports = { currency, commonSR, SSR,
 				   addBalance, wipeBalance, getBalance, 
 				   downloadFile, sleep,
 				   getSnowy, getRainy, getStarnight,
-				   setSnowy, setRainy, setStarnight };
+				   setSnowy, setRainy, setStarnight,
+				   addTotalPookies, getTotalPookies };

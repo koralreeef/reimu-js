@@ -13,6 +13,7 @@ module.exports = {
         .addStringOption(option =>
 			option.setName('pookie')
 				.setDescription('what pookie are you using')
+				.setAutocomplete(true)
 				.setRequired(true))
 		.addIntegerOption(option =>
 			option.setName('amount')
@@ -20,7 +21,17 @@ module.exports = {
 				.setMinValue(1)
 				.setMaxValue(25)
 				.setRequired(true)),
-
+	async autocomplete(interaction) {
+		//find a way to autocomplete all in?
+		const focusedValue = interaction.options.getFocused();
+		const user = await Users.findOne({ where: { user_id: interaction.user.id } });
+		const pookies = await user.getPookies(interaction.user.id);
+		const choices = pookies.map(i => i.pookie.pookie_name);
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		);
+	},
 	async execute(interaction) {
         const userID = interaction.user.id;
         const p = interaction.options.getString('pookie');
@@ -29,6 +40,7 @@ module.exports = {
 		let scaler = (p.match(regex)||[]).length;
 		let allIn = 0;
 		let str = "the";
+		const date = new Date();
         const loss = -amount;
 		try{
 			const pookie = await Pookiebears.findOne({ where: { pookie_name: p} } );
@@ -74,8 +86,8 @@ module.exports = {
 							.setTitle(pookie.pookie_name+"\nresult: +"+amount)
 							.setImage('attachment://'+pookie.file_path.substring(9))
 							.setColor(green)
-							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+pookieDate.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
-										iconURL: pookie.creatorURL })
+							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
+										iconURL: interaction.user.displayAvatarURL() })
 
 								
 						return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
