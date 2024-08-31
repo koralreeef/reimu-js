@@ -15,9 +15,9 @@ module.exports = {
 	async execute(interaction) {
 		{
 			const pookieName = interaction.options.getString('name');
-			const ssrName = pookieName+" SSR";
+			const ssrName = pookieName+" ssr";
 			const starryName = "starry night "+pookieName;
-			const starrySSR = "starry night "+pookieName+" SSR";
+			const starrySSR = "starry night "+pookieName+" ssr";
 			// equivalent to: DELETE from tags WHERE name = ?;
 			//loop according to length? maybe?
 			//const deletedPookie = await Pookiebears.findAll({ where: {pookie_name: pookieName}, rarity: { [Op.like]: '%+%',}});

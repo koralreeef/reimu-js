@@ -17,7 +17,7 @@ module.exports = {
 
 	async execute(interaction) {
 
-		const name = interaction.options.getString('name');
+		const name = interaction.options.getString('name').toLowerCase();
 		const url = interaction.options.getString('link');
 		const fileName = name.replace(/ /g,"_");
 
@@ -34,15 +34,15 @@ module.exports = {
 					creator: interaction.user.username,
 					creatorURL: avatarURL,
 					summon_count: 0,
-					rarity: "common"
+					rarity: 0
 				});
 				await Pookiebears.create({
-					pookie_name: name+" SSR",
+					pookie_name: name+" ssr",
 					file_path: "./images/"+fileName+".jpg",
 					creator: interaction.user.username,
 					creatorURL: avatarURL,
 					summon_count: 0,
-					rarity: "SSR"
+					rarity: 100
 				})
 
 				downloadFile(url, fileName+".jpg");

@@ -15,6 +15,25 @@ module.exports = {
                 .setDescription('how many are you giving')
                 .setMinValue(1)
                 .setRequired(true))
+/*
+        .addStringOption(option =>
+            option.setName('pookie2')
+                .setDescription('what pookie are you giving')
+                .setAutocomplete(true))
+        .addIntegerOption(option =>
+            option.setName('amount2')
+                .setDescription('how many are you giving')
+                .setMinValue(1))
+
+        .addStringOption(option =>
+            option.setName('pookie3')
+                .setDescription('what pookie are you giving')
+                .setAutocomplete(true))
+        .addIntegerOption(option =>
+            option.setName('amount3')
+                .setDescription('how many are you giving')
+                .setMinValue(1))   
+*/
         .addUserOption(option =>
             option.setName('target')
                 .setDescription('who is recieving these pookies')
@@ -24,7 +43,7 @@ module.exports = {
         const user = await Users.findOne({ where: { user_id: interaction.user.id } });
         const pookies = await user.getPookies(interaction.user.id);
         const choices = pookies.map(i => i.pookie.pookie_name);
-        const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+        const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 5);
         await interaction.respond(
             filtered.map(choice => ({ name: choice, value: choice })),
         );
@@ -43,8 +62,8 @@ module.exports = {
             console.log(await check);
             if(await check == true)
                 {
-                    sender.addPookies(senderPookie, senderID, loss);
-                    target.addPookies(senderPookie, tar.id, amount);
+                    sender.addPookies(senderPookie, senderID, loss, senderPookie.rarity);
+                    target.addPookies(senderPookie, tar.id, amount, senderPookie.rarity);
                     if(await sender.checkAmount(senderPookie, senderID, loss) == true)
                     {
                         sender.destroyPookies(senderPookie, senderID);

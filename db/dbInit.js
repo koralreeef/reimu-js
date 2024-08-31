@@ -45,16 +45,21 @@ sequelize.sync({ force }).then(async () => {
 				creator: 'koral',
 				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
 				summon_count: 0, 
-				rarity: "common"
+				rarity: 0
 			}),
 			Pookiebears.upsert({ id: 2,
-				pookie_name: 'lappy SSR',
+				pookie_name: 'lappy ssr',
 				file_path: './images/pookiebear1.jpg',
 				creator: 'koral',
 				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
 				summon_count: 0, 
-				rarity: "SSR"
+				rarity: 100
 			}),
+			Users.upsert({ user_id: 1271933270451552317,
+				balance: 0,
+				lifetime: 0,
+				favoritePookie: "reimu"
+			})
 		];
 
 		await Promise.all(pookies);

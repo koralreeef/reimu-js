@@ -16,7 +16,7 @@ module.exports = {
 		const focusedValue = interaction.options.getFocused();
 		const pookies = await Pookiebears.findAll({ attributes: ['pookie_name'] });
 		const choices = pookies.map(i => i.pookie_name);
-		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 5);
 		await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: choice })),
 		);
@@ -28,10 +28,10 @@ module.exports = {
 			{ where: {pookie_name: n}});
 
 		console.log(await pookie);
-		if(pookie.rarity == "SSR") embedColor = gold;
+		if(pookie.rarity == 100) embedColor = gold;
 		if(pookie.rarity.includes("+")) embedColor = white;
-		if(pookie.rarity == "starry SSR") embedColor = cornsilk;
-		if(pookie.rarity == "starry") embedColor = yellow;
+		if(pookie.rarity == 300) embedColor = cornsilk;
+		if(pookie.rarity == 200) embedColor = yellow;
 
 		console.log(await Pookiebears.findAll());
 		const attachment = new AttachmentBuilder(pookie.file_path);

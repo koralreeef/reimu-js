@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			'default': 0,
 		},
+		rarity: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			'default': 0,
+		},
 	}, {
 		timestamps: false,
 	});

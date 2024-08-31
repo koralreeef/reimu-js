@@ -16,7 +16,7 @@ Pookiebears.hasMany(UserPookies, {foreignKey: 'pookie_id'});
 UserPookies.belongsTo(Pookiebears, {foreignKey: 'pookie_id', as: 'pookie'});
 
 Reflect.defineProperty(Users.prototype, 'addPookies', {
-	value: async (pookie, userID, amount) => {
+	value: async (pookie, userID, amount, rarity) => {
 		const userPookie = await UserPookies.findOne({
 			where: { user_id: userID, pookie_id: pookie.id },
 		});
@@ -26,7 +26,7 @@ Reflect.defineProperty(Users.prototype, 'addPookies', {
 			return userPookie.save();
 		}
 
-		return UserPookies.create({ user_id: userID, pookie_id: pookie.id, amount: amount });
+		return UserPookies.create({ user_id: userID, pookie_id: pookie.id, amount: amount, rarity: rarity });
 	},
 });
 
@@ -49,6 +49,7 @@ Reflect.defineProperty(Users.prototype, 'getPookies', {
 		return UserPookies.findAll({
 			where: { user_id: userID },
 			order: [
+				['rarity', 'DESC'],
 				['amount', 'DESC'],
 			],	
 			include: ['pookie'],

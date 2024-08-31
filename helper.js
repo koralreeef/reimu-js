@@ -6,6 +6,7 @@ const path = require("path");
 const currency = new Collection();
 const fs = require("fs");
 
+//ssr = 100, starry = 200, starry ssr = 300, + is +3 rarity
 var commonSR = 60;
 var SSR = 90;
 let totalPookies = 0;
@@ -57,7 +58,7 @@ async function addBalance(id, amount) {
 		return user.save();
 	}
 
-	const newUser = await Users.create({ user_id: id, balance: amount, lifetime: amount });
+	const newUser = await Users.create({ user_id: id, balance: amount, lifetime: amount, favoritePookie: "lappy" });
 	currency.set(id, newUser);
 	return newUser;
 }

@@ -27,7 +27,7 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: interaction.user.id } });
 		const pookies = await user.getPookies(interaction.user.id);
 		const choices = pookies.map(i => i.pookie.pookie_name);
-		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 5);
 		await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: choice })),
 		);
@@ -48,7 +48,7 @@ module.exports = {
 			const check = user.checkPookies(pookie, userID, loss);
 			if(await check == true)
 			{
-				user.addPookies(pookie, userID, loss);
+				user.addPookies(pookie, userID, loss, pookie.rarity);
 				
 				if(await user.checkAmount(pookie, userID, loss) == true) 
 				{
@@ -77,7 +77,7 @@ module.exports = {
 					if(roll > rollToBeat){
 						console.log("hey guys");
 						
-						user.addPookies(pookie, userID, amount*2);
+						user.addPookies(pookie, userID, amount*2, pookie.rarity);
 						let pookieDate = pookie.createdAt;
 						const attachment = new AttachmentBuilder(pookie.file_path);
 						let pookieEmbed = new EmbedBuilder()

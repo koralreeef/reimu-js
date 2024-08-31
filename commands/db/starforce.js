@@ -13,7 +13,7 @@ async function makeStarPookie(pookie, interaction)
 		creator: interaction.user.username,
 		creatorURL: interaction.user.displayAvatarURL(),
 		summon_count: 0,
-		rarity: pookie.rarity+"\+"
+		rarity: pookie.rarity+"3"
 	})
 	console.log(n);
 	return n;
@@ -41,7 +41,7 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: interaction.user.id } });
 		const pookies = await user.getPookies(interaction.user.id);
 		const choices = pookies.map(i => i.pookie.pookie_name);
-		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 25);
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 5);
 		await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: choice })),
 		);
@@ -65,7 +65,7 @@ module.exports = {
 			const date = new Date();
 			if(await check == true)
 			{
-				user.addPookies(pookie, userID, loss);
+				user.addPookies(pookie, userID, loss, pookie.rarity);
 				
 				if(await user.checkAmount(pookie, userID, loss) == true) 
 				{
@@ -73,7 +73,7 @@ module.exports = {
 					allIn = 3;
 					//this fucking sucks idk what the allin boolean is for yet
 					str = "**ALL** of the";
-				}
+				} else if (amount == 25) allIn = 3;	
 				let rollToBeat = 50 - amount*2 - allIn + (10 * scaler);
 				if(rollToBeat >= 70) rollToBeat = 70;
 				const message = await interaction.reply({ content: "good luck to <@"+userID+">! goodbye to "+str+" **"+amount+"** "+pookie.pookie_name+"(s)...", fetchReply: true });
@@ -108,7 +108,7 @@ module.exports = {
 							{ where: {id: newpookie.id} 
 						 });
 						
-						user.addPookies(newpookie, userID, 1);
+						user.addPookies(newpookie, userID, 1, newpookie.rarity);
 						let pookieDate = newpookie.createdAt;
 						const attachment = new AttachmentBuilder(newpookie.file_path);
 						let pookieEmbed = new EmbedBuilder()

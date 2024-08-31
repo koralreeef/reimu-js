@@ -14,13 +14,14 @@ async function makeStarryPookie(name, fileName, avatarURL, username, rarity){
         creator: username,
         creatorURL: avatarURL,
         summon_count: 1,
-        rarity: "starry "+ssr
+        rarity: 200+ssr
     });
     return pookie;
 }
 
 //LOL
 async function buildEmbed(message, file_path, pookieFileName, userUsername, pookie_name, userID, newCount, pookie_id, ssr, star, color){
+        newCount += 1;
         let text = "";
         //use switch soon
         if(ssr && star){
@@ -45,7 +46,7 @@ async function buildEmbed(message, file_path, pookieFileName, userUsername, pook
         //add pookiebear to inventory
         const pookie = await Pookiebears.findOne({ where: { id: pookie_id} } );
         const user = await Users.findOne({ where: { user_id: userID } });
-        user.addPookies(pookie, userID, 1);
+        user.addPookies(pookie, userID, 1, pookie.rarity);
         message.channel.send({ embeds: [embed], files: [attachment]});
         
         h.addTotalPookies(1);
@@ -76,7 +77,7 @@ module.exports = {
             let userUsername = message.author.username;
             let avatarURL = message.author.displayAvatarURL();
 
-            let pookieCommons = await Pookiebears.findAll({where: {rarity: "common"}} );
+            let pookieCommons = await Pookiebears.findAll({where: {rarity: 0}} );
             let pookiebearID = h.getRandomInt(pookieCommons.length);
             let star = h.getStarnight();
 
@@ -86,8 +87,8 @@ module.exports = {
                 if(h.getRandomInt(100) > (h.SSR - snowMultiplier))
                 {              
                         if(star){
-                        let starName = "starry night "+currentPookie.pookie_name+" SSR";
-                        const starpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: "starry SSR"}});
+                        let starName = "starry night "+currentPookie.pookie_name+" ssr";
+                        const starpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: 300}});
                         if(starpookie)
                         {
                             let newCount = starpookie.summon_count + 1;
@@ -95,15 +96,15 @@ module.exports = {
                                 { where: {id: starpookie.id} 
                              });
                         } else{
-                        await makeStarryPookie(starName, pookieFileName, avatarURL, userUsername, "SSR");
+                        await makeStarryPookie(starName, pookieFileName, avatarURL, userUsername, 100);
                         }
-                        const newpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: "starry SSR"}});
+                        const newpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: 300}});
                         console.log(newpookie);
                         await buildEmbed(message, newpookie.file_path, pookieFileName, userUsername, newpookie.pookie_name, userID, newpookie.summon_count, newpookie.id, true, star, cornsilk);
                         return;
                     }
-                    let ssrName = currentPookie.pookie_name+" SSR";
-                    const ssrPookie = await Pookiebears.findOne({ where: {pookie_name: ssrName, rarity: "SSR"}});
+                    let ssrName = currentPookie.pookie_name+" ssr";
+                    const ssrPookie = await Pookiebears.findOne({ where: {pookie_name: ssrName, rarity: 100}});
     
                     let newCount = ssrPookie.summon_count + 1;
     
@@ -122,7 +123,7 @@ module.exports = {
             //refactor later
             if(star){
                 let starName = "starry night "+currentPookie.pookie_name;
-                const starpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: "starry "}});
+                const starpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: 200}});
                 if(starpookie)
                 {
                     let newCount = starpookie.summon_count + 1;
@@ -132,7 +133,7 @@ module.exports = {
                 } else{
                 await makeStarryPookie(starName, pookieFileName, avatarURL, userUsername, "");
                 }
-                const newpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: "starry "}});
+                const newpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: 200}});
                 console.log(newpookie);
                 await buildEmbed(message, newpookie.file_path, pookieFileName, userUsername, newpookie.pookie_name, userID, newpookie.summon_count, newpookie.id, false, star, yellow);
                 return;
