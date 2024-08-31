@@ -1,117 +1,144 @@
-const { SlashCommandBuilder, ButtonStyle, ComponentType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonBuilder, ActionRowBuilder} = require('discord.js');
-const { Users, Pookiebears } = require('../../db/dbObjects.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { Users, UserPookies, Pookiebears } = require('../../db/dbObjects.js');
 
-//HAGGLE SYSTEM IF YOU TRADE WITH THE BOT (RANDOM CHANCE TO GET DEALS)
-//UNUSABLE
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('tradepookie')
-		.setDescription('give another user a trade offer for their pookies (WIP)')
+		.setDescription('give another user some pookies')
+        .addStringOption(option =>
+			option.setName('send')
+				.setDescription('what pookie are you sending')
+                .setAutocomplete(true)
+				.setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('number')
+                .setDescription('how many are you sending')
+                .setMinValue(1)
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('get')
+                .setDescription('what pookie are you getting')
+                .setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('amount')
+                .setDescription('how many are you getting')
+                .setMinValue(1)
+                .setRequired(true))
         .addUserOption(option =>
-            option.setName('user')
-                .setDescription('who is recieving this trade')
-                .setRequired(true)),  
-
-	async execute(interaction) {
-        const r = interaction.options.getUser('user');
+            option.setName('target')
+                .setDescription('who is recieving these pookies')
+                .setRequired(true)),
+                /*
+        .addStringOption(option =>
+            option.setName('pookie2')
+                .setDescription('what pookie are you giving')
+                .setAutocomplete(true))
+        .addIntegerOption(option =>
+            option.setName('amount2')
+                .setDescription('how many are you giving')
+                .setMinValue(1))
+        .addStringOption(option =>
+            option.setName('target2')
+                .setDescription('what pookie do you want')
+                .setAutocomplete(true))
+        .addIntegerOption(option =>
+            option.setName('tamount2')
+                .setDescription('how many are you getting')
+                .setMinValue(1)),             
+                */
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
         const user = await Users.findOne({ where: { user_id: interaction.user.id } });
-        const reciever = await Users.findOne({ where: { user_id: r.id } });
-
-		const pookies = await user.getPookies(interaction.user.id);
-        const pookies2 = await reciever.getPookies(r.id);
-        //console.log(pookies);
-        const select = new StringSelectMenuBuilder()
-			.setCustomId(interaction.id)
-			.setPlaceholder('your inventory')
-            .setMinValues(1)
-            .setMaxValues(pookies.length)
-			.addOptions(
-                pookies.map(i =>
-				    new StringSelectMenuOptionBuilder()
-                        .setLabel(i.pookie.pookie_name)
-                        .setDescription(i.amount+ " remaining")
-                        .setValue(i.pookie.pookie_name)
-                )
-			);
-
-        const selectOther = new StringSelectMenuBuilder()
-        .setCustomId(interaction.id+"2")
-        .setPlaceholder(r.username+"'s inventory")
-        .setMinValues(1)
-        .setMaxValues(pookies2.length)
-        .addOptions(
-            pookies2.map(i =>
-                new StringSelectMenuOptionBuilder()
-                    .setLabel(i.pookie.pookie_name)
-                    .setDescription(i.amount+ " remaining")
-                    .setValue(i.pookie.pookie_name)
-            )
+        const pookies = await user.getPookies(interaction.user.id);
+        const choices = pookies.map(i => i.pookie.pookie_name);
+        const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 5);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice, value: choice })),
         );
-
-        const sendTrade = new ButtonBuilder()
-			.setCustomId(interaction.id+"3")
-			.setLabel('Send offer')
+    },
+	async execute(interaction) {
+        const tar = interaction.options.getUser('target');
+        const senderID = interaction.user.id;
+        const ms = Date.now();
+        let timer = Math.floor(ms/1000) + 30;
+        const p1 = interaction.options.getString('send');
+        const a1 = interaction.options.getInteger('number');
+        const t1 = interaction.options.getString('get');
+        const ta1 = interaction.options.getInteger('amount');
+        if(p1 == t1)
+            return interaction.reply({ content: "you cannot trade the same pookies dude", ephemeral: true })
+        /*
+        const p2 = interaction.options.getString('pookie2');
+        const a2 = interaction.options.getString('amount2');
+        const t2 = interaction.options.getString('target2');
+        const ta2 = interaction.options.getString('tamount2');
+        */
+        console.log(" sdfsdfa" +p1);
+        const loss1 = -a1;
+        const loss2 = -ta1;
+        try{
+            const senderPookie = await Pookiebears.findOne({ where: { pookie_name: p1} } );
+            const targetPookie = await Pookiebears.findOne({ where: { pookie_name: t1} } );
+            const sender = await Users.findOne({ where: { user_id: senderID } });
+            const target = await Users.findOne({ where: { user_id: tar.id } });
+            const check = sender.checkPookies(senderPookie, senderID, loss1);
+            const checkTar = target.checkPookies(targetPookie, tar.id, loss2);
+            //console.log(await check);
+            const accept = new ButtonBuilder()
+			.setCustomId("accept")
+			.setLabel('Accept Trade')
 			.setStyle(ButtonStyle.Success);
 
-        const row = new ActionRowBuilder()
-			.addComponents(select);
+		    const deny = new ButtonBuilder()
+			.setCustomId("deny")
+			.setLabel('Deny Trade')
+			.setStyle(ButtonStyle.Danger);
+            
+            const row = new ActionRowBuilder()
+			.addComponents(accept, deny);
 
-        const row2 = new ActionRowBuilder()
-			.addComponents(selectOther);
+            if(await check == true && await checkTar == true)
+                {
+                    const response = await interaction.reply({
+                        content: `A new trade offer from ${interaction.user.username}! ${tar}, do you accept?
+                                  \n**${a1} ${p1}** for **${ta1} ${t1}**\nexpires <t:${timer}:R>`,
+                        components: [row],
+                    });
+                    
+                    const collectorFilter = i =>{
+                        if (i.user.id === tar.id) return true;
+                        interaction.followUp({content: "this isnt your trade!", ephemeral: true});
+                    }
+                    try {
+                        const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+                    
+                        if (confirmation.customId === 'accept') {
+                            //handle sender trading pookies
+                            sender.addPookies(senderPookie, senderID, loss1, senderPookie.rarity);
+                            target.addPookies(senderPookie, tar.id, a1, senderPookie.rarity);
 
-        const row3 = new ActionRowBuilder()
-            .addComponents(sendTrade);
+                            //handle sender getting pookies
+                            sender.addPookies(targetPookie, senderID, ta1, targetPookie.rarity);
+                            target.addPookies(targetPookie, tar.id, loss2, targetPookie.rarity);
 
-        //make sure only sender can interact with ui
-		const response = await interaction.reply({content: "choose which pookies to trade", components: [row]})
-        const response2 = await interaction.followUp({content: "choose which pookies you want from "+r.username+"'s inventory", components: [row2]})
-        const response3 = await interaction.followUp({components: [row3]})
-        let msg = "";
-        let msg2 = "";
-        let offer = "";
-        let want = "";
-        const filter = i => i.user.id === interaction.user.id && i.customId === interaction.id;
-        const filter2 = i => i.user.id === interaction.user.id && i.customId === interaction.id+"2";
-        const filter3 = i => i.user.id === interaction.user.id && i.customId === interaction.id+"3";
-        const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, filter, time: 60_000 });
-        const collector2 = response2.createMessageComponentCollector({ componentType: ComponentType.StringSelect, filter2, time: 60_000 });
-
-        collector.on('collect', async (interaction) => {
-            if (!interaction.values.length) {
-                interaction.update('You have emptied your selection.');
-                return;
+                            if(await sender.checkAmount(senderPookie, senderID, loss1) == true)
+                                sender.destroyPookies(senderPookie, senderID);
+                            if(await target.checkAmount(targetPookie, senderID, loss2) == true)
+                                target.destroyPookies(targetPookie, tar.id);
+                            return confirmation.update({ content: interaction.user.username+" just traded **"+a1+" "+p1+"** to <@"+tar+"> for **"+ta1+" "+t1+"**!", components: []});
+                        } else if (confirmation.customId === 'deny') {
+                            await confirmation.update({ content: 'trade not accepted :(', components: [] });
+                        }
+                    } catch (e) {
+                        await interaction.editReply({ content: 'answer not received within 30s, cancelling', components: [] });
+                    }
+                } else {
+                    return interaction.reply({ content: "you dont have enough of those brokie", ephemeral: true })
+                }  
+            } catch(err)
+            {
+                console.log(err);
+                return interaction.reply({ content: "it broke", ephemeral: true })
             }
-            if(msg){
-                msg.edit(interaction.user.username+" is offering "+interaction.values.join(", "));
-                interaction.reply({ content: "trade updated", ephemeral: true });
-            } else {
-            msg = await interaction.reply({content: interaction.user.username+" is offering "+interaction.values.join(", "), ephemeral: true });
-            offer = interaction.user.username+" is offering "+interaction.values.join(", ");
-            }
-            //msg.edit(interaction.user.username+" is offering "+interaction.values.join(", "));
-        })
-
-        collector2.on('collect', async (interaction) => {
-            if (!interaction.values.length) {
-                interaction.update('You have emptied your selection.');
-                return;
-            }
-            if(msg2){
-                msg.edit(interaction.user.username+" wants "+interaction.values.join(", "));
-                interaction.reply({ content: "trade updated", ephemeral: true });
-            } else {
-            msg2 = await interaction.reply({content: interaction.user.username+" wants "+interaction.values.join(", "), ephemeral: true });
-            want = interaction.user.username+" wants "+interaction.values.join(", ");
-            }
-        })
-
-        const confirmation = await response3.awaitMessageComponent({ filter: filter3, time: 60_000 });
-        if(confirmation.customId === interaction.id+"3"){
-            await confirmation.update({content: "offer sent", components: []});
-            await interaction.client.users.send(r.id, "hey man "+interaction.user.username+" just sent you a trade request:\n"+offer+"\n"+want);
-            return;
-        }
 	},
 };
-
-//https://discordjs.guide/message-components/select-menus.html#multi-selects
