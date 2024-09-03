@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const { Users, UserPookies, Pookiebears } = require('../../db/dbObjects.js');
-const { blue, gold, white, yellow, cornsilk } = require('color-name');
+const { blue } = require('color-name');
+const { getEmbedColor } = require('../../helper.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,11 +22,8 @@ module.exports = {
         if (unlucky == null) return interaction.reply(`${target.tag} has nothing!`);
         const pookies = await user.getPookies(target.id);
         const fav = await Pookiebears.findOne({ where: { pookie_name: user.favoritePookie }});
+        embedColor = getEmbedColor(fav.pookie_name, fav.rarity);
         const attachment = new AttachmentBuilder(fav.file_path);
-        if(fav.rarity == "100") embedColor = gold; //ssr
-        if(fav.pookie_name.includes("+")) embedColor = white;
-        if(fav.rarity == "300") embedColor = cornsilk; //starry ssr
-        if(fav.rarity == "200") embedColor = yellow; //starry
         const invEmbed = new EmbedBuilder()
                 .setTitle(target.tag+"\'s inventory:")
                 .setThumbnail('attachment://'+fav.file_path.substring(9))

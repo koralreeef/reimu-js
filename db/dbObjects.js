@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
@@ -7,6 +6,10 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
+function getRandomInt(max) {
+	return Math.floor(Math.random() * max);
+  }
+  
 const Users = require('./models/Users.js')(sequelize, Sequelize.DataTypes);
 const UserPookies = require('./models/UserPookies.js')(sequelize, Sequelize.DataTypes);
 const Pookiebears = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
@@ -35,10 +38,26 @@ Reflect.defineProperty(Users.prototype, 'destroyPookies', {
 		const userPookie = await UserPookies.findOne({
 			where: { user_id: userID, pookie_id: pookie.id },
 		});
-
+		//new random pookie from inventory
+		const inventory = await UserPookies.findAll({ where: {user_id: userID}});
+		const r = inventory[getRandomInt(inventory.length-1)].pookie_id;
+		const newpookie = await Pookiebears.findOne({ where: {id: r}});
+		const user = await Users.findOne({
+			where: { user_id: userID },
+		});
+		
 		if (userPookie) {
 			console.log(pookie.pookie_name+" destroyed.");
-			return userPookie.destroy();
+			userPookie.destroy();
+			if(user.favoritePookie === pookie.pookie_name)
+			{
+				console.log("favorite pookie "+pookie.pookie_name+" destroyed.");
+				console.log("new pookie "+newpookie.pookie_name+" set.");
+				user.update({ favoritePookie: newpookie.pookie_name }, 
+					{ where: {user_id: user.id} 
+				 });
+			}
+			return;
 		}
 		return;
 	},
@@ -75,7 +94,6 @@ Reflect.defineProperty(Users.prototype, 'checkAmount', {
 		return false;
 	},
 });
-
 
 Reflect.defineProperty(Users.prototype, 'checkPookies', {
 	value: async (pookie, userID, amount) => {			

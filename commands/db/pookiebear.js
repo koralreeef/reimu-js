@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
-const { downloadFile } = require('../../helper.js');
+const { downloadFile, common, ssr } = require('../../helper.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,6 +25,8 @@ module.exports = {
 		return await interaction.reply({ content: "only discord image links will be accepted (post your image in a channel and copy its link)", ephemeral: true});
 		if(name.includes("+")) 
 		return await interaction.reply({ content: "nice try man however thats reserved for the gamblers", ephemeral: true});
+		if(name.includes("starry night")) 
+		return await interaction.reply({ content: "these are only avaliable on special nights silly", ephemeral: true});
 		let avatarURL = interaction.user.displayAvatarURL();
 			try {
 				// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
@@ -34,7 +36,7 @@ module.exports = {
 					creator: interaction.user.username,
 					creatorURL: avatarURL,
 					summon_count: 0,
-					rarity: 0
+					rarity: common
 				});
 				await Pookiebears.create({
 					pookie_name: name+" ssr",
@@ -42,7 +44,7 @@ module.exports = {
 					creator: interaction.user.username,
 					creatorURL: avatarURL,
 					summon_count: 0,
-					rarity: 100
+					rarity: ssr
 				})
 
 				downloadFile(url, fileName+".jpg");

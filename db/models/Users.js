@@ -19,6 +19,15 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		/* unlocks with quests, quests will be rewarding things that are grindy,
+			quest 1: craft any triple +++ pookie, reward: location that makes starforce easier
+			quest 2: turn in 200 of any pookie, reward: location that makes doubling pookies easier
+		location: {
+			type: DataTypes.STRING,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		*/
 	}, {
 		timestamps: false,
 	});

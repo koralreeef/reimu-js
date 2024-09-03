@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
-const { blue, gold, white, yellow, cornsilk } = require('color-name');
+const { blue } = require('color-name');
+const { getEmbedColor } = require('../../helper.js');
 
 let embedColor = blue;
 module.exports = {
@@ -23,19 +24,16 @@ module.exports = {
 	},
 	async execute(interaction) {
 		
+		
 		const n = interaction.options.getString('name');
 		const pookie = await Pookiebears.findOne(
 			{ where: {pookie_name: n}});
 
 		console.log(await pookie);
-		if(pookie.rarity == 100) embedColor = gold;
-		if(pookie.rarity.includes("+")) embedColor = white;
-		if(pookie.rarity == 300) embedColor = cornsilk;
-		if(pookie.rarity == 200) embedColor = yellow;
-
 		console.log(await Pookiebears.findAll());
 		const attachment = new AttachmentBuilder(pookie.file_path);
 		let pookieDate = pookie.createdAt;
+		embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity)
 		let pookieEmbed = new EmbedBuilder()
 				.setAuthor({name: "pookiebear #"+pookie.id })
 				.setTitle(pookie.pookie_name+"\nsummon count: "+pookie.summon_count)

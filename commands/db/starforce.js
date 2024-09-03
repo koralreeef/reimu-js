@@ -1,8 +1,7 @@
 const { SlashCommandBuilder, Events, GatewayIntentBits, EmbedBuilder, AttachmentBuilder, User } = require('discord.js');
 const { Users, Pookiebears } = require('../../db/dbObjects.js');
-const { blue, gold, white } = require('color-name');
-const { getRandomInt, sleep, getStarnight } = require('../../helper.js');
-
+const { lightcoral } = require('color-name');
+const { getRandomInt, sleep, getStarnight, getEmbedColor } = require('../../helper.js');
 const regex = /\+/gm;
 
 async function makeStarPookie(pookie, interaction)
@@ -13,7 +12,7 @@ async function makeStarPookie(pookie, interaction)
 		creator: interaction.user.username,
 		creatorURL: interaction.user.displayAvatarURL(),
 		summon_count: 0,
-		rarity: pookie.rarity+"3"
+		rarity: pookie.rarity+3
 	})
 	console.log(n);
 	return n;
@@ -23,7 +22,7 @@ async function makeStarPookie(pookie, interaction)
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('starforce')
-		.setDescription('summon a special version of your pookie (odds: amount*2/50 (scales after every + on rarity))')
+		.setDescription('summon a special version of your pookie (use /starforce calc for odds)')
         .addStringOption(option =>
 			option.setName('pookie')
 				.setDescription('what pookie are you using')
@@ -51,6 +50,7 @@ module.exports = {
         const userID = interaction.user.id;
         const p = interaction.options.getString('pookie');
         const amount = interaction.options.getInteger('amount');
+		let embedColor = lightcoral;
 		let roll = getRandomInt(100);
 		let scaler = (p.match(regex)||[]).length;
 		let starMultiplier = 0;
@@ -67,15 +67,15 @@ module.exports = {
 			{
 				user.addPookies(pookie, userID, loss, pookie.rarity);
 				
-				if(await user.checkAmount(pookie, userID, loss) == true) 
+				if(await user.checkAmount(pookie, userID, loss) == true || amount == 25) 
 				{
-					user.destroyPookies(pookie, userID);
+					user.destroyPookies(pookie, userID, user.favoritePookie);
 					allIn = 3;
 					//this fucking sucks idk what the allin boolean is for yet
 					str = "**ALL** of the";
 				} else if (amount == 25) allIn = 3;	
-				let rollToBeat = 50 - amount*2 - allIn + (10 * scaler);
-				if(rollToBeat >= 70) rollToBeat = 70;
+				let rollToBeat = 50 - amount*2 - allIn + (5 * scaler);
+				//if(rollToBeat >= 70) rollToBeat = 70;
 				const message = await interaction.reply({ content: "good luck to <@"+userID+">! goodbye to "+str+" **"+amount+"** "+pookie.pookie_name+"(s)...", fetchReply: true });
 					//GUYS IS THERE ANY BETTER WAY TO DO THIS
 					await message.react('🇵');
@@ -107,16 +107,15 @@ module.exports = {
 						await Pookiebears.update({ summon_count: newCount }, 
 							{ where: {id: newpookie.id} 
 						 });
-						
+						embedColor = getEmbedColor(newpookie.pookie_name, newpookie.rarity);
 						user.addPookies(newpookie, userID, 1, newpookie.rarity);
-						let pookieDate = newpookie.createdAt;
 						const attachment = new AttachmentBuilder(newpookie.file_path);
 						let pookieEmbed = new EmbedBuilder()
 							.setAuthor({name: "pookiebear #"+newpookie.id })
 														//DUDE
 							.setTitle(newpookie.pookie_name+"\nsummon count: "+newCount)
 							.setImage('attachment://'+newpookie.file_path.substring(9))
-							.setColor(white)
+							.setColor(embedColor)
 							.setFooter({ text: `Summoned by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" (\+"+starMultiplier+") > "+rollToBeat, 
 										iconURL: newpookie.creatorURL })
 

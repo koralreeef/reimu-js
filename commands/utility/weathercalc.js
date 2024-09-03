@@ -19,6 +19,16 @@ module.exports = {
             .setMinValue(1)
             .setMaxValue(10000)
             .setRequired(true)),
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const user = await Users.findOne({ where: { user_id: interaction.user.id } });
+        const pookies = await user.getPookies(interaction.user.id);
+        const choices = pookies.map(i => i.pookie.pookie_name);
+        const filtered = choices.filter(choice => choice.startsWith(focusedValue)).slice(0, 5);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice, value: choice })),
+        );
+    },   
 	async execute(interaction) {
         let roll = interaction.options.getInteger('minutes');
         let select = interaction.options.getInteger('chance');

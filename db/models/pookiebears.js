@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         rarity: {
-            type: DataTypes.STRING,
-            defaultValue: "common",
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: false,
         }
     }, {

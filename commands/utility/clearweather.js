@@ -1,0 +1,21 @@
+const { SlashCommandBuilder } = require('discord.js');
+const { setSnowy, setStarnight, setRainy, setHurricane, setRainDuration, setSnowDuration, setStarnightDuration, setWeatherClear } = require('../../helper.js');
+const { set } = require('lodash');
+
+module.exports = {
+	data: new SlashCommandBuilder()
+	.setName('clearweather')
+	.setDescription('clears weather'),
+
+	async execute(interaction) {
+        setSnowy(false);
+        setSnowDuration(0);
+        setStarnight(false);
+        setStarnightDuration(0);
+        setRainy(false);
+        setRainDuration(0);
+        setHurricane(false);
+        setWeatherClear(true);
+        return await interaction.reply("weather cleared");
+	},
+};

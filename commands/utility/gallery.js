@@ -1,6 +1,8 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
 const { blue, gold, white, yellow, cornsilk } = require('color-name');
+const { common } = require('../../helper.js');
+
 //something with buttons
 
 async function buildEmbed(pookie){
@@ -22,7 +24,7 @@ module.exports = {
 
 	//sort by rarity maybe eh
 	async execute(interaction) {
-		const pookieList = await Pookiebears.findAll({ where: { rarity: 0}}); //find all where rarity common and rarity ssr + summon_count > 0
+		const pookieList = await Pookiebears.findAll({ where: { rarity: common}}); //find all where rarity common and rarity ssr + summon_count > 0
 		if(pookieList.length < 1) return await interaction.reply("No pookiebears found!");
 		
 		const forward = new ButtonBuilder()

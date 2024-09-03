@@ -60,7 +60,7 @@ module.exports = {
         const tar = interaction.options.getUser('target');
         const senderID = interaction.user.id;
         const ms = Date.now();
-        let timer = Math.floor(ms/1000) + 30;
+        let timer = Math.floor(ms/1000) + 300;
         const p1 = interaction.options.getString('send');
         const a1 = interaction.options.getInteger('number');
         const t1 = interaction.options.getString('get');
@@ -101,16 +101,17 @@ module.exports = {
                 {
                     const response = await interaction.reply({
                         content: `A new trade offer from ${interaction.user.username}! ${tar}, do you accept?
-                                  \n**${a1} ${p1}** for **${ta1} ${t1}**\nexpires <t:${timer}:R>`,
+                                  \nYou will recieve **${a1} ${p1}**\n${interaction.user.username} is offering **${ta1} ${t1}**\nexpires <t:${timer}:R>`,
                         components: [row],
                     });
                     
                     const collectorFilter = i =>{
                         if (i.user.id === tar.id) return true;
+                        //i.reply?
                         interaction.followUp({content: "this isnt your trade!", ephemeral: true});
                     }
                     try {
-                        const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 30_000 });
+                        const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 300_000 });
                     
                         if (confirmation.customId === 'accept') {
                             //handle sender trading pookies
