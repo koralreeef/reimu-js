@@ -11,6 +11,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const Pookiebears = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
 const Users = require('./models/Users.js')(sequelize, Sequelize.DataTypes);
+const Quests = require('./models/quests.js')(sequelize, Sequelize.DataTypes);
 const UserPookies = require('./models/UserPookies.js')(sequelize, Sequelize.DataTypes);
 const osuUsers = require('./models/osuUsers.js')(sequelize, Sequelize.DataTypes);
 
@@ -37,6 +38,8 @@ sequelize.sync({ force }).then(async () => {
 	console.log("done");
 		await fs.mkdirSync("./images");
 		moveImage('/pookiebear1.jpg', './images');
+		moveImage('/pookiebear2.jpg', './images');
+		moveImage('/pookiebear3.jpg', './images');
 
 		const pookies = [
 			Pookiebears.upsert({ id: 1,
@@ -55,10 +58,45 @@ sequelize.sync({ force }).then(async () => {
 				summon_count: 0, 
 				rarity: 100
 			}),
+			Pookiebears.upsert({ id: 3,
+				pookie_name: 'maddie flour',
+				file_path: './images/pookiebear2.jpg',
+				creator: 'koral',
+				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
+				summon_count: 0, 
+				rarity: 0
+			}),
+			Pookiebears.upsert({ id: 4,
+				pookie_name: 'maddie flour ssr',
+				file_path: './images/pookiebear2.jpg',
+				creator: 'koral',
+				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
+				summon_count: 0, 
+				rarity: 100
+			}),
+			Pookiebears.upsert({ id: 5,
+				pookie_name: 'jill stingray',
+				file_path: './images/pookiebear3.jpg',
+				creator: 'koral',
+				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
+				summon_count: 0, 
+				rarity: 0
+			}),
+			Pookiebears.upsert({ id: 6,
+				pookie_name: 'jill stingray ssr',
+				file_path: './images/pookiebear3.jpg',
+				creator: 'koral',
+				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
+				summon_count: 0, 
+				rarity: 100
+			}),
 			Users.upsert({ user_id: 1271933270451552317,
 				balance: 0,
 				lifetime: 0,
-				favoritePookie: "reimu"
+				favoritePookie: "reimu",
+				location: "gensokyo",
+				questTier: 10,
+				questLifetime: 19,
 			})
 		];
 

@@ -131,7 +131,7 @@ module.exports = {
                             await confirmation.update({ content: 'trade not accepted :(', components: [] });
                         }
                     } catch (e) {
-                        await interaction.editReply({ content: 'answer not received within 30s, cancelling', components: [] });
+                        await interaction.editReply({ content: 'answer not received within 5 minutes, cancelling', components: [] });
                     }
                 } else {
                     return interaction.reply({ content: "you dont have enough of those brokie", ephemeral: true })

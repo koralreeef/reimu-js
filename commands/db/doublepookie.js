@@ -4,7 +4,7 @@ const { green } = require('color-name');
 const { getRandomInt, sleep } = require('../../helper.js');
 
 const regex = /\+/gm;
-
+//buff by giving back half of pookies wagered
 //you gotta spend pookies to make pookies
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -39,6 +39,7 @@ module.exports = {
 		let roll = getRandomInt(100);
 		let scaler = (p.match(regex)||[]).length;
 		let allIn = 0;
+		let casino = 0;
 		let str = "the";
 		const date = new Date();
         const loss = -amount;
@@ -57,7 +58,8 @@ module.exports = {
 					//this fucking sucks idk what the allin boolean is for yet
 					str = "**ALL** of the";
 				}
-				let rollToBeat = 50 - allIn + (10 * scaler);
+				if(user.location == 'casino zone') casino = 15;
+				let rollToBeat = 50 - allIn - casino + (10 * scaler);
 				if(rollToBeat >= 70) rollToBeat = 70;
 				const message = await interaction.reply({ content: "good luck to <@"+userID+">! goodbye to "+str+" **"+amount+"** "+pookie.pookie_name+"(s)...", fetchReply: true });
 					//GUYS IS THERE ANY BETTER WAY TO DO THIS
@@ -86,14 +88,14 @@ module.exports = {
 							.setTitle(pookie.pookie_name+"\nresult: +"+amount)
 							.setImage('attachment://'+pookie.file_path.substring(9))
 							.setColor(green)
-							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
+							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" (+"+casino+") > "+rollToBeat, 
 										iconURL: interaction.user.displayAvatarURL() })
 
 								
 						return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
 					} else {
 						return interaction.editReply({ content: "unlucky... you just lost "+amount+" "+pookie.pookie_name+"(s)...." 
-													  +"\nyour unlucky roll: "+roll+" < "+rollToBeat}); 
+													  +"\nyour unlucky roll: "+roll+" (+"+casino+") < "+rollToBeat}); 
 					}
 			} else {
 				return interaction.reply({ content: "you dont have enough of those brokie", ephemeral: true })

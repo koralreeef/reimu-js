@@ -14,6 +14,7 @@ const Users = require('./models/Users.js')(sequelize, Sequelize.DataTypes);
 const UserPookies = require('./models/UserPookies.js')(sequelize, Sequelize.DataTypes);
 const Pookiebears = require('./models/pookiebears.js')(sequelize, Sequelize.DataTypes);
 const osuUsers = require('./models/osuUsers.js')(sequelize, Sequelize.DataTypes);
+const Quests = require('./models/quests.js')(sequelize, Sequelize.DataTypes);
 
 Pookiebears.hasMany(UserPookies, {foreignKey: 'pookie_id'});
 UserPookies.belongsTo(Pookiebears, {foreignKey: 'pookie_id', as: 'pookie'});
@@ -115,4 +116,4 @@ Reflect.defineProperty(Users.prototype, 'checkPookies', {
 	},
 });
 
-module.exports = { Users, UserPookies, Pookiebears, osuUsers };
+module.exports = { Users, UserPookies, Pookiebears, osuUsers, Quests };

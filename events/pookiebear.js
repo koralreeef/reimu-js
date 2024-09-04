@@ -22,7 +22,23 @@ async function makeStarryPookie(name, fileName, avatarURL, username, rarity){
 //LOL
 async function buildEmbed(message, file_path, pookieFileName, userUsername, pookie_name, userID, newCount, pookie_id, ssr, star, color){
         newCount += 1;
+        doubleChance = 1;
         let text = "";
+        let text3 = "";
+        let text2 = "";
+
+        //add pookiebear to inventory
+        const pookie = await Pookiebears.findOne({ where: { id: pookie_id} } );
+        const user = await Users.findOne({ where: { user_id: userID } });
+
+        if(user.location == 'pookie forest') {
+            if(h.getRandomInt(100) > 50){
+                doubleChance = 2;
+                text3 = "**L U C K Y !**";
+                text2 = " \* 2!";
+                newCount += 1;
+            }
+        }
         //use switch soon
         if(ssr && star){
             text = `OH MY STARS!! A starry night makes anything possible!\nTotal summon count: ${newCount}`;
@@ -38,17 +54,14 @@ async function buildEmbed(message, file_path, pookieFileName, userUsername, pook
     
         let embed = new EmbedBuilder()
         .setAuthor({name: "summoned by: "+userUsername+"\nattempt count: "+h.getBalance(userID)})
-        .setTitle(pookie_name)
+        .setTitle(pookie_name+text2+"\n"+text3)
         .setImage('attachment://'+pookieFileName)
         .setColor(color)
         .setFooter({ text: text, iconURL: 'attachment://'+pookieFileName })
 
-        //add pookiebear to inventory
-        const pookie = await Pookiebears.findOne({ where: { id: pookie_id} } );
-        const user = await Users.findOne({ where: { user_id: userID } });
-        user.addPookies(pookie, userID, 1, pookie.rarity);
         message.channel.send({ embeds: [embed], files: [attachment]});
 
+        user.addPookies(pookie, userID, doubleChance, pookie.rarity);
         h.wipeBalance(userID);}
         return;
 }
@@ -70,12 +83,17 @@ module.exports = {
             })
             latestID = latestPookie.id;
             h.addBalance(message.author.id, 1);
+            
             if(h.getRandomInt(100) > (h.commonSR - rainMultiplier)) {
                 
             let userID = message.author.id;
             let userUsername = message.author.username;
             let avatarURL = message.author.displayAvatarURL();
-
+            const u = await Users.findOne({where: {user_id: userID}});
+            let starRoll = 0;
+            if(u.location == 'star peak') {
+                starRoll = h.getRandomInt(100);
+            }
             let pookieCommons = await Pookiebears.findAll({where: {rarity: h.common}} );
             let pookiebearID = h.getRandomInt(pookieCommons.length);
             let star = h.getStarnight();
@@ -88,7 +106,7 @@ module.exports = {
 
                 if(h.getRandomInt(100) > (h.SSR - snowMultiplier))
                 {              
-                        if(star){
+                        if(star || starRoll > 70){
                         let starName = "starry night "+currentPookie.pookie_name+" ssr";
                         const starpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: h.starry_ssr}});
                         if(starpookie)
@@ -123,7 +141,7 @@ module.exports = {
                 }
                 
             //refactor later
-            if(star){
+            if(star || starRoll > 70){
                 let starName = "starry night "+currentPookie.pookie_name;
                 const starpookie = await Pookiebears.findOne({ where: {pookie_name: starName, rarity: h.starry}});
                 if(starpookie)

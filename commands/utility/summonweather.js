@@ -111,9 +111,9 @@ module.exports = {
         if(checkWeather.get(weather) == true)
             return await interaction.reply({ content: weather+ ' is already happening!', ephemeral: true});
 
-        const check2 = false;
-        const check3 = false;
-        const check = await user.checkPookies(p1, userID, loss);
+        let check2 = false;
+        let check3 = false;
+        let check = await user.checkPookies(p1, userID, loss);
         console.log("fart 2");
         if(p2)
         check2 = await user.checkPookies(p2, userID, loss2);

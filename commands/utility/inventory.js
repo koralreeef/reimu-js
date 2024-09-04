@@ -28,8 +28,8 @@ module.exports = {
                 .setTitle(target.tag+"\'s inventory:")
                 .setThumbnail('attachment://'+fav.file_path.substring(9))
                 .setColor(embedColor)
-                .setDescription(`\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``)
-                .setFooter({ text: "total pookie attempts: "+user.lifetime+"\nfavorite pookie: "+fav.pookie_name });
+                .setDescription(`\n\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``)
+                .setFooter({ text: "location: "+user.location+"\nquests done: "+user.questLifetime+"\ntotal pookie attempts: "+user.lifetime+"\nfavorite pookie: "+fav.pookie_name});
 
         console.log(pookies.map(i => i.pookie.pookie_name));
         //how to sort by asc

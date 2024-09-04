@@ -50,7 +50,7 @@ module.exports = {
 
         let scaler = (pookie.match(regex)||[]).length;
 
-        let rollToBeat = 50 - amount*2 - all - starMultiplier + (5 * scaler);
+        let rollToBeat = 50 - amount*2 - all - starMultiplier + (8 * scaler);
         let final = 100 - rollToBeat;
 		return await interaction.reply('chance for a '+pookie+' star force to succeed: '+final+
                                 '%\n50 - '+amount+'(2) - '+all+' - '+starMultiplier+' + (5('+scaler+

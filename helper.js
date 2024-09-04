@@ -7,6 +7,19 @@ const path = require("path");
 const currency = new Collection();
 const fs = require("fs");
 
+const tierMap = new Map([
+    [0, "ssr pookies"],
+	[1, "starry night pookies"],
+	[2, "plus pookies"],
+    [3, "plus pookies"],
+])
+
+const locationMap = new Map([
+	[1, 'pookie forest'],
+	[2, 'casino zone'],
+	[3, 'star peak']
+]);
+
 const starryMap = new Map([
 	[0, '65FA02'],
 	[1, '02FAB4'],
@@ -24,23 +37,23 @@ const plusMap = new Map([
 	[4, rebeccapurple],
 	[5, orchid],
 ]);
-//somethin
-const starryplusMap = new Map([
-	[0, lightcoral],
-	[1, moccasin],
-	[2, mediumaquamarine],
-	[3, aqua],
-	[4, rebeccapurple],
-	[5, orchid],
+
+const ssrMap = new Map([
+	[0, 'db07bf'],
+	[1, '0dc7d1'],
+	[2, 'd95e00'],
+	[3, '00cf22'],
+	[4, 'c4040e'],
+	[5, '042ec4'],
 ]);
-//somehttin
-const starryssrplusMap = new Map([
-	[0, lightcoral],
-	[1, moccasin],
-	[2, mediumaquamarine],
-	[3, aqua],
-	[4, rebeccapurple],
-	[5, orchid],
+
+const starryssrMap = new Map([
+	[0, 'ffd1ef'],
+	[1, 'e3d1ff'],
+	[2, 'cfe4ff'],
+	[3, 'cafada'],
+	[4, 'fafaca'],
+	[5, 'fadac0'],
 ]);
 
 const regex = /[+]/g;
@@ -148,7 +161,13 @@ async function addBalance(id, amount) {
 		return user.save();
 	}
 
-	const newUser = await Users.create({ user_id: id, balance: amount, lifetime: amount, favoritePookie: "lappy" });
+	const newUser = await Users.create({ user_id: id,
+										balance: amount, 
+										lifetime: amount, 
+										favoritePookie: "lappy", 
+										location: "none", 
+										questTier: 3, 
+										questLifetime: 0 });
 	currency.set(id, newUser);
 	return newUser;
 }
@@ -192,26 +211,62 @@ function getEmbedColor(p, r) {
 	let embedColor = blue;
 	let colorIndex = -1;
 	console.log("1 "+embedColor);
+	let plus = false;
+	console.log(p);
 	//check for +
 	//three different color rotations for starry night and ssr
-	if(Array.isArray(p.match(regex)) && (p.match(regex)).length)
-	colorIndex = p.match(regex).length - 1;
+	//PLEASE REFACTOR
+	if(p.match(regex)){
+		if(Array.isArray(p.match(regex)) && (p.match(regex)).length){
+		colorIndex = p.match(regex).length - 1;
+		plus = true;
+		}
+	}
+	ssrSubstring = colorIndex + 1;
 	if(r == ssr) embedColor = gold; 
 	if(r == starry_ssr) embedColor = cornsilk;
 	if(r == starry) embedColor = yellow; 
 	//test
-	if(p.substring(0, 12) == "starry night" && colorIndex != -1){ //starry only ++
+	if(plus){
+		if (p.substring(0, 12) == "starry night" &&
+		p.substring(p.length - 3 - ssrSubstring, p.length - p.match(regex).length) == "ssr"){ // starry night ssr ++ only
 		console.log(colorIndex);
-		embedColor = starryMap.get(colorIndex);
-		if(colorIndex >= starryMap.size - 1)
+		embedColor = starryssrMap.get(colorIndex);
+		if(colorIndex >= starryssrMap.size - 1)
 		{
-			embedColor = '0xED61BC';
+			embedColor = 'fab1b1';
 			console.log("2 "+embedColor);
 			return embedColor;
 		}
 		console.log("3 "+embedColor);
 		return embedColor;
-	} else if (colorIndex != -1){ // ++ only
+	} 
+		else if (p.substring(0, 12) != "starry night" &&
+			   p.substring(p.length - 3 - ssrSubstring, p.length - p.match(regex).length) == "ssr"){ // ssr ++ only
+		console.log(colorIndex);
+		embedColor = ssrMap.get(colorIndex);
+		if(colorIndex >= ssrMap.size - 1)
+		{
+			embedColor = 'ff03ee';
+			console.log("2 "+embedColor);
+			return embedColor;
+		}
+		console.log("3 "+embedColor);
+		return embedColor;
+	}	
+		else if(p.substring(0, 12) == "starry night"){ //starry only ++
+		console.log(colorIndex);
+		embedColor = starryMap.get(colorIndex);
+		if(colorIndex >= starryMap.size - 1)
+		{
+			embedColor = 'c74298';
+			console.log("2 "+embedColor);
+			return embedColor;
+		}
+		console.log("3 "+embedColor);
+		return embedColor;
+	}  
+		 else { // ++ only
 		console.log(colorIndex);
 		embedColor = plusMap.get(colorIndex);
 		if(colorIndex >= plusMap.size - 1)
@@ -222,7 +277,8 @@ function getEmbedColor(p, r) {
 		}
 		console.log("3 "+embedColor);
 		return embedColor;
-	}
+	} 
+}
 
 	return embedColor;
 }
@@ -239,4 +295,5 @@ module.exports = { currency, commonSR, SSR,
 				   common, ssr, starry, starry_ssr,
 				   setHurricanePookie, getHurricanePookie,
 				   arrayExists, getEmbedColor,
-				   setWeatherClear, getWeatherClear };
+				   setWeatherClear, getWeatherClear,
+					locationMap,tierMap };
