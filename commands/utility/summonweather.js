@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { Users, Pookiebears } = require('../../db/dbObjects.js');
+const { pookieChannel, rainrole, snowyrole, starryrole } = require('../../config.json');
 const h = require('../../helper.js');
 
 const weatherMap = new Map([
@@ -74,6 +75,7 @@ module.exports = {
     },  
 
 	async execute(interaction) {
+        var t = interaction.client.channels.cache.get(pookieChannel);
         let pookie = interaction.options.getString('pookie');
         let pookie2 = interaction.options.getString('pookie2') || "";
         let pookie3 = interaction.options.getString('pookie3') || "";
@@ -171,23 +173,23 @@ module.exports = {
                 h.setRainy(true);
                 console.log(weather+" set")
                 weatherString = "A rainy sky has been summoned by ";
-                ping = "<@&1279809115291385990>";
+                ping = "<@&"+rainrole+">";
                 break;
             case "snow":
                 h.setSnowDuration(weatherDuration);
                 h.setSnowy(true);
                 console.log(weather+" set")
                 weatherString = "A snowfall has been summoned by ";
-                ping = "<@&1279809139274682399>";
+                ping = "<@&"+snowyrole+">";
                 break;
             case "star":
                 h.setStarnightDuration(weatherDuration);
                 h.setStarnight(true);
                 console.log(weather+" set")
                 weatherString = "A starry night has been summoned by ";
-                ping = "<@&1279809084459188264>";
+                ping = "<@&"+starryrole+">";
         }
-
-		return await interaction.reply('# '+weatherString+'<@'+interaction.user.id+'> for '+getLength(weatherTime.toFixed(0))+'!\n');
+        await interaction.reply({ content: "weather summoned", ephemeral: true});
+		return await t.send('# '+weatherString+'<@'+interaction.user.id+'> for '+getLength(weatherTime.toFixed(0))+'!\n'+ping);
 	},
 };

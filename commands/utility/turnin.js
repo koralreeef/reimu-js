@@ -93,7 +93,10 @@ module.exports = {
 								  files: [attachment],
                                   components: [row]});                         
             try {
-                const collectorFilter = i => i.user.id === interaction.user.id;
+                const collectorFilter = i => {
+                    if (i.user.id === interaction.user.id) return true;
+                    interaction.followUp({content: "this isnt your quest!", ephemeral: true});
+                }
                 const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
                 if (confirmation.customId === 'yes'){
                        const reward = quest.reward;

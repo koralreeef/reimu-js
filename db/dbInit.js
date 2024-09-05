@@ -90,6 +90,7 @@ sequelize.sync({ force }).then(async () => {
 				summon_count: 0, 
 				rarity: 100
 			}),
+			/*
 			Users.upsert({ user_id: 1271933270451552317,
 				balance: 0,
 				lifetime: 0,
@@ -98,6 +99,7 @@ sequelize.sync({ force }).then(async () => {
 				questTier: 10,
 				questLifetime: 19,
 			})
+			*/
 		];
 
 		await Promise.all(pookies);

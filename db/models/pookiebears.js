@@ -27,14 +27,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: false,
-        }
-        /*
+        },
         source: {
             type: DataTypes.STRING,
             defaultValue: 0,
             allowNull: false,
         }
-            */
     }, {
 		timestamps: true,
 	});

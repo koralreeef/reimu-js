@@ -32,10 +32,11 @@ module.exports = {
 		const attachment = new AttachmentBuilder(pookie.file_path);
 		let pookieDate = pookie.createdAt;
 		embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity)
+		console.log(pookie.source);
 		let pookieEmbed = new EmbedBuilder()
 				.setAuthor({name: "pookiebear #"+pookie.id })
 				.setTitle(pookie.pookie_name+"\nsummon count: "+pookie.summon_count)
-				//.setDescription(pookie.source)
+				.setDescription(pookie.source)
                 .setImage('attachment://'+pookie.file_path.substring(9))
                 .setColor(embedColor)
                 .setFooter({ text: `Creator: `+pookie.creator+" at "+pookieDate.toLocaleString(), 

@@ -6,7 +6,8 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds,
                                         GatewayIntentBits.GuildMessages,
 										GatewayIntentBits.GuildMessageReactions, 
                                         GatewayIntentBits.MessageContent, 
-                                        GatewayIntentBits.DirectMessages] });
+                                        GatewayIntentBits.DirectMessages,
+										GatewayIntentBits.GuildMembers,] });
 //moved index.js
 client.cooldowns = new Collection(); //command cooldowns
 client.commands = new Collection(); //reload.js

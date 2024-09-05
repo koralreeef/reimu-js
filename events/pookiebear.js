@@ -1,4 +1,4 @@
-const { Events, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const { Events, EmbedBuilder, AttachmentBuilder, Message } = require('discord.js');
 const { Users, Pookiebears } = require('../db/dbObjects.js');
 const { blue, gold, cornsilk, yellow } = require('color-name');
 const h = require('../helper.js')
@@ -70,7 +70,7 @@ module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
         //if (message.author.bot) return;
-        if(message.content.toLowerCase() === 'pookiebear')
+        if(message.content.toLowerCase() === 'pookiebear' && (message.channel.id === "1281242671343603732" || message.channel.id === "1273023049221935185"))
         {
             if(h.getSnowy() == true) snowMultiplier = 30;
             else snowMultiplier = 0;

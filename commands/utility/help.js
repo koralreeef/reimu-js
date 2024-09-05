@@ -32,9 +32,9 @@ module.exports = {
                                             'weather and location can influence if a starforce succeeds or not.');
         }
         if(option == 'l'){
-            return await interaction.reply('locations give passive bonuses to you, but you can only choose one! pookieville increases pookiebear chances overall, pookie forest gives a chance for double pookies on summon\n'+
-                                            'mt. pookie gives a set amount of pookies every 30 minutes, the casino zone bumps your chances at the /doublepookies command, \n'
-                                            +'and star peak boosts starforce chances and allows you to summon starry night pookies at any time!'
+            return await interaction.reply('locations give passive bonuses to you, but you can only choose one! \n**pookieville** increases pookiebear chances overall, **pookie forest** gives a chance for double pookies on summon\n'+
+                                            '**mt. pookie** gives a set amount of pookies every 30 minutes, the **casino zone** bumps your chances at the /doublepookies command, \n'
+                                            +'and **star peak** boosts starforce chances and allows you to summon starry night pookies at any time!'
             );
         }
         if(option == 'w'){

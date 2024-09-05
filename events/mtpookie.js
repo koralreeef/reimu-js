@@ -1,6 +1,7 @@
 const { Users, Pookiebears } = require('../db/dbObjects.js');
 const { Op } = require("sequelize");
-const { locationMap, arrayExists, common, ssr, getRandomInt, targetChannel } = require('../helper.js');
+const { locationMap, arrayExists, common, ssr, getRandomInt } = require('../helper.js');
+const { statusChannel } = require('../config.json');
 const { Events, Message } = require('discord.js');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
 	async execute(client) {
 	
         console.log("the mountain is active!");
-        var t = client.channels.cache.get(targetChannel);
+        var t = client.channels.cache.get(statusChannel);
 		setInterval(async () => {
             const users = await Users.findAll({where: {location: locationMap.get(2)}})
             if(arrayExists(users))
@@ -25,6 +26,6 @@ module.exports = {
                 }
                 t.send("# krakatoa! the mountain is exploding with "+random.pookie_name+"!");
             }
-		}, 1800000);
+		}, 3600000);
     },
 };

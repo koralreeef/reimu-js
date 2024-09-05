@@ -68,7 +68,6 @@ var SSR = 90;
 let totalPookies = 0;
 let weatherClear = false;
 let hurricanePookie = "";
-const targetChannel = '1273023049221935185';
 let rainy = false, snowy = false, starnight = false, hurricane = false; 
 
 function setTotalPookies(i){
@@ -299,4 +298,4 @@ module.exports = { currency, commonSR, SSR,
 				   setHurricanePookie, getHurricanePookie,
 				   arrayExists, getEmbedColor,
 				   setWeatherClear, getWeatherClear,
-				   locationMap,tierMap,targetChannel };
+				   locationMap,tierMap };

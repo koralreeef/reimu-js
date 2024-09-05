@@ -4,6 +4,15 @@ const { downloadFile, common, ssr } = require('../../helper.js');
 
 const regex = /[^èéòàùì\w\s]/gi;
 
+function isValidHttpUrl(string) {
+	try {
+	  const newUrl = new URL(string);
+	  return newUrl.protocol === 'http:' || newUrl.protocol === 'https:';
+	} catch (err) {
+	  return false;
+	}
+  }
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('pookiebear')
@@ -23,21 +32,24 @@ module.exports = {
 	async execute(interaction) {
 
 		const name = interaction.options.getString('name').toLowerCase();
-		//const source = interaction.options.getString('source').toLowerCase() || "no source listed";
+		let source = interaction.options.getString('source') || "no source listed";
 		const url = interaction.options.getString('link');
 		const fileName = name.replace(/ /g,"_");
 	
-		//if(source != 'no source listed') source = "[source]("+source+")";
         if(!url.startsWith("https://cdn.discordapp.com/attachments/")) 
 		return await interaction.reply({ content: "only discord image links will be accepted (post your image in a channel and copy its link)", ephemeral: true});
+		if(source != "no source listed" && !isValidHttpUrl(source)) 
+		return await interaction.reply({ content: "please have a proper link for your source", ephemeral: true});
 		if(name.includes("+")) 
 		return await interaction.reply({ content: "nice try man however thats reserved for the gamblers", ephemeral: true});
 		if(name.length > 31)
 		return await interaction.reply({ content: "name is too long", ephemeral: true});
-		if(name.test(regex))	
+		if(regex.test(name))	
 		return await interaction.reply({ content: "only regular letters, numbers, and spaces are allowed", ephemeral: true}); 
 		if(name.includes("starry night")) 
 		return await interaction.reply({ content: "these are only avaliable on special nights silly", ephemeral: true});
+		if(source != "no source listed")
+		source = "[source]("+source+")";
 		let avatarURL = interaction.user.displayAvatarURL();
 			try {
 				// equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
@@ -48,7 +60,7 @@ module.exports = {
 					creatorURL: avatarURL,
 					summon_count: 0,
 					rarity: common,
-					//source: source
+					source: source
 				});
 				await Pookiebears.create({
 					pookie_name: name+" ssr",
@@ -57,7 +69,7 @@ module.exports = {
 					creatorURL: avatarURL,
 					summon_count: 0,
 					rarity: ssr,
-					//source: source
+					source: source
 				})
 
 				downloadFile(url, fileName+".jpg");

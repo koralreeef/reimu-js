@@ -172,16 +172,16 @@ module.exports = {
 					}
 				} 
 			} catch (error) {
-				if (isOsuJSError(err)) {
+				if (isOsuJSError(error)) {
 					// `err` is now of type `OsuJSError`
 				
-					if (err.type === 'invalid_json_syntax') {
+					if (error.type === 'invalid_json_syntax') {
 					  // `err` is now of type `OsuJSGeneralError`
 					  console.error('Error while parsing response as JSON');
-					} else if (err.type === 'network_error') {
+					} else if (error.type === 'network_error') {
 					  // `err` is now of type `OsuJSGeneralError`
 					  console.error('Network error');
-					} else if (err.type === 'unexpected_response') {
+					} else if (error.type === 'unexpected_response') {
 					  // `err` is now of type `OsuJSUnexpectedResponseError`
 				
 					  /**
@@ -189,7 +189,7 @@ module.exports = {
 					   * `err.response(true)`
 					   * "true" means that it will return the Response type from "node-fetch" instead of the native Response
 					   */
-					  const response = err.response(); // Type: `Response`
+					  const response = error.response(); // Type: `Response`
 				
 					  console.error('Unexpected response');
 					  console.log(`Details: ${response.status} - ${response.statusText}`);

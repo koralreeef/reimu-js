@@ -177,12 +177,15 @@ module.exports = {
         console.log(p.name);
 
 		const pookieEmbed = await buildEmbed(p, tier, amount);
-        await interaction.reply({ embeds: [pookieEmbed],
+        const response = await interaction.reply({ embeds: [pookieEmbed],
 								  files: [attachment],
                                   components: [row]
 		});
         try {
-        const filter = i => i.user.id === interaction.user.id;
+        const filter = i => {
+            if (i.user.id === interaction.user.id) return true;
+            interaction.followUp({content: "this isnt your quest!", ephemeral: true});
+        }
 		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60_000 });
         collector.on('collect', async i => {
         if (i.customId === user.user_id){
