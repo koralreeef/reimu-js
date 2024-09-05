@@ -137,14 +137,16 @@ module.exports = {
 		.setDescription('check current quest')
         .addIntegerOption(option =>
             option.setName('questtier')
-                  .setDescription('specify what tier of quests to generate')
-                  .setRequired(true)),
+                  .setDescription('specify what tier of quests to generate')),
+                  
 	async execute(interaction) {
-        const tier = interaction.options.getInteger('questtier');
         const user = await Users.findOne({ where: { user_id: interaction.user.id } });
         if(!user)
             return await interaction.reply("you havent summoned a pookiebear yet!");
+        
+        const tier = interaction.options.getInteger('questtier') ?? user.questTier;
         const check = await Quests.findOne({ where: { user_id: interaction.user.id }});
+
         if(check){
             console.log(await check);
             return await interaction.reply("you already have a quest!");
@@ -152,6 +154,7 @@ module.exports = {
         if(tier > user.questTier){
             return await interaction.reply("your quest tier isnt high enough! ("+user.questTier+" < "+tier+")");
         }
+
         //const userTier = Math.floor(user.quest/4);
         //figure out how to assign boss quests 
         /*
