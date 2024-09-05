@@ -30,13 +30,14 @@ async function buildEmbed(message, file_path, pookieFileName, userUsername, pook
         //add pookiebear to inventory
         const pookie = await Pookiebears.findOne({ where: { id: pookie_id} } );
         const user = await Users.findOne({ where: { user_id: userID } });
-
-        if(user.location == 'pookie forest') {
-            if(h.getRandomInt(100) > 50){
-                doubleChance = 2;
-                text3 = "**L U C K Y !**";
-                text2 = " \* 2!";
-                newCount += 1;
+        if(user){
+            if(user.location == 'pookie forest') {
+                if(h.getRandomInt(100) > 50){
+                    doubleChance = 2;
+                    text3 = "**L U C K Y !**";
+                    text2 = " \* 2!";
+                    newCount += 1;
+                }
             }
         }
         //use switch soon
@@ -85,19 +86,22 @@ module.exports = {
             h.addBalance(message.author.id, 1);
             let userID = message.author.id;
             let newbonus = 0;
+            let starRoll = 0;
             const u = await Users.findOne({where: {user_id: userID}});
-            if(u.location == 'pookieville') {
-                newbonus = 10;
+            if(u){
+                if(u.location == 'pookieville') {
+                    newbonus = 10;
+                }     
+                if(u.location == 'star peak') {
+                    starRoll = h.getRandomInt(100);
+                }
             }
             if(h.getRandomInt(100) > (h.commonSR - rainMultiplier - newbonus)) {
                 
             let userUsername = message.author.username;
             let avatarURL = message.author.displayAvatarURL();
             
-            let starRoll = 0;
-            if(u.location == 'star peak') {
-                starRoll = h.getRandomInt(100);
-            }
+            
 
             let pookieCommons = await Pookiebears.findAll({where: {rarity: h.common}} );
             let pookiebearID = h.getRandomInt(pookieCommons.length);

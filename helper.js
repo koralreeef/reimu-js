@@ -169,7 +169,7 @@ async function addBalance(id, amount) {
 										lifetime: amount, 
 										favoritePookie: "lappy", 
 										location: "pookieville", 
-										questTier: 2, 
+										questTier: 0, 
 										questLifetime: 0 });
 	currency.set(id, newUser);
 	return newUser;

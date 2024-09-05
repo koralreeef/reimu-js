@@ -39,6 +39,6 @@ module.exports = {
                 client.user.setActivity('activity', { type: ActivityType.Custom, name: "custom", state: getTotalPookies()+" pookies down in the fantastic blowhole"});
             }
 
-		}, 15000);
+		}, 300000);
     },
 };

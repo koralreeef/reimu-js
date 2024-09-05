@@ -19,6 +19,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('get')
                 .setDescription('what pookie are you getting')
+                .setAutocomplete(true)
                 .setRequired(true))
         .addIntegerOption(option =>
             option.setName('amount')
@@ -58,8 +59,13 @@ module.exports = {
         );
     },
 	async execute(interaction) {
+        const u = await Users.findOne({ where: { user_id: interaction.user.id } });
+        if(u) {} else {
+            return await interaction.reply("you havent summoned a pookiebear yet!");}
         const tar = interaction.options.getUser('target');
         const senderID = interaction.user.id;
+        if(tar.id == senderID)
+            return interaction.reply({ content: "you cannot trade pookies to yourself dude", ephemeral: true })
         const ms = Date.now();
         let timer = Math.floor(ms/1000) + 300;
         const p1 = interaction.options.getString('send');
@@ -116,17 +122,22 @@ module.exports = {
                     
                         if (confirmation.customId === 'accept') {
                             //handle sender trading pookies
-                            sender.addPookies(senderPookie, senderID, loss1, senderPookie.rarity);
-                            target.addPookies(senderPookie, tar.id, a1, senderPookie.rarity);
+                            if(await sender.checkAmount(senderPookie, senderID, loss1) == true){
+                                sender.destroyPookies(senderPookie, senderID);
+                            } else {
+                                sender.addPookies(senderPookie, senderID, loss1, senderPookie.rarity);
+                            }
+                        
+                            if(await target.checkAmount(targetPookie, tar.id, loss2) == true){
+                                target.destroyPookies(targetPookie, tar.id);
+                            } else { 
+                                target.addPookies(targetPookie, tar.id, loss2, targetPookie.rarity);
+                            }
 
                             //handle sender getting pookies
+                            target.addPookies(senderPookie, tar.id, a1, senderPookie.rarity);
                             sender.addPookies(targetPookie, senderID, ta1, targetPookie.rarity);
-                            target.addPookies(targetPookie, tar.id, loss2, targetPookie.rarity);
-
-                            if(await sender.checkAmount(senderPookie, senderID, loss1) == true)
-                                sender.destroyPookies(senderPookie, senderID);
-                            if(await target.checkAmount(targetPookie, senderID, loss2) == true)
-                                target.destroyPookies(targetPookie, tar.id);
+                            
                             return confirmation.update({ content: interaction.user.username+" just traded **"+a1+" "+p1+"** to <@"+tar+"> for **"+ta1+" "+t1+"**!", components: []});
                         } else if (confirmation.customId === 'deny') {
                             await confirmation.update({ content: 'trade not accepted :(', components: [] });

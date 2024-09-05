@@ -24,12 +24,14 @@ module.exports = {
         const fav = await Pookiebears.findOne({ where: { pookie_name: user.favoritePookie }});
         embedColor = getEmbedColor(fav.pookie_name, fav.rarity);
         const attachment = new AttachmentBuilder(fav.file_path);
+        let remainder = user.questLifetime%5;
+        let result = 5 - remainder;
         const invEmbed = new EmbedBuilder()
                 .setTitle(target.tag+"\'s inventory:")
                 .setThumbnail('attachment://'+fav.file_path.substring(9))
                 .setColor(embedColor)
                 .setDescription(`\n\`\`\`${pookies.map(i => `${i?.amount} ${i?.pookie.pookie_name}`).join('\n')}\`\`\``)
-                .setFooter({ text: "location: "+user.location+"\nquest tier: "+user.questTier+"\ntotal pookie attempts: "+user.lifetime+"\nfavorite pookie: "+fav.pookie_name});
+                .setFooter({ text: "location: "+user.location+"\nquest tier: "+user.questTier+"  ||  "+result+" quests until next tier\ntotal pookie attempts: "+user.lifetime+"\nfavorite pookie: "+fav.pookie_name});
 
         console.log(pookies.map(i => i.pookie.pookie_name));
         //how to sort by asc

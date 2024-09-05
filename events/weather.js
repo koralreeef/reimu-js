@@ -86,7 +86,7 @@ module.exports = {
                 {
                     h.setRainy(false);
                     deleteMsg(weatherMessageID, pookie);
-                    pookieChannel.send("## The rain has cleared!");
+                    pookie.send("## The rain has cleared!");
                     rainString = "Last rain sighting was <t:"+h.getRainDuration()+":R>\n";
                 }
                 if(currentTimestamp > h.getSnowDuration() && h.getSnowy() == true)

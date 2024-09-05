@@ -18,6 +18,8 @@ module.exports = {
 	async execute(interaction) {
         const location = interaction.options.getString("location");
         const user = await Users.findOne({ where: { user_id: interaction.user.id } });
+        if(user) {} else {
+            return await interaction.reply("you havent summoned a pookiebear yet!");}
         if(user.questTier < 1)
 		return await interaction.reply("you dont have any locations yet! have you tried using /quest?");
         if(location == user.location){

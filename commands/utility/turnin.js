@@ -135,15 +135,17 @@ module.exports = {
                         user.addPookies(pookie, id, quest.reward_amount, pookie.rarity)
                         }
                         let newcount;
-                       if((quest.questTier == user.questTier) || quest.questTier - 1 == user.questTier){
+                        let turnedin = false;
+                       if((quest.questTier == user.questTier) || (quest.questTier == user.questTier - 1)){
                        newcount = user.questLifetime + 1;
                        user.update({ questLifetime: newcount }, 
                        { where: {user_id: user.id}});
+                       turnedin = true;
                        }
                        console.log("lifetime quests: "+user.questLifetime);
                        console.log("quest tier: "+user.questTier)
                        let locationString = "";
-                       if(user.questLifetime%5 == 0) {
+                       if(user.questLifetime%5 == 0 && turnedin == true) {
                             let newcount = user.questTier + 1;
                             user.update({ questTier: newcount }, 
                                 { where: {user_id: user.id}});
@@ -153,8 +155,8 @@ module.exports = {
                             locationString = "you unlocked the "+location+"! (/setlocation)"
                         +"\nthis location has a chance to summon double pookies whenever you summon one!";
                         if(user.questTier == 2)
-                            locationString = "you unlocked the "+location+"!"
-                        +"\nthis mountain passively spews out 10 random pookies for you every hour!";
+                            locationString = "you unlocked "+location+"!"
+                        +"\nthis mountain passively spews out 12 random pookies for you every hour!";
                         if(user.questTier == 3)
                             locationString = "you unlocked the "+location+"!"
                         +"\nthis zone boosts the chance of the doublepookie skill by 25%!";

@@ -48,7 +48,8 @@ sequelize.sync({ force }).then(async () => {
 				creator: 'koral',
 				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
 				summon_count: 0, 
-				rarity: 0
+				rarity: 0,
+				source: "no source listed"
 			}),
 			Pookiebears.upsert({ id: 2,
 				pookie_name: 'lappy ssr',
@@ -56,39 +57,26 @@ sequelize.sync({ force }).then(async () => {
 				creator: 'koral',
 				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
 				summon_count: 0, 
-				rarity: 100
+				rarity: 100,
+				source: "no source listed"
 			}),
 			Pookiebears.upsert({ id: 3,
-				pookie_name: 'maddie flour',
-				file_path: './images/pookiebear2.jpg',
-				creator: 'koral',
-				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
-				summon_count: 0, 
-				rarity: 0
-			}),
-			Pookiebears.upsert({ id: 4,
-				pookie_name: 'maddie flour ssr',
-				file_path: './images/pookiebear2.jpg',
-				creator: 'koral',
-				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
-				summon_count: 0, 
-				rarity: 100
-			}),
-			Pookiebears.upsert({ id: 5,
 				pookie_name: 'jill stingray',
 				file_path: './images/pookiebear3.jpg',
 				creator: 'koral',
 				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
 				summon_count: 0, 
-				rarity: 0
+				rarity: 0,
+				source: "[source](https://x.com/danidanihatikyu/status/1450170022563758080)"
 			}),
-			Pookiebears.upsert({ id: 6,
+			Pookiebears.upsert({ id: 4,
 				pookie_name: 'jill stingray ssr',
 				file_path: './images/pookiebear3.jpg',
 				creator: 'koral',
 				creatorURL: 'https://cdn.discordapp.com/avatars/109299841519099904/588b0dfa2e47bdd3325730eb76bad246.webp',
 				summon_count: 0, 
-				rarity: 100
+				rarity: 100,
+				source: "[source](https://x.com/danidanihatikyu/status/1450170022563758080)"
 			}),
 			/*
 			Users.upsert({ user_id: 1271933270451552317,

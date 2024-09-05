@@ -88,7 +88,12 @@ module.exports = {
         let loss2 = -amount2;
         let loss3 = -amount3;
 
+        if((pookie2 != "" && pookie2 == 0) || (pookie3 != "" && pookie3 == 0)){
+            return await interaction.reply("allocated amounts wrong");
+        }
         const user = await Users.findOne({ where: { user_id: interaction.user.id}})
+        if(user) {} else {
+            return await interaction.reply("you havent summoned a pookiebear yet!");}
         const p1 = await Pookiebears.findOne({ where: { pookie_name: pookie}})
         const p2 = await Pookiebears.findOne({ where: { pookie_name: pookie2}})
         const p3 = await Pookiebears.findOne({ where: { pookie_name: pookie3}})

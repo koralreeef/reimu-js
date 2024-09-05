@@ -87,14 +87,14 @@ module.exports = {
 							.setTitle(pookie.pookie_name+"\nresult: +"+amount)
 							.setImage('attachment://'+pookie.file_path.substring(9))
 							.setColor(green)
-							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" (+"+casino+") > "+rollToBeat, 
+							.setFooter({ text: `Doubled by: `+interaction.user.username+" at "+date.toLocaleString()+"\nwinning roll: "+roll+" > "+rollToBeat, 
 										iconURL: interaction.user.displayAvatarURL() })
 
 								
 						return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
 					} else {
 						return interaction.editReply({ content: "unlucky... you just lost "+amount+" "+pookie.pookie_name+"(s)...." 
-													  +"\nyour unlucky roll: "+roll+" (+"+casino+") < "+rollToBeat}); 
+													  +"\nyour unlucky roll: "+roll+" < "+rollToBeat}); 
 					}
 			} else {
 				return interaction.reply({ content: "you dont have enough of those brokie", ephemeral: true })

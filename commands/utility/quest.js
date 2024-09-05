@@ -83,21 +83,21 @@ async function amountGenerator(tier, p){
 */
 async function amountGenerator(tier, p){
     if(tier == 0)
-        amount = 20 + getRandomInt(30);
+        amount = 20 + getRandomInt(10);
     if(tier == 1)
     {
-        amount = 40 + getRandomInt(60);
+        amount = 40 + getRandomInt(30);
         if(p.rarity == ssr) amount = (amount/4).toFixed(0);
     }
     if(tier == 2)
     {
-        amount = 80 + getRandomInt(120);
+        amount = 80 + getRandomInt(60);
         if(p.rarity == ssr) amount = (amount/4).toFixed(0);
         if(p.rarity == starry) amount = (amount/6).toFixed(0);
     }
     if(tier == 3)
         {
-            amount = 160 + getRandomInt(240);
+            amount = 160 + getRandomInt(120);
             if(p.rarity == ssr) amount = (amount/4).toFixed(0);
             if(p.rarity == starry) amount = (amount/6).toFixed(0);
             if(p.rarity == starry_ssr) amount = (amount/8).toFixed(0);
@@ -131,7 +131,7 @@ async function rewardGenerator(tier, p){
         return pookie;
 }
 module.exports = {
-    cooldown: 60,
+    cooldown: 1,
 	data: new SlashCommandBuilder()
 		.setName('quest')
 		.setDescription('check current quest')
@@ -142,6 +142,8 @@ module.exports = {
 	async execute(interaction) {
         const tier = interaction.options.getInteger('questtier');
         const user = await Users.findOne({ where: { user_id: interaction.user.id } });
+        if(!user)
+            return await interaction.reply("you havent summoned a pookiebear yet!");
         const check = await Quests.findOne({ where: { user_id: interaction.user.id }});
         if(check){
             console.log(await check);
@@ -152,12 +154,12 @@ module.exports = {
         }
         //const userTier = Math.floor(user.quest/4);
         //figure out how to assign boss quests 
-
+        /*
         const reroll = new ButtonBuilder()
         .setCustomId(user.user_id)
         .setLabel('🎲')
         .setStyle(ButtonStyle.Primary);
-
+        */
         const accept = new ButtonBuilder()
         .setCustomId(user.user_id+"1")
         .setLabel('accept')
@@ -169,7 +171,7 @@ module.exports = {
         .setStyle(ButtonStyle.Danger);
 
         const row = new ActionRowBuilder()
-        .addComponents(reroll, accept, deny);
+        .addComponents(accept, deny);
 
         p = await pookieGenerator(tier);
         amount = await amountGenerator(tier, p);
@@ -184,10 +186,10 @@ module.exports = {
         try {
         const filter = i => {
             if (i.user.id === interaction.user.id) return true;
-            interaction.followUp({content: "this isnt your quest!", ephemeral: true});
         }
 		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60_000 });
         collector.on('collect', async i => {
+            /*
         if (i.customId === user.user_id){
             p = await pookieGenerator(tier);
             amount = await amountGenerator(tier, p);
@@ -199,6 +201,7 @@ module.exports = {
                               components: [row]
             })
         }
+            */
         if (i.customId === user.user_id+"1"){
             collector.stop();
             const attachment = new AttachmentBuilder(p.file_path);
@@ -221,7 +224,7 @@ module.exports = {
         }
         if (i.customId === user.user_id+"2"){
             collector.stop();
-               await i.update({  content: "quest search stopped.",
+               await i.update({  content: "quest denied",
                               embeds: [],
                               files: [],
                               components: []
@@ -229,7 +232,7 @@ module.exports = {
         }
     })
         }   catch (e) {
-            await interaction.editReply({ content: 'quest not accepted within 3 minutes, cancelling', components: [] });
+            await interaction.editReply({ content: 'quest not accepted within a minute, cancelling', components: [] });
         }
 		//await interaction.reply(questString);
 	},
