@@ -38,7 +38,8 @@ module.exports = {
 			option.setName('pookies')
 				.setDescription('how many pookies per roll (ex. 20 amount/ 5 pookies = 4; 4 rolls')
 				.setMinValue(1)
-				.setMaxValue(25)),	
+				.setMaxValue(25)
+				.setRequired(true)),	
 	async autocomplete(interaction) {
 		//find a way to autocomplete all in?
 		const focusedValue = interaction.options.getFocused();
@@ -83,7 +84,7 @@ module.exports = {
 			if (rolls == 0)
 				return interaction.reply({ content: "pookies cannot be greater than amount given (ex. 5 amount/6 pookies)", ephemeral: true });
 			user.addPookies(pookie, userID, loss, pookie.rarity);
-			if(await user.checkAmount(pookie, userID, loss) == true || amount == 25) 
+			if(await user.checkAmount(pookie, userID, loss) == true) 
 				{
 					user.destroyPookies(pookie, userID, user.favoritePookie);
 					allIn = 3;
@@ -105,13 +106,13 @@ module.exports = {
 		for(let i = 0; i < rolls; i++){
 			let roll = getRandomInt(100);
 			rollToBeat = 50 - r*2 - allIn + (8 * scaler);
-			//if(rollToBeat >= 70) rollToBeat = 70;
+			if(rollToBeat >= 99) rollToBeat = 99;
 			//100 - amount*2
 
 			//console.log("roll: "+roll+", rollToBeat: "+rollToBeat);
 			rollString += "roll: "+roll+"\n";
-
-			if(roll + starMultiplier > rollToBeat){
+			roll = roll + starMultiplier;
+			if(roll> rollToBeat){
 				//console.log("one win");
 				wincount++;
 				//await interaction.followUp({ content: "congrats <@"+userID+"> on the new **"+pookie.pookie_name+"+**!!! \nyour winning roll: "+roll+" > "+rollToBeat}); 
@@ -148,15 +149,16 @@ module.exports = {
 		let pookieEmbed = new EmbedBuilder()
 			.setAuthor({name: "pookiebear #"+newpookie.id })
 										//DUDE
-			.setTitle(newpookie.pookie_name+"\nsummon count: "+newCount)
+			.setTitle(newpookie.pookie_name+"\nroll results: "+wincount+"/"+rolls+" ("+r+" pookies/roll)")
 			//.setDescription("roll to beat: "+rollToBeat+"\n"+rollString)
 			.setImage('attachment://'+newpookie.file_path.substring(9))
 			.setColor(embedColor)
 			.setFooter({ text: `Summoned by: `+interaction.user.username+" at "+date.toLocaleString()+
-								"\nroll results: "+wincount+"/"+rolls+" ("+r+" pookies/roll)", 
+								"\nsummon count: "+newCount, 
 						iconURL: newpookie.creatorURL })
 		return interaction.editReply({ embeds: [pookieEmbed], files: [attachment]});
 		} else {
+			rollToBeat = rollToBeat - starMultiplier;
 			return interaction.editReply({ content: "unlucky... you just boomed "+amount+" "+pookie.pookie_name+
 										"(s) away....\nroll to beat: "+rollToBeat+"\nunlucky rolls: \n"+rollString}); 
 		}

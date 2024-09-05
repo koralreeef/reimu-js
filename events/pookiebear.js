@@ -83,17 +83,22 @@ module.exports = {
             })
             latestID = latestPookie.id;
             h.addBalance(message.author.id, 1);
-            
-            if(h.getRandomInt(100) > (h.commonSR - rainMultiplier)) {
-                
             let userID = message.author.id;
+            let newbonus = 0;
+            const u = await Users.findOne({where: {user_id: userID}});
+            if(u.location == 'pookieville') {
+                newbonus = 10;
+            }
+            if(h.getRandomInt(100) > (h.commonSR - rainMultiplier - newbonus)) {
+                
             let userUsername = message.author.username;
             let avatarURL = message.author.displayAvatarURL();
-            const u = await Users.findOne({where: {user_id: userID}});
+            
             let starRoll = 0;
             if(u.location == 'star peak') {
                 starRoll = h.getRandomInt(100);
             }
+
             let pookieCommons = await Pookiebears.findAll({where: {rarity: h.common}} );
             let pookiebearID = h.getRandomInt(pookieCommons.length);
             let star = h.getStarnight();

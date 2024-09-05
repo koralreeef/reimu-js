@@ -131,15 +131,16 @@ module.exports = {
                         pookie = await makePlusPookie(name, pookieFileName, avatarURL, userUsername, p.rarity);
                         user.addPookies(pookie, id, quest.reward_amount, pookie.rarity)
                         }
-                      
-                       let newcount = user.questLifetime + 1;
-
+                        let newcount;
+                       if((quest.questTier == user.questTier) || quest.questTier - 1 == user.questTier){
+                       newcount = user.questLifetime + 1;
                        user.update({ questLifetime: newcount }, 
                        { where: {user_id: user.id}});
+                       }
                        console.log("lifetime quests: "+user.questLifetime);
                        console.log("quest tier: "+user.questTier)
                        let locationString = "";
-                       if(user.questLifetime%4 == 0) {
+                       if(user.questLifetime%5 == 0) {
                             let newcount = user.questTier + 1;
                             user.update({ questTier: newcount }, 
                                 { where: {user_id: user.id}});
@@ -150,8 +151,11 @@ module.exports = {
                         +"\nthis location has a chance to summon double pookies whenever you summon one!";
                         if(user.questTier == 2)
                             locationString = "you unlocked the "+location+"!"
-                        +"\nthis zone boosts the chance of the doublepookie skill by 15%!";
+                        +"\nthis mountain passively spews out 10 random pookies for you every hour!";
                         if(user.questTier == 3)
+                            locationString = "you unlocked the "+location+"!"
+                        +"\nthis zone boosts the chance of the doublepookie skill by 25%!";
+                        if(user.questTier == 4)
                             locationString = "you unlocked the "+location+"!"
                         +"\nthis starry peak boosts the chances of starforce and allows you to find starry night pookies at any time!";
                        }

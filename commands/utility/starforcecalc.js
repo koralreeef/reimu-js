@@ -45,15 +45,18 @@ module.exports = {
 
         let starMultiplier = 0;
         let all = 0;
-        if (star) starMultiplier = 30;
+        if (star) starMultiplier = 15;
         if (allIn) all = 3;
-
-        let scaler = (pookie.match(regex)||[]).length;
+        if (location == 'star peak') starMultiplier += 10;
+        let scaler = (pookie.match(regex)||[]).length - 1;
 
         let rollToBeat = 50 - amount*2 - all - starMultiplier + (8 * scaler);
         let final = 100 - rollToBeat;
+        if(final < 1) {
+            return await interaction.reply('this calc will cap at 1%\noverflow by '+final+'%');
+        }
 		return await interaction.reply('chance for a '+pookie+' star force to succeed: '+final+
-                                '%\n50 - '+amount+'(2) - '+all+' - '+starMultiplier+' + (5('+scaler+
+                                '%\nroll to beat: 50 - '+amount+'(2) - '+all+' - '+starMultiplier+' + (5('+scaler+
                                 '))\nallIn: '+allIn+', starrynight: '+star+', scaler(+ amount): '+scaler);
 	},
 };

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { Op } = require("sequelize");
 const { Pookiebears, UserPookies } = require('../../db/dbObjects.js');
 const fs = require('fs');
@@ -10,7 +10,8 @@ module.exports = {
         .addStringOption(option =>
 			option.setName('name')
 				.setDescription('what\'s their name')
-				.setRequired(true)),
+				.setRequired(true))
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
 	async execute(interaction) {
 		{

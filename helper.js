@@ -10,14 +10,17 @@ const fs = require("fs");
 const tierMap = new Map([
     [0, "ssr pookies"],
 	[1, "starry night pookies"],
-	[2, "plus pookies"],
-    [3, "plus pookies"],
+	[2, "starry night pookies"],
+	[3, "plus pookies"],
+    [4, "plus pookies"],
 ])
 
 const locationMap = new Map([
+	[0, 'pookieville'],
 	[1, 'pookie forest'],
-	[2, 'casino zone'],
-	[3, 'star peak']
+	[2, 'mt. pookie'],
+	[3, 'casino zone'],
+	[4, 'star peak']
 ]);
 
 const starryMap = new Map([
@@ -65,6 +68,7 @@ var SSR = 90;
 let totalPookies = 0;
 let weatherClear = false;
 let hurricanePookie = "";
+const targetChannel = '1273023049221935185';
 let rainy = false, snowy = false, starnight = false, hurricane = false; 
 
 function setTotalPookies(i){
@@ -165,8 +169,8 @@ async function addBalance(id, amount) {
 										balance: amount, 
 										lifetime: amount, 
 										favoritePookie: "lappy", 
-										location: "none", 
-										questTier: 3, 
+										location: "pookieville", 
+										questTier: 2, 
 										questLifetime: 0 });
 	currency.set(id, newUser);
 	return newUser;
@@ -279,8 +283,7 @@ function getEmbedColor(p, r) {
 		return embedColor;
 	} 
 }
-
-	return embedColor;
+return embedColor;
 }
 module.exports = { currency, commonSR, SSR, 
 				   getLifetime, getRandomInt, 
@@ -296,4 +299,4 @@ module.exports = { currency, commonSR, SSR,
 				   setHurricanePookie, getHurricanePookie,
 				   arrayExists, getEmbedColor,
 				   setWeatherClear, getWeatherClear,
-					locationMap,tierMap };
+				   locationMap,tierMap,targetChannel };

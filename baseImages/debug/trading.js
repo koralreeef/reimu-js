@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ButtonStyle, ComponentType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonBuilder, ActionRowBuilder} = require('discord.js');
+const { SlashCommandBuilder, ButtonStyle, ComponentType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonBuilder, ActionRowBuilder, PermissionFlagsBits} = require('discord.js');
 const { Users, Pookiebears } = require('../../db/dbObjects.js');
 
 //HAGGLE SYSTEM IF YOU TRADE WITH THE BOT (RANDOM CHANCE TO GET DEALS)
@@ -10,7 +10,8 @@ module.exports = {
         .addUserOption(option =>
             option.setName('user')
                 .setDescription('who is recieving this trade')
-                .setRequired(true)),  
+                .setRequired(true))
+            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
 	async execute(interaction) {
         const r = interaction.options.getUser('user');

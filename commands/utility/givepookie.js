@@ -51,6 +51,9 @@ module.exports = {
 	async execute(interaction) {
         const tar = interaction.options.getUser('target');
         const senderID = interaction.user.id;
+        if(senderID == tar.id){
+            return interaction.reply("you cannot send pookies to yourself..."); 
+        }
         const pookie = interaction.options.getString('pookie');
         const amount = interaction.options.getInteger('amount');
         const loss = -amount;

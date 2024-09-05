@@ -1,11 +1,11 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { setSnowy, setStarnight, setRainy, setHurricane, setRainDuration, setSnowDuration, setStarnightDuration, setWeatherClear } = require('../../helper.js');
-const { set } = require('lodash');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 	.setName('clearweather')
-	.setDescription('clears weather'),
+	.setDescription('clears weather')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
 	async execute(interaction) {
         setSnowy(false);

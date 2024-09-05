@@ -2,6 +2,7 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = re
 const { Users, UserPookies, Pookiebears } = require('../../db/dbObjects.js');
 
 module.exports = {
+    cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('tradepookie')
 		.setDescription('give another user some pookies')
@@ -101,7 +102,7 @@ module.exports = {
                 {
                     const response = await interaction.reply({
                         content: `A new trade offer from ${interaction.user.username}! ${tar}, do you accept?
-                                  \nYou will recieve **${a1} ${p1}**\n${interaction.user.username} is offering **${ta1} ${t1}**\nexpires <t:${timer}:R>`,
+                                  \nYou will recieve **${a1} ${p1}**\n${interaction.user.username} wants **${ta1} ${t1}**\nexpires <t:${timer}:R>`,
                         components: [row],
                     });
                     

@@ -8,6 +8,7 @@ let tierMap = new Map([
 	[1, "starry night pookies"],
 	[2, "plus pookies"],
     [3, "plus pookies"],
+    [4, "plus plus pookies"],
 ])
 
 let p;
@@ -44,6 +45,8 @@ async function pookieGenerator(tier){
         if(tier == 2)
             pookie = await Pookiebears.findAll( { where: {rarity: { [Op.or]: [common, ssr, starry]}}});   
         if(tier == 3)
+            pookie = await Pookiebears.findAll( { where: {rarity: { [Op.or]: [common, ssr, starry, starry_ssr]}}});  
+        if(tier == 4)
             pookie = await Pookiebears.findAll( { where: {rarity: { [Op.or]: [common, ssr, starry, starry_ssr]}}});  
             const name = pookie[getRandomInt(pookie.length)];
             p = name;
@@ -90,13 +93,20 @@ async function amountGenerator(tier, p){
     {
         amount = 80 + getRandomInt(120);
         if(p.rarity == ssr) amount = (amount/4).toFixed(0);
-        if(p.rarity == starry) amount = (amount/2).toFixed(0);
+        if(p.rarity == starry) amount = (amount/6).toFixed(0);
     }
     if(tier == 3)
         {
             amount = 160 + getRandomInt(240);
             if(p.rarity == ssr) amount = (amount/4).toFixed(0);
-            if(p.rarity == starry) amount = (amount/2).toFixed(0);
+            if(p.rarity == starry) amount = (amount/6).toFixed(0);
+            if(p.rarity == starry_ssr) amount = (amount/8).toFixed(0);
+        }
+    if(tier == 4)
+        {
+            amount = 320 + getRandomInt(480);
+            if(p.rarity == ssr) amount = (amount/4).toFixed(0);
+            if(p.rarity == starry) amount = (amount/6).toFixed(0);
             if(p.rarity == starry_ssr) amount = (amount/8).toFixed(0);
         }
     return amount;
@@ -112,6 +122,8 @@ async function rewardGenerator(tier, p){
             pookie = p.pookie_name+"\+";
         if(tier == 3)
             pookie = p.pookie_name+"\+";
+        if(tier == 4)
+            pookie = p.pookie_name+"\+\+";
             //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to ssrs just for you!!"
             //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
             //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
@@ -119,6 +131,7 @@ async function rewardGenerator(tier, p){
         return pookie;
 }
 module.exports = {
+    cooldown: 60,
 	data: new SlashCommandBuilder()
 		.setName('quest')
 		.setDescription('check current quest')
@@ -141,17 +154,17 @@ module.exports = {
         //figure out how to assign boss quests 
 
         const reroll = new ButtonBuilder()
-        .setCustomId('reroll')
+        .setCustomId(user.user_id)
         .setLabel('🎲')
         .setStyle(ButtonStyle.Primary);
 
         const accept = new ButtonBuilder()
-        .setCustomId('yes')
+        .setCustomId(user.user_id+"1")
         .setLabel('accept')
         .setStyle(ButtonStyle.Success);
 
         const deny = new ButtonBuilder()
-        .setCustomId('no')
+        .setCustomId(user.user_id+"2")
         .setLabel('stop search')
         .setStyle(ButtonStyle.Danger);
 
@@ -169,10 +182,10 @@ module.exports = {
                                   components: [row]
 		});
         try {
-        const filter = i => i.user.id === interaction.user.id && i.customId === 'reroll' || i.customId === 'yes' || i.customId === 'no';
-		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 180_000 });
+        const filter = i => i.user.id === interaction.user.id;
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60_000 });
         collector.on('collect', async i => {
-        if (i.customId === 'reroll'){
+        if (i.customId === user.user_id){
             p = await pookieGenerator(tier);
             amount = await amountGenerator(tier, p);
             const attachment = new AttachmentBuilder(p.file_path);
@@ -183,7 +196,7 @@ module.exports = {
                               components: [row]
             })
         }
-        if (i.customId === 'yes'){
+        if (i.customId === user.user_id+"1"){
             collector.stop();
             const attachment = new AttachmentBuilder(p.file_path);
             const pookieEmbed = await buildEmbed(p, tier, amount);
@@ -203,7 +216,7 @@ module.exports = {
             })
             console.log(quest);
         }
-        if (i.customId === 'no'){
+        if (i.customId === user.user_id+"2"){
             collector.stop();
                await i.update({  content: "quest search stopped.",
                               embeds: [],
