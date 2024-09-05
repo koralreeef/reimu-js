@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Pookiebears } = require('../../db/dbObjects.js');
 const { downloadFile, common, ssr } = require('../../helper.js');
 
+const regex = /[^èéòàùì\w\s]/gi;
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('pookiebear')
@@ -13,18 +15,27 @@ module.exports = {
 		.addStringOption(option =>
 			option.setName('link')
 				.setDescription('enter an image link')
-				.setRequired(true)),
+				.setRequired(true))
+		.addStringOption(option =>
+			option.setName('source')
+				.setDescription('source link for any fanart (twitter or pixiv or other)')),
 
 	async execute(interaction) {
 
 		const name = interaction.options.getString('name').toLowerCase();
+		//const source = interaction.options.getString('source').toLowerCase() || "no source listed";
 		const url = interaction.options.getString('link');
 		const fileName = name.replace(/ /g,"_");
-
+	
+		//if(source != 'no source listed') source = "[source]("+source+")";
         if(!url.startsWith("https://cdn.discordapp.com/attachments/")) 
 		return await interaction.reply({ content: "only discord image links will be accepted (post your image in a channel and copy its link)", ephemeral: true});
 		if(name.includes("+")) 
 		return await interaction.reply({ content: "nice try man however thats reserved for the gamblers", ephemeral: true});
+		if(name.length > 31)
+		return await interaction.reply({ content: "name is too long", ephemeral: true});
+		if(name.test(regex))	
+		return await interaction.reply({ content: "only regular letters, numbers, and spaces are allowed", ephemeral: true}); 
 		if(name.includes("starry night")) 
 		return await interaction.reply({ content: "these are only avaliable on special nights silly", ephemeral: true});
 		let avatarURL = interaction.user.displayAvatarURL();
@@ -36,7 +47,8 @@ module.exports = {
 					creator: interaction.user.username,
 					creatorURL: avatarURL,
 					summon_count: 0,
-					rarity: common
+					rarity: common,
+					//source: source
 				});
 				await Pookiebears.create({
 					pookie_name: name+" ssr",
@@ -44,7 +56,8 @@ module.exports = {
 					creator: interaction.user.username,
 					creatorURL: avatarURL,
 					summon_count: 0,
-					rarity: ssr
+					rarity: ssr,
+					//source: source
 				})
 
 				downloadFile(url, fileName+".jpg");

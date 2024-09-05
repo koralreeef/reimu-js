@@ -22,9 +22,7 @@ module.exports = {
 			filtered.map(choice => ({ name: choice, value: choice })),
 		);
 	},
-	async execute(interaction) {
-		
-		
+	async execute(interaction) {		
 		const n = interaction.options.getString('name');
 		const pookie = await Pookiebears.findOne(
 			{ where: {pookie_name: n}});
@@ -37,6 +35,7 @@ module.exports = {
 		let pookieEmbed = new EmbedBuilder()
 				.setAuthor({name: "pookiebear #"+pookie.id })
 				.setTitle(pookie.pookie_name+"\nsummon count: "+pookie.summon_count)
+				//.setDescription(pookie.source)
                 .setImage('attachment://'+pookie.file_path.substring(9))
                 .setColor(embedColor)
                 .setFooter({ text: `Creator: `+pookie.creator+" at "+pookieDate.toLocaleString(), 
