@@ -24,7 +24,7 @@ async function makeStarPookie(pookie, interaction) {
     creatorURL: interaction.user.displayAvatarURL(),
     summon_count: 0,
     rarity: pookie.rarity + 5,
-    source: pookie.source
+    source: pookie.source,
   });
   console.log(n.source);
   return n;

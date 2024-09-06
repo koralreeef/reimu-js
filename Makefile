@@ -6,3 +6,5 @@ refresh-commands:
 	node deploy-commands.js
 refresh-db:
 	node ./db/dbInit.js -f
+run-dev:
+	nodemon app.js
