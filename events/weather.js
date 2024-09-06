@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const { Pookiebears } = require('../db/dbObjects.js');
-const { statusChannel, pookieChannel, rainrole, snowyrole, starryrole, hurricanerole } = require('../config.json');
+const { statusChannel, pookieChannel, rainrole, snowyrole, starryrole, hurricanerole, weatherMsg } = require('../config.json');
 //just give it up bruh use h
 const h = require('../helper.js');
 
@@ -26,7 +26,7 @@ module.exports = {
         var status = client.channels.cache.get(statusChannel);
         var pookie = client.channels.cache.get(pookieChannel);
         //let message = await status.send(weatherString);
-        let messageID = "1281245543720550444";
+        let messageID = weatherMsg;
         let weatherMessageID = 0;
 
         setInterval(async () => {
@@ -112,9 +112,18 @@ module.exports = {
                 }
             h.setWeatherClear(false);
             const next = currentTimestamp + 15;
-            status.messages.fetch(messageID)
-            .then(message => message.edit(weatherString+rainString+snowString+starString+hurricaneString+"Next weather check: <t:"+next+":R>"))
-            .catch(console.error);
+
+            let weatherMsg = weatherString+rainString+snowString+starString+hurricaneString+"Next weather check: <t:"+next+":R>"
+            
+            try {
+                let message = await status.messages.fetch(messageID)
+                await message.edit(weatherMsg)
+            } catch (e) {
+                let msg = await status.send(weatherMsg)
+                messageID = msg.id
+            }
+            
+            
 		}, 15000);
 
 		console.log(`Weather watch in progress...`);

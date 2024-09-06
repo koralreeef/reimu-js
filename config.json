@@ -1,0 +1,14 @@
+{
+    "token": "YOUR BOT TOKEN HERE",
+    "AccessToken": "YOUR OSU TOKEN HERE",
+    "clientId": "YOUR BOT CLIENT ID HERE",
+    "guildId": "YOUR GUILD ID HERE",
+    "pookiewatch": [],
+    "statusChannel": "YOUR POOKIE STATUS CHANNEL HERE",
+    "pookieChannel": "YOUR POOKIE CHANNEL HERE",
+    "rainrole": "YOUR RAINY PING ROLE ID HERE",
+    "snowyrole": "YOUR SNOWY PING ROLE ID HERE",
+    "starryrole": "YOUR STARRY PING ROLE ID HERE",
+    "hurricanerole": "YOUR HURRICANE PIGNG ROLE ID HERE",
+    "weatherMsg": "YOUR WEATHER UPDATE MSG ID HERE"
+}
