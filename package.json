@@ -101,7 +101,7 @@
   },
   "scripts": {
     "test": "jest",
-    "format": "npx prettier . --write &&  npx eslint '**/*.js' --fix",
+    "format": "npx prettier . --write &&  npx eslint \"**/*.js\" --fix",
     "prepare": "husky"
   },
   "keywords": [],
