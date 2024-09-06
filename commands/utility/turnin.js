@@ -86,6 +86,7 @@ module.exports = {
             const check = user.checkPookies(pookie, id, loss);
             const pookieEmbed = await buildEmbed(pookie, quest.questTier, quest.due_amount);
             const attachment = new AttachmentBuilder(pookie.file_path);
+            await interaction.deferReply();
             if(await check == true)
             {
                 const response = await interaction.reply({ content: "would you like to turn in the current quest?",

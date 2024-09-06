@@ -180,9 +180,9 @@ module.exports = {
         amount = await amountGenerator(tier, p);
         const attachment = new AttachmentBuilder(p.file_path);
         console.log(p.name);
-
+        await interaction.deferReply();
 		const pookieEmbed = await buildEmbed(p, tier, amount);
-        const response = await interaction.reply({ embeds: [pookieEmbed],
+        const response = await interaction.editReply({ embeds: [pookieEmbed],
 								  files: [attachment],
                                   components: [row]
 		});
