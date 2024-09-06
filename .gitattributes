@@ -1,0 +1,4 @@
+*.png binary
+*.jpg binary
+*.js text eol=crlf
+*.ts text eol=crlf
