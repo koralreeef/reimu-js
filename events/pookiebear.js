@@ -12,7 +12,14 @@ const h = require("../helper.js");
 let latestID, latestPookie;
 let rainMultiplier, snowMultiplier;
 
-async function makeStarryPookie(name, fileName, avatarURL, username, rarity, source) {
+async function makeStarryPookie(
+  name,
+  fileName,
+  avatarURL,
+  username,
+  rarity,
+  source,
+) {
   const ssr = rarity;
   const pookie = await Pookiebears.create({
     pookie_name: name,
@@ -21,7 +28,7 @@ async function makeStarryPookie(name, fileName, avatarURL, username, rarity, sou
     creatorURL: avatarURL,
     summon_count: 1,
     rarity: h.starry + ssr,
-    source: source
+    source: source,
   });
   return pookie;
 }
@@ -163,7 +170,7 @@ module.exports = {
                 avatarURL,
                 userUsername,
                 h.ssr,
-                currentPookie.source
+                currentPookie.source,
               );
             }
             const newpookie = await Pookiebears.findOne({
@@ -232,7 +239,7 @@ module.exports = {
               avatarURL,
               userUsername,
               "",
-              currentPookie.source
+              currentPookie.source,
             );
           }
           const newpookie = await Pookiebears.findOne({

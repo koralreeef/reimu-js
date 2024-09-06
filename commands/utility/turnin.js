@@ -49,7 +49,14 @@ async function buildCompleteEmbed(pookie, tier, amount) {
   return pookieEmbed;
 }
 
-async function makeStarryPookie(name, fileName, avatarURL, username, rarity, source) {
+async function makeStarryPookie(
+  name,
+  fileName,
+  avatarURL,
+  username,
+  rarity,
+  source,
+) {
   const pookie = await Pookiebears.create({
     pookie_name: "starry night " + name,
     file_path: "./images/" + fileName,
@@ -57,7 +64,7 @@ async function makeStarryPookie(name, fileName, avatarURL, username, rarity, sou
     creatorURL: avatarURL,
     summon_count: 1,
     rarity: starry + rarity,
-    source
+    source,
   });
   return pookie;
 }
@@ -167,7 +174,7 @@ module.exports = {
               avatarURL,
               userUsername,
               p.rarity,
-              p.source
+              p.source,
             );
             user.addPookies(pookie, id, quest.reward_amount, pookie.rarity);
           } else if (quest.questTier > 1) {
