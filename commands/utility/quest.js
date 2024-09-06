@@ -17,7 +17,7 @@ const {
 } = require("../../helper.js");
 const { Op } = require("sequelize");
 
-let tierMap = new Map([
+const tierMap = new Map([
   [0, "ssr pookies"],
   [1, "starry night pookies"],
   [2, "plus pookies"],
@@ -26,31 +26,31 @@ let tierMap = new Map([
 ]);
 
 async function buildEmbed(pookie, tier, amount) {
-  let embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity);
-  let reward = (amount / 2).toFixed(0);
+  const embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity);
+  const reward = (amount / 2).toFixed(0);
   let tierString = tierMap.get(tier);
   let starString = "";
   let string = "";
-  //PLEASE REWRITE THIS OH MY GOD
+  // PLEASE REWRITE THIS OH MY GOD
   if (tierMap.get(tier).includes("starry night")) {
     starString = "starry night ";
     string = "pookies";
     tierString = "";
   }
-  let pookieEmbed = new EmbedBuilder()
+  const pookieEmbed = new EmbedBuilder()
     .setAuthor({ name: "quest tier: " + tier })
     .setTitle(pookie.pookie_name + "s needed: " + amount)
     .setThumbnail("attachment://" + pookie.file_path.substring(9))
     .setColor(embedColor)
     .setFooter({
       text:
-        `reward: ` +
+        "reward: " +
         reward +
-        ` ` +
+        " " +
         starString +
-        `` +
+        "" +
         pookie.pookie_name +
-        ` ` +
+        " " +
         tierString +
         string,
       iconURL: "attachment://" + pookie.file_path.substring(9),
@@ -59,28 +59,33 @@ async function buildEmbed(pookie, tier, amount) {
 }
 async function pookieGenerator(tier) {
   let pookie;
-  if (tier == 0)
+  if (tier == 0) {
     pookie = await Pookiebears.findAll({ where: { rarity: common } });
-  if (tier == 1)
+  }
+  if (tier == 1) {
     pookie = await Pookiebears.findAll({
       where: { rarity: { [Op.or]: [common, ssr] } },
     });
-  if (tier == 2)
+  }
+  if (tier == 2) {
     pookie = await Pookiebears.findAll({
       where: { rarity: { [Op.or]: [common, ssr, starry] } },
     });
-  if (tier == 3)
+  }
+  if (tier == 3) {
     pookie = await Pookiebears.findAll({
       where: { rarity: { [Op.or]: [common, ssr, starry, starry_ssr] } },
     });
-  if (tier == 4)
+  }
+  if (tier == 4) {
     pookie = await Pookiebears.findAll({
       where: { rarity: { [Op.or]: [common, ssr, starry, starry_ssr] } },
     });
+  }
   const name = pookie[getRandomInt(pookie.length)];
-  //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to ssrs just for you!!"
-  //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
-  //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
+  // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to ssrs just for you!!"
+  // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
+  // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
 
   return name;
 }
@@ -144,9 +149,9 @@ async function rewardGenerator(tier, p) {
   if (tier == 2) pookie = p.pookie_name + "+";
   if (tier == 3) pookie = p.pookie_name + "+";
   if (tier == 4) pookie = p.pookie_name + "++";
-  //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to ssrs just for you!!"
-  //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
-  //questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
+  // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to ssrs just for you!!"
+  // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
+  // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
 
   return pookie;
 }
@@ -158,21 +163,22 @@ module.exports = {
     .addIntegerOption((option) =>
       option
         .setName("questtier")
-        .setDescription("specify what tier of quests to generate")
+        .setDescription("specify what tier of quests to generate"),
     ),
 
   async execute(interaction) {
     const user = await Users.findOne({
       where: { user_id: interaction.user.id },
     });
-    if (!user)
+    if (!user) {
       return await interaction.reply("you havent summoned a pookiebear yet!");
+    }
 
     const tier = interaction.options.getInteger("questtier") ?? user.questTier;
     const check = await Quests.findOne({
       where: { user_id: interaction.user.id },
     });
-    if(user.questTier > 4) tier = 4;
+    if (user.questTier > 4) tier = 4;
     if (check) {
       console.log(await check);
       return await interaction.reply("you already have a quest!");
@@ -183,12 +189,12 @@ module.exports = {
           user.questTier +
           " < " +
           tier +
-          ")"
+          ")",
       );
     }
 
-    //const userTier = Math.floor(user.quest/4);
-    //figure out how to assign boss quests
+    // const userTier = Math.floor(user.quest/4);
+    // figure out how to assign boss quests
 
     const reroll = new ButtonBuilder()
       .setCustomId(user.user_id)
@@ -239,12 +245,12 @@ module.exports = {
           currentQuestPookie = await pookieGenerator(tier);
           amount = await amountGenerator(tier, currentQuestPookie);
           const attachment = new AttachmentBuilder(
-            currentQuestPookie.file_path
+            currentQuestPookie.file_path,
           );
           const pookieEmbed = await buildEmbed(
             currentQuestPookie,
             tier,
-            amount
+            amount,
           );
           await i.update({
             content: "",
@@ -278,12 +284,12 @@ module.exports = {
 
           case "ACCEPTED":
             const attachment = new AttachmentBuilder(
-              currentQuestPookie.file_path
+              currentQuestPookie.file_path,
             );
             const pookieEmbed = await buildEmbed(
               currentQuestPookie,
               tier,
-              amount
+              amount,
             );
             await lastInteraction.update({
               content:
@@ -292,7 +298,7 @@ module.exports = {
               files: [attachment],
               components: [],
             });
-            let reward = await rewardGenerator(tier, currentQuestPookie);
+            const reward = await rewardGenerator(tier, currentQuestPookie);
             const quest = await Quests.create({
               user_id: user.user_id,
               pookie_id: currentQuestPookie.id,
@@ -316,6 +322,6 @@ module.exports = {
     } catch (e) {
       console.log("testasdf");
     }
-    //await interaction.reply(questString);
+    // await interaction.reply(questString);
   },
 };
