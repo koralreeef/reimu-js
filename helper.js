@@ -8,11 +8,11 @@ const currency = new Collection();
 const fs = require("fs");
 
 const tierMap = new Map([
-    [0, "ssr pookies"],
+	[0, "ssr pookies"],
 	[1, "starry night pookies"],
 	[2, "starry night pookies"],
 	[3, "plus pookies"],
-    [4, "plus pookies"],
+	[4, "plus pookies"],
 ])
 
 const locationMap = new Map([
@@ -24,129 +24,135 @@ const locationMap = new Map([
 ]);
 
 const starryMap = new Map([
-	[0, '65FA02'],
-	[1, '02FAB4'],
-	[2, '0244FA'],
-	[3, 'AE0AFA'],
-	[4, 'FC12BA'],
-	[5, 'FA002A'],
+	[1, '65FA02'],
+	[2, '02FAB4'],
+	[3, '0244FA'],
+	[4, 'AE0AFA'],
+	[5, 'FC12BA'],
+	[6, 'FA002A'],
 ]);
 
 const plusMap = new Map([
-	[0, lightcoral],
-	[1, moccasin],
-	[2, mediumaquamarine],
-	[3, aqua],
-	[4, rebeccapurple],
-	[5, orchid],
+	[1, 'f08080'],
+	[2, 'ffe4b5'],
+	[3, '66ddaa'],
+	[4, '00ffff'],
+	[5, '663399'],
+	[6, 'da70d6'],
 ]);
 
 const ssrMap = new Map([
-	[0, 'db07bf'],
-	[1, '0dc7d1'],
-	[2, 'd95e00'],
-	[3, '00cf22'],
-	[4, 'c4040e'],
-	[5, '042ec4'],
+	[1, 'db07bf'],
+	[2, '0dc7d1'],
+	[3, 'd95e00'],
+	[4, '00cf22'],
+	[5, 'c4040e'],
+	[6, '042ec4'],
 ]);
 
 const starryssrMap = new Map([
-	[0, 'ffd1ef'],
-	[1, 'e3d1ff'],
-	[2, 'cfe4ff'],
-	[3, 'cafada'],
-	[4, 'fafaca'],
-	[5, 'fadac0'],
+	[1, 'ffd1ef'],
+	[2, 'e3d1ff'],
+	[3, 'cfe4ff'],
+	[4, 'cafada'],
+	[5, 'fafaca'],
+	[6, 'fadac0'],
 ]);
 
+const HIGHEST_STARRY_SSR_COLOR = 'fab1b1'
+const HIGHEST_STARRY_COLOR = 'c74298'
+const HIGHEST_SSR_COLOR = 'ff03ee'
+const HIGHEST_PLUS_COLOR = 'ffffff'
+
+
 const regex = /[+]/g;
-let rainDuration = Math.floor(Date.now()/1000), snowDuration = Math.floor(Date.now()/1000), 
-    starnightDuration = Math.floor(Date.now()/1000);
+let rainDuration = Math.floor(Date.now() / 1000), snowDuration = Math.floor(Date.now() / 1000),
+	starnightDuration = Math.floor(Date.now() / 1000);
 let common = 0, ssr = 100, starry = 200, starry_ssr = 300; //+ is +3 rarity
 var commonSR = 60;
 var SSR = 90;
 let totalPookies = 0;
 let weatherClear = false;
 let hurricanePookie = "";
-let rainy = false, snowy = false, starnight = false, hurricane = false; 
+let rainy = false, snowy = false, starnight = false, hurricane = false;
 
-function setTotalPookies(i){
+function setTotalPookies(i) {
 	totalPookies = i;
 }
 
-function getTotalPookies(){
+function getTotalPookies() {
 	return totalPookies;
 }
 
-function getSnowy(){
+function getSnowy() {
 	return snowy;
 }
 
-function getSnowDuration(){
+function getSnowDuration() {
 	return snowDuration;
 }
 
-function setSnowDuration(s){
+function setSnowDuration(s) {
 	snowDuration = s;
 }
 
-function setSnowy(bool){
+function setSnowy(bool) {
 	snowy = bool;
 }
 
-function getHurricane(){
+function getHurricane() {
 	return hurricane;
 }
 
-function setWeatherClear(bool){
+function setWeatherClear(bool) {
 	weatherClear = bool;
 }
 
-function getWeatherClear(bool){
+function getWeatherClear(bool) {
 	weatherClear = bool;
 }
 
-function setHurricane(bool){
+function setHurricane(bool) {
 	hurricane = bool;
 }
 
-function getHurricanePookie(){
+function getHurricanePookie() {
 	return hurricanePookie;
 }
 
-function setHurricanePookie(p){
+function setHurricanePookie(p) {
 	hurricanePookie = p;
 }
 
-function getRainy(){
+function getRainy() {
 	return rainy;
 }
 
-function setRainy(bool){
+function setRainy(bool) {
 	rainy = bool;
 }
 
-function getRainDuration(){
+function getRainDuration() {
 	return rainDuration;
 }
 
-function setRainDuration(r){
+function setRainDuration(r) {
 	rainDuration = r;
 }
 
-function getStarnight(){
+function getStarnight() {
 	return starnight;
 }
 
-function setStarnight(bool){
+function setStarnight(bool) {
 	starnight = bool;
 }
 
-function getStarnightDuration(){
+function getStarnightDuration() {
 	return starnightDuration;
 }
 
-function setStarnightDuration(s){
+function setStarnightDuration(s) {
 	starnightDuration = s;
 }
 
@@ -160,17 +166,19 @@ async function addBalance(id, amount) {
 
 	if (user) {
 		user.balance += Number(amount);
-        user.lifetime += Number(amount);
+		user.lifetime += Number(amount);
 		return user.save();
 	}
 
-	const newUser = await Users.create({ user_id: id,
-										balance: amount, 
-										lifetime: amount, 
-										favoritePookie: "lappy", 
-										location: "pookieville", 
-										questTier: 0, 
-										questLifetime: 0 });
+	const newUser = await Users.create({
+		user_id: id,
+		balance: amount,
+		lifetime: amount,
+		favoritePookie: "lappy",
+		location: "pookieville",
+		questTier: 0,
+		questLifetime: 0
+	});
 	currency.set(id, newUser);
 	return newUser;
 }
@@ -182,120 +190,70 @@ function getBalance(id) {
 
 function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
-  }
+}
 
 function wipeBalance(id) {
 	const user = currency.get(id);
-    user.balance = 0;
+	user.balance = 0;
 	return user.save()
-}   
+}
 
 const downloadFile = (async (url, fileName) => {
-    const res = await fetch(url);
+	const res = await fetch(url);
 
-    const destination = path.resolve("./images", fileName);
-    if (!fs.existsSync("./images")) fs.mkdirSync("./images"); //make downloads directory if none
-    const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
-    await finished(Readable.fromWeb(res.body).pipe(fileStream));
-    }
+	const destination = path.resolve("./images", fileName);
+	if (!fs.existsSync("./images")) fs.mkdirSync("./images"); //make downloads directory if none
+	const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
+	await finished(Readable.fromWeb(res.body).pipe(fileStream));
+}
 );
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function arrayExists(array) {
-	if(Array.isArray(array) && array.length)
+	if (Array.isArray(array) && array.length)
 		return true;
 	return false;
 }
 
-function getEmbedColor(p, r) {
-	let embedColor = blue;
-	let colorIndex = -1;
-	console.log("1 "+embedColor);
-	let plus = false;
-	console.log(p);
-	//check for +
-	//three different color rotations for starry night and ssr
-	//PLEASE REFACTOR
-	if(p.match(regex)){
-		if(Array.isArray(p.match(regex)) && (p.match(regex)).length){
-		colorIndex = p.match(regex).length - 1;
-		plus = true;
+function getEmbedColor(pookie, rarity) {
+
+	if (pookie.indexOf("+") == -1) {
+		switch(rarity) {
+			case ssr: return gold;
+			case starry_ssr: return cornsilk;
+			case starry: return yellow;
+			default: return blue
 		}
 	}
-	ssrSubstring = colorIndex + 1;
-	if(r == ssr) embedColor = gold; 
-	if(r == starry_ssr) embedColor = cornsilk;
-	if(r == starry) embedColor = yellow; 
-	//test
-	if(plus){
-		if (p.substring(0, 12) == "starry night" &&
-		p.substring(p.length - 3 - ssrSubstring, p.length - p.match(regex).length) == "ssr"){ // starry night ssr ++ only
-		console.log(colorIndex);
-		embedColor = starryssrMap.get(colorIndex);
-		if(colorIndex >= starryssrMap.size - 1)
-		{
-			embedColor = 'fab1b1';
-			console.log("2 "+embedColor);
-			return embedColor;
-		}
-		console.log("3 "+embedColor);
-		return embedColor;
-	} 
-		else if (p.substring(0, 12) != "starry night" &&
-			   p.substring(p.length - 3 - ssrSubstring, p.length - p.match(regex).length) == "ssr"){ // ssr ++ only
-		console.log(colorIndex);
-		embedColor = ssrMap.get(colorIndex);
-		if(colorIndex >= ssrMap.size - 1)
-		{
-			embedColor = 'ff03ee';
-			console.log("2 "+embedColor);
-			return embedColor;
-		}
-		console.log("3 "+embedColor);
-		return embedColor;
-	}	
-		else if(p.substring(0, 12) == "starry night"){ //starry only ++
-		console.log(colorIndex);
-		embedColor = starryMap.get(colorIndex);
-		if(colorIndex >= starryMap.size - 1)
-		{
-			embedColor = 'c74298';
-			console.log("2 "+embedColor);
-			return embedColor;
-		}
-		console.log("3 "+embedColor);
-		return embedColor;
-	}  
-		 else { // ++ only
-		console.log(colorIndex);
-		embedColor = plusMap.get(colorIndex);
-		if(colorIndex >= plusMap.size - 1)
-		{
-			embedColor = white;
-			console.log("2 "+embedColor);
-			return embedColor;
-		}
-		console.log("3 "+embedColor);
-		return embedColor;
-	} 
+
+	const plusNumber = pookie.length - pookie.indexOf("+")
+
+	switch(rarity) {
+		case starry_ssr: return starryssrMap.get(plusNumber) ?? HIGHEST_STARRY_SSR_COLOR
+		case starry: return starryMap.get(plusNumber) ?? HIGHEST_STARRY_COLOR
+		case ssr: return ssrMap.get(plusNumber) ?? HIGHEST_SSR_COLOR
+		default: return plusMap.get(plusNumber) ?? HIGHEST_PLUS_COLOR
+	}
+	
 }
-return embedColor;
-}
-module.exports = { currency, commonSR, SSR, 
-				   getLifetime, getRandomInt, 
-				   addBalance, wipeBalance, getBalance, 
-				   downloadFile, sleep,
-				   getSnowy, getRainy, getStarnight,
-				   getSnowDuration, getRainDuration, getStarnightDuration,
-				   setSnowDuration, setRainDuration, setStarnightDuration,
-				   setSnowy, setRainy, setStarnight,
-				   getTotalPookies, setTotalPookies,
-				   setHurricane, getHurricane,
-				   common, ssr, starry, starry_ssr,
-				   setHurricanePookie, getHurricanePookie,
-				   arrayExists, getEmbedColor,
-				   setWeatherClear, getWeatherClear,
-				   locationMap,tierMap };
+
+module.exports = {
+	currency, commonSR, SSR,
+	getLifetime, getRandomInt,
+	addBalance, wipeBalance, getBalance,
+	downloadFile, sleep,
+	getSnowy, getRainy, getStarnight,
+	getSnowDuration, getRainDuration, getStarnightDuration,
+	setSnowDuration, setRainDuration, setStarnightDuration,
+	setSnowy, setRainy, setStarnight,
+	getTotalPookies, setTotalPookies,
+	setHurricane, getHurricane,
+	common, ssr, starry, starry_ssr,
+	setHurricanePookie, getHurricanePookie,
+	arrayExists, getEmbedColor,
+	setWeatherClear, getWeatherClear,
+	locationMap, tierMap
+};

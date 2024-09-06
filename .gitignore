@@ -3,4 +3,9 @@ database.sqlite
 images
 config.json
 usefulstuff.txt
+seeders
+coverage
+.idea
+.vscode
+main
 
