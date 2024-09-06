@@ -4,3 +4,5 @@ database.sqlite
 images
 usefulstuff.txt
 seeders
+coverage
+.idea
