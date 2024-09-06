@@ -1,6 +1,5 @@
 node_modules
-config.json
 database.sqlite
 images
+config.json
 usefulstuff.txt
-seeders
