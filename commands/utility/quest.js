@@ -241,7 +241,7 @@ module.exports = {
       });
       collector.on("collect", async (i) => {
         if (i.customId === user.user_id) {
-          console.log("asdf");
+          let ms = Date.now();
           currentQuestPookie = await pookieGenerator(tier);
           amount = await amountGenerator(tier, currentQuestPookie);
           const attachment = new AttachmentBuilder(
@@ -258,8 +258,10 @@ module.exports = {
             files: [attachment],
             components: [row],
           });
+          let ping = Date.now() - ms;
+          console.log("response time: "+ping+"ms");
         }
-
+        
         // If quest interactions are accepted or deny, kill collector and keep track of state
         if (i.customId === user.user_id + "1") {
           questState = "ACCEPTED";

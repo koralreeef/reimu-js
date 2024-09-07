@@ -6,6 +6,7 @@ const { cornsilk, yellow, gold, blue } = require("color-name");
 const path = require("path");
 const currency = new Collection();
 const fs = require("fs");
+const sharp = require("sharp");
 
 const tierMap = new Map([
   [0, "ssr pookies"],
@@ -203,13 +204,25 @@ function wipeBalance(id) {
   return user.save();
 }
 
-const downloadFile = async (url, fileName) => {
+  const downloadFile = async (url) => {
   const res = await fetch(url);
 
-  const destination = path.resolve("./images", fileName);
+  const destination = path.resolve("./images", "dummy.jpeg");
+  fs.unlink('./images/dummy.jpeg', function(err) {
+    if(err && err.code == 'ENOENT') {
+        // file doens't exist
+        console.log("File doesn't exist, won't remove it.");
+    } else if (err) {
+        // other errors, e.g. maybe we don't have enough permission
+        console.error("Error occurred while trying to remove file");
+    } else {
+        console.log(`removed`);
+    }
+  });
   if (!fs.existsSync("./images")) fs.mkdirSync("./images"); // make downloads directory if none
   const fileStream = fs.createWriteStream(destination, { flags: "wx" });
   await finished(Readable.fromWeb(res.body).pipe(fileStream));
+  return "./images/dummy.jpeg";
 };
 
 function sleep(ms) {

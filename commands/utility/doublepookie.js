@@ -31,6 +31,7 @@ module.exports = {
         .setName("amount")
         .setDescription("how many pookies are we using")
         .setMinValue(1)
+        .setMaxValue(100)
         .setRequired(true),
     ),
   async autocomplete(interaction) {
@@ -72,7 +73,7 @@ module.exports = {
           // this fucking sucks idk what the allin boolean is for yet
           str = "**ALL** of the";
         }
-        if (user.location == "casino zone") casino = 25;
+        if (user.location == "casino zone") casino = 15;
         let rollToBeat = 50 - allIn - casino + 10 * scaler;
         if (rollToBeat >= 70) rollToBeat = 70;
         const message = await interaction.reply({

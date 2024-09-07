@@ -124,8 +124,9 @@ module.exports = {
     );
     const attachment = new AttachmentBuilder(pookie.file_path);
 
+    await interaction.deferReply();
     if ((await check) === true) {
-      const response = await interaction.reply({
+      const response = await interaction.editReply({
         content: "would you like to turn in the current quest?",
         embeds: [pookieEmbed],
         files: [attachment],
@@ -275,7 +276,7 @@ module.exports = {
         return await interaction.followUp("it broke");
       }
     } else {
-      return await interaction.reply({
+      return await interaction.editReply({
         content: "",
         embeds: [pookieEmbed],
         files: [attachment],

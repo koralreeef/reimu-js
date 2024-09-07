@@ -81,6 +81,7 @@
     "reusify": "^1.0.4",
     "run-parallel": "^1.2.0",
     "sequelize": "^6.37.3",
+    "sharp": "^0.33.5",
     "shebang-command": "^2.0.0",
     "shebang-regex": "^3.0.0",
     "sqlite3": "^5.1.7",

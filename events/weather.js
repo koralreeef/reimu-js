@@ -36,7 +36,7 @@ module.exports = {
   once: true,
   async execute(client) {
     const status = client.channels.cache.get(statusChannel);
-    const pookie = client.channels.cache.get(pookieChannel);
+    //const pookie = client.channels.cache.get(pookieChannel);
     // let message = await status.send(weatherString);
     let messageID = weatherMsg;
     let weatherMessageID = 0;
@@ -58,10 +58,10 @@ module.exports = {
         h.setRainDuration(
           Math.floor((ms + 60 * 1000 + h.getRandomInt(10 * 1000)) / 1000),
         );
-        const msg = await pookie.send(
+        const msg = await status.send(
           "# Take cover! It's started to rain! Ends <t:" +
             h.getRainDuration() +
-            ":R>!\n<@&<@&" +
+            ":R>!\n<@&" +
             rainrole +
             ">",
         );
@@ -83,7 +83,7 @@ module.exports = {
         h.setSnowDuration(
           Math.floor((ms + 60 * 1000 + h.getRandomInt(10 * 1000)) / 1000),
         );
-        const msg = await pookie.send(
+        const msg = await status.send(
           "# It's the start of some snowfall! Ends <t:" +
             h.getSnowDuration() +
             ":R>!\n<@&" +
@@ -108,7 +108,7 @@ module.exports = {
         h.setStarnightDuration(
           Math.floor((ms + 60 * 1000 + h.getRandomInt(300 * 1000)) / 1000),
         );
-        const msg = await pookie.send(
+        const msg = await status.send(
           "# Look above everyone! A starry sky has appeared! Ends <t:" +
             h.getStarnightDuration() +
             ":R>! \n<@&" +
@@ -138,7 +138,7 @@ module.exports = {
         hurricaneDuration = Math.floor(
           (ms + 60 * 1000 + h.getRandomInt(300 * 1000)) / 1000,
         );
-        const msg = await pookie.send(
+        const msg = await status.send(
           "# A hurricane of " +
             hurricanePookie.pookie_name +
             " approaches!  Ends <t:" +
@@ -158,15 +158,15 @@ module.exports = {
       // THIS SO BADDDD
       if (currentTimestamp > h.getRainDuration() && h.getRainy() == true) {
         h.setRainy(false);
-        deleteMsg(weatherMessageID, pookie);
-        pookie.send("## The rain has cleared!");
+        deleteMsg(weatherMessageID, status);
+        //status.send("## The rain has cleared!");
         rainString =
           "Last rain sighting was <t:" + h.getRainDuration() + ":R>\n";
       }
       if (currentTimestamp > h.getSnowDuration() && h.getSnowy() == true) {
         h.setSnowy(false);
-        deleteMsg(weatherMessageID, pookie);
-        pookie.send("## The snowfall has stopped!");
+        deleteMsg(weatherMessageID, status);
+        //status.send("## The snowfall has stopped!");
         snowString =
           "Last snow sighting was <t:" + h.getSnowDuration() + ":R>\n";
       }
@@ -175,15 +175,15 @@ module.exports = {
         h.getStarnight() == true
       ) {
         h.setStarnight(false);
-        deleteMsg(weatherMessageID, pookie);
-        pookie.send("## The starry sky has disappeared...");
+        deleteMsg(weatherMessageID, status);
+        //status.send("## The starry sky has disappeared...");
         starString =
           "Last starry sighting was <t:" + h.getStarnightDuration() + ":R>\n";
       }
       if (currentTimestamp > hurricaneDuration && h.getHurricane() == true) {
         h.setHurricane(false);
-        deleteMsg(weatherMessageID, pookie);
-        pookie.send("## The hurricane has faded!");
+        deleteMsg(weatherMessageID, status);
+        //status.send("## The hurricane has faded!");
         hurricaneString =
           "Last hurricane sighting was <t:" + hurricaneDuration + ":R>\n";
       }

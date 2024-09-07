@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { Pookiebears } = require("../../db/dbObjects.js");
 const { downloadFile, common, ssr } = require("../../helper.js");
+const sharp = require("sharp");
+const fs = require("fs");
 
 const regex = /[^èéòàùì\w\s]/gi;
 
@@ -83,6 +85,12 @@ module.exports = {
     if (source != "no source listed") source = "[source](" + source + ")";
     const avatarURL = interaction.user.displayAvatarURL();
     try {
+      const filelink = await downloadFile(url, fileName);
+      await sharp(filelink)
+      .resize(500)
+      .jpeg({quality: 70})
+      .toFile("./images/"+fileName+".jpg");
+
       // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
       const pookie = await Pookiebears.create({
         pookie_name: name,
@@ -102,8 +110,6 @@ module.exports = {
         rarity: ssr,
         source: source,
       });
-
-      downloadFile(url, fileName + ".jpg");
       interaction.reply(`pookiebear ${pookie.pookie_name} added.`);
       const user = interaction.client.users.cache.get(interaction.user.id);
       return await interaction.client.users.send(
