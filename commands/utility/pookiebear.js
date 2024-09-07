@@ -87,9 +87,9 @@ module.exports = {
     try {
       const filelink = await downloadFile(url, fileName);
       await sharp(filelink)
-      .resize(500)
-      .jpeg({quality: 70})
-      .toFile("./images/"+fileName+".jpg");
+        .resize(500)
+        .jpeg({ quality: 70 })
+        .toFile("./images/" + fileName + ".jpg");
 
       // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
       const pookie = await Pookiebears.create({

@@ -259,9 +259,9 @@ module.exports = {
             components: [row],
           });
           let ping = Date.now() - ms;
-          console.log("response time: "+ping+"ms");
+          console.log("response time: " + ping + "ms");
         }
-        
+
         // If quest interactions are accepted or deny, kill collector and keep track of state
         if (i.customId === user.user_id + "1") {
           questState = "ACCEPTED";
