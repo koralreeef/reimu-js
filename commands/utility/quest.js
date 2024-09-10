@@ -92,7 +92,7 @@ async function pookieGenerator(tier) {
   // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to ssrs just for you!!"
   // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
   // questString = "i need "+amount+" "+name.pookie_name+"s please!!!!! ill convert them half of them to starry night pookies just for you!!"
-
+  console.log(name);
   return name;
 }
 /* testing purposes
@@ -259,6 +259,7 @@ module.exports = {
             currentQuestPookie.file_path,
           );
           const pookieEmbed = await buildEmbed(
+            user,
             currentQuestPookie,
             tier,
             amount,
@@ -300,6 +301,7 @@ module.exports = {
               currentQuestPookie.file_path,
             );
             const pookieEmbed = await buildEmbed(
+              user,
               currentQuestPookie,
               tier,
               amount,

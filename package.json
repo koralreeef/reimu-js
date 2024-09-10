@@ -103,7 +103,8 @@
   "scripts": {
     "test": "jest",
     "format": "npx prettier . --write &&  npx eslint \"**/*.js\" --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "run-dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
