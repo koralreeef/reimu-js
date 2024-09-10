@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const { AccessToken, token } = require("../config.json");
+const { AccessToken, newlyranked } = require("../config.json");
 const { LegacyClient, calcModStat, isOsuJSError } = require("osu-web.js");
 const { hr, dt } = calcModStat;
 const legacyApi = new LegacyClient(AccessToken);
@@ -57,7 +57,7 @@ module.exports = {
   once: true,
   async execute(client) {
     const targetChannel = client.channels.cache.get("1274178425774538892");
-
+    if(newlyranked == true) {
     setInterval(async () => {
       // 3 (* actual beatmaps) api call(s) (+however many dtable beatmaps) every 60s
       // HOW TO FIX THE DOUBLEPOSTING
@@ -252,12 +252,11 @@ module.exports = {
             console.log(`Details: ${response.status} - ${response.statusText}`);
             consoe.log("JSON: ", await response.json());
           }
-          client.login(token);
           return targetChannel.send("couldn't process new map");
         }
       }
     }, 60001);
-
+  }
     console.log("Starting search for new beatmaps...");
   },
 };

@@ -25,7 +25,7 @@ const tierMap = new Map([
   [4, "plus plus pookies"],
 ]);
 
-async function buildEmbed(pookie, tier, amount) {
+async function buildEmbed(user, pookie, tier, amount) {
   const embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity);
   const reward = (amount / 2).toFixed(0);
   let tierString = tierMap.get(tier);
@@ -39,7 +39,7 @@ async function buildEmbed(pookie, tier, amount) {
   }
   const pookieEmbed = new EmbedBuilder()
     .setAuthor({ name: "quest tier: " + tier })
-    .setTitle(pookie.pookie_name + "s needed: " + amount)
+    .setTitle(pookie.pookie_name + "s needed: " + amount + "\npookies on hand: " + await user.getPookie(pookie, user.user_id))
     .setThumbnail("attachment://" + pookie.file_path.substring(9))
     .setColor(embedColor)
     .setFooter({
@@ -224,7 +224,7 @@ module.exports = {
     console.log(currentQuestPookie.name);
 
     await interaction.deferReply();
-    const pookieEmbed = await buildEmbed(currentQuestPookie, tier, amount);
+    const pookieEmbed = await buildEmbed(user, currentQuestPookie, tier, amount);
     await interaction.editReply({
       embeds: [pookieEmbed],
       files: [attachment],

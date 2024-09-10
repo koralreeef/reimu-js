@@ -69,9 +69,12 @@ async function makeStarryPookie(
   return pookie;
 }
 
-async function makePlusPookie(name, fileName, avatarURL, username, rarity) {
+async function makePlusPookie(name, fileName, avatarURL, username, rarity, tier) {
+  //enum for rewards?
+  let plus = "\+";
+  if (tier == 4) plus = "\+\+";
   const pookie = await Pookiebears.create({
-    pookie_name: name + "+",
+    pookie_name: name + plus,
     file_path: "./images/" + fileName,
     creator: username,
     creatorURL: avatarURL,
@@ -193,6 +196,8 @@ module.exports = {
               avatarURL,
               userUsername,
               p.rarity,
+              p.source,
+              quest.questTier,
             );
             user.addPookies(pookie, id, quest.reward_amount, pookie.rarity);
           }

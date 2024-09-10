@@ -34,12 +34,10 @@ module.exports = {
     const n = interaction.options.getString("name");
     const pookie = await Pookiebears.findOne({ where: { pookie_name: n } });
 
-    console.log(await pookie);
-    console.log(await Pookiebears.findAll());
     const attachment = new AttachmentBuilder(pookie.file_path);
     const pookieDate = pookie.createdAt;
     embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity);
-    console.log(pookie.source);
+
     const pookieEmbed = new EmbedBuilder()
       .setAuthor({ name: "pookiebear #" + pookie.id })
       .setTitle(pookie.pookie_name + "\nsummon count: " + pookie.summon_count)
