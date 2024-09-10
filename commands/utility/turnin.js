@@ -69,10 +69,17 @@ async function makeStarryPookie(
   return pookie;
 }
 
-async function makePlusPookie(name, fileName, avatarURL, username, rarity, tier) {
+async function makePlusPookie(
+  name,
+  fileName,
+  avatarURL,
+  username,
+  rarity,
+  tier,
+) {
   //enum for rewards?
-  let plus = "\+";
-  if (tier == 4) plus = "\+\+";
+  let plus = "+";
+  if (tier == 4) plus = "++";
   const pookie = await Pookiebears.create({
     pookie_name: name + plus,
     file_path: "./images/" + fileName,

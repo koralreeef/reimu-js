@@ -94,7 +94,7 @@ Reflect.defineProperty(Users.prototype, "getPookies", {
 Reflect.defineProperty(Users.prototype, "getPookie", {
   value: async (pookie, userID) => {
     const userPookie = await UserPookies.findOne({
-      where: { user_id: userID, pookie_id: pookie.id }
+      where: { user_id: userID, pookie_id: pookie.id },
     });
     return userPookie.amount;
   },
