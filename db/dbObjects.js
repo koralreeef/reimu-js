@@ -96,8 +96,7 @@ Reflect.defineProperty(Users.prototype, "getPookie", {
     const userPookie = await UserPookies.findOne({
       where: { user_id: userID, pookie_id: pookie.id },
     });
-    if (userPookie)
-    return userPookie.amount;
+    if (userPookie) return userPookie.amount;
     else return 0;
   },
 });
