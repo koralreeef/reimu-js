@@ -2,6 +2,16 @@ import { gold, blue, yellow, cornsilk } from "color-name";
 import { common, getEmbedColor, ssr, starry, starry_ssr } from "../helper";
 import { describe, expect, test } from "@jest/globals";
 
+jest.mock(
+  "sharp",
+  () => {
+    return {
+      default: {},
+    };
+  },
+  { virtual: true },
+);
+
 describe("getEmbedColor", () => {
   beforeEach(() => {
     jest.clearAllMocks();
