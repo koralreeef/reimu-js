@@ -1,15 +1,9 @@
-const {
-  Events,
-  EmbedBuilder,
-  AttachmentBuilder,
-  Message,
-} = require("discord.js");
+const { Events, EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const { Users, Pookiebears } = require("../db/dbObjects.js");
 const { blue, gold, cornsilk, yellow } = require("color-name");
 const { pookiewatch } = require(".././config.json");
 const h = require("../helper.js");
 
-let latestID, latestPookie;
 let rainMultiplier, snowMultiplier;
 
 async function makeStarryPookie(
@@ -114,10 +108,6 @@ module.exports = {
       if (h.getRainy() == true) rainMultiplier = 20;
       else rainMultiplier = 0;
 
-      latestPookie = await Pookiebears.findOne({
-        order: [["id", "DESC"]],
-      });
-      latestID = latestPookie.id;
       h.addBalance(message.author.id, 1);
       const userID = message.author.id;
       let newbonus = 0;

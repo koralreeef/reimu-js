@@ -1,5 +1,4 @@
-const { AttachmentBuilder, Events } = require("discord.js");
-const Canvas = require("@napi-rs/canvas");
+const { Events } = require("discord.js");
 
 module.exports = {
   name: Events.MessageCreate,

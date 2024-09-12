@@ -1,6 +1,5 @@
-const { Users, Users2 } = require("../db/dbObjects.js");
+const { Users } = require("../db/dbObjects.js");
 const { currency } = require("../helper.js");
-const { koralreef } = require(".././config.json");
 const { PresenceUpdateStatus } = require("discord.js");
 const { Events } = require("discord.js");
 

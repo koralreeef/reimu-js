@@ -1,10 +1,7 @@
 const {
   SlashCommandBuilder,
-  Events,
-  GatewayIntentBits,
   EmbedBuilder,
   AttachmentBuilder,
-  User,
 } = require("discord.js");
 const { Users, Pookiebears } = require("../../db/dbObjects.js");
 const { lightcoral } = require("color-name");

@@ -7,7 +7,6 @@ const {
   setRainDuration,
   setSnowDuration,
   setStarnightDuration,
-  setWeatherClear,
 } = require("../../helper.js");
 
 module.exports = {
@@ -24,7 +23,7 @@ module.exports = {
     setRainy(false);
     setRainDuration(0);
     setHurricane(false);
-    setWeatherClear(true);
+    (true);
     return await interaction.reply("weather cleared");
   },
 };

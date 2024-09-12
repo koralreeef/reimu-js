@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { Pookiebears, UserPookies } = require("../../db/dbObjects.js");
-const fs = require("fs");
 
 module.exports = {
   data: new SlashCommandBuilder()

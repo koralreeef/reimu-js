@@ -1,10 +1,7 @@
 const {
   SlashCommandBuilder,
-  Events,
-  GatewayIntentBits,
   EmbedBuilder,
   AttachmentBuilder,
-  User,
 } = require("discord.js");
 const { Users, Pookiebears } = require("../../db/dbObjects.js");
 const { green } = require("color-name");
@@ -107,7 +104,6 @@ module.exports = {
           console.log("hey guys");
 
           user.addPookies(pookie, userID, amount * 2, pookie.rarity);
-          const pookieDate = pookie.createdAt;
           const attachment = new AttachmentBuilder(pookie.file_path);
           const pookieEmbed = new EmbedBuilder()
             .setAuthor({ name: "pookiebear #" + pookie.id })

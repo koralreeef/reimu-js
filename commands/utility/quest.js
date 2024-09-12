@@ -289,7 +289,7 @@ module.exports = {
         }
       });
 
-      collector.on("end", async (i) => {
+      collector.on("end", async () => {
         switch (questState) {
           case "PENDING":
             await interaction.editReply({

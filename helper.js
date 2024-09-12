@@ -6,7 +6,6 @@ const { cornsilk, yellow, gold, blue } = require("color-name");
 const path = require("path");
 const currency = new Collection();
 const fs = require("fs");
-const sharp = require("sharp");
 
 const tierMap = new Map([
   [0, "ssr pookies"],
@@ -75,7 +74,6 @@ const common = 0,
 const commonSR = 60;
 const SSR = 90;
 let totalPookies = 0;
-let weatherClear = false;
 let hurricanePookie = "";
 let rainy = false,
   snowy = false,
@@ -108,14 +106,6 @@ function setSnowy(bool) {
 
 function getHurricane() {
   return hurricane;
-}
-
-function setWeatherClear(bool) {
-  weatherClear = bool;
-}
-
-function getWeatherClear(bool) {
-  weatherClear = bool;
 }
 
 function setHurricane(bool) {
@@ -297,8 +287,6 @@ module.exports = {
   getHurricanePookie,
   arrayExists,
   getEmbedColor,
-  setWeatherClear,
-  getWeatherClear,
   locationMap,
   tierMap,
 };

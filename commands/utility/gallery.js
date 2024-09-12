@@ -6,8 +6,8 @@ const {
   SlashCommandBuilder,
   AttachmentBuilder,
 } = require("discord.js");
-const { Users, Pookiebears } = require("../../db/dbObjects.js");
-const { blue, gold, white, yellow, cornsilk } = require("color-name");
+const { Pookiebears, Users } = require("../../db/dbObjects.js");
+const { blue } = require("color-name");
 const { common } = require("../../helper.js");
 
 // something with buttons
@@ -70,11 +70,7 @@ module.exports = {
       files: [attachment],
       components: [row],
     });
-    const filter = (i) => i.user.id === interaction.user.id;
-    const collector = interaction.channel.createMessageComponentCollector(
-      filter,
-      (time = 120_000),
-    );
+    const collector = interaction.channel.createMessageComponentCollector();
     let index = 0;
 
     collector.on("collect", async (i) => {
@@ -114,7 +110,7 @@ module.exports = {
         collector.stop();
       }
 
-      collector.on("end", async (i) => {
+      collector.on("end", async () => {
         await interaction.editReply({
           content: "stopped gallery search",
           components: [],

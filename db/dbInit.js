@@ -13,16 +13,6 @@ const Pookiebears = require("./models/pookiebears.js")(
   sequelize,
   Sequelize.DataTypes,
 );
-const Users = require("./models/Users.js")(sequelize, Sequelize.DataTypes);
-const Quests = require("./models/quests.js")(sequelize, Sequelize.DataTypes);
-const UserPookies = require("./models/UserPookies.js")(
-  sequelize,
-  Sequelize.DataTypes,
-);
-const osuUsers = require("./models/osuUsers.js")(
-  sequelize,
-  Sequelize.DataTypes,
-);
 
 function moveImage(image, destination) {
   // destination will be created or overwritten by default.
