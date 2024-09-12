@@ -33,7 +33,7 @@ export default [
       "no-unused-vars": "warn",
       "no-undef": "warn",
       "no-self-assign": "error",
-      "no-empty": "warn",
+      "no-empty": "error",
       "no-case-declarations": "warn",
       "no-const-assign": "error",
       "no-useless-escape": "warn",

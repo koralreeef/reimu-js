@@ -118,8 +118,7 @@ module.exports = {
     const user = await Users.findOne({
       where: { user_id: interaction.user.id },
     });
-    if (user) {
-    } else {
+    if (!user) {
       return await interaction.reply("you havent summoned a pookiebear yet!");
     }
     const p1 = await Pookiebears.findOne({ where: { pookie_name: pookie } });
