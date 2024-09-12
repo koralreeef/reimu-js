@@ -66,7 +66,9 @@ module.exports = {
       files: [attachment],
       components: [row],
     });
-    const collector = interaction.channel.createMessageComponentCollector();
+    const collector = interaction.channel.createMessageComponentCollector({
+      time: 120_000,
+    });
     let index = 0;
 
     collector.on("collect", async (i) => {
