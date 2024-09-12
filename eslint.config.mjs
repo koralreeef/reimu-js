@@ -34,7 +34,7 @@ export default [
       "no-undef": "warn",
       "no-self-assign": "error",
       "no-empty": "error",
-      "no-case-declarations": "warn",
+      "no-case-declarations": "error",
       "no-const-assign": "error",
       "no-useless-escape": "warn",
     },
