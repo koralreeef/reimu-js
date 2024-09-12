@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require("discord.js");
 const { Pookiebears } = require("../../db/dbObjects.js");
 const { downloadFile, common, ssr } = require("../../helper.js");
 const sharp = require("sharp");
-const fs = require("fs");
 
 const regex = /[^èéòàùì\w\s]/gi;
 

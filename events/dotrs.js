@@ -3,7 +3,6 @@ const { LegacyClient, calcAccuracy, calcModStat } = require("osu-web.js");
 const { AccessToken } = require("../config.json");
 const { coral } = require("color-name");
 const { osuUsers } = require("../db/dbObjects.js");
-const interactionCreate = require("./interactionCreate.js");
 const { hr, dt, ez, ht } = calcModStat;
 const legacyApi = new LegacyClient(AccessToken);
 

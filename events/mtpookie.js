@@ -8,7 +8,7 @@ const {
   getRandomInt,
 } = require("../helper.js");
 const { pookieChannel } = require("../config.json");
-const { Events, Message } = require("discord.js");
+const { Events } = require("discord.js");
 
 module.exports = {
   name: Events.ClientReady,

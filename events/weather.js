@@ -2,7 +2,6 @@ const { Events } = require("discord.js");
 const { Pookiebears } = require("../db/dbObjects.js");
 const {
   statusChannel,
-  pookieChannel,
   rainrole,
   snowyrole,
   starryrole,
@@ -187,7 +186,6 @@ module.exports = {
         hurricaneString =
           "Last hurricane sighting was <t:" + hurricaneDuration + ":R>\n";
       }
-      h.setWeatherClear(false);
       const next = currentTimestamp + 15;
 
       const weatherMsg =

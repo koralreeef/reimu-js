@@ -139,10 +139,10 @@ module.exports = {
     );
 
     const filter = (i) => i.user.id === interaction.user.id;
-    const collector = interaction.channel.createMessageComponentCollector(
-      filter,
-      (time = 120_000),
-    );
+    const collector = interaction.channel.createMessageComponentCollector({
+      filter: filter,
+      time: 120_000,
+    });
     let index = 1;
     collector.on("collect", async (i) => {
       //gray out buttons on page end
@@ -192,7 +192,7 @@ module.exports = {
         collector.stop();
       }
 
-      collector.on("end", async (i) => {
+      collector.on("end", async () => {
         await interaction.editReply({
           content: "stopped inventory search",
           components: [],

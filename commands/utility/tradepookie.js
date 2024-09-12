@@ -4,7 +4,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
 } = require("discord.js");
-const { Users, UserPookies, Pookiebears } = require("../../db/dbObjects.js");
+const { Users, Pookiebears } = require("../../db/dbObjects.js");
 
 module.exports = {
   cooldown: 10,

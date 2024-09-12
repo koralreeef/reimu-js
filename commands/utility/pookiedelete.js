@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { Op } = require("sequelize");
 const { Pookiebears, UserPookies } = require("../../db/dbObjects.js");
 const fs = require("fs");
 

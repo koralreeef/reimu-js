@@ -8,7 +8,7 @@ const {
   ActionRowBuilder,
   PermissionFlagsBits,
 } = require("discord.js");
-const { Users, Pookiebears } = require("../../db/dbObjects.js");
+const { Users } = require("../../db/dbObjects.js");
 
 // HAGGLE SYSTEM IF YOU TRADE WITH THE BOT (RANDOM CHANCE TO GET DEALS)
 // UNUSABLE

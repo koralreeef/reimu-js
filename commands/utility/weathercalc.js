@@ -1,9 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { Users } = require("./db/dbObjects.js");
 
-const rainyChance = 900;
-const snowyChance = 950;
-const starNightChance = 999;
 const weatherCheck = 9999;
 module.exports = {
   data: new SlashCommandBuilder()
