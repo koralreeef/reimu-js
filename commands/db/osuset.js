@@ -18,7 +18,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    id = interaction.user.id;
+    const id = interaction.user.id;
     const osuName = interaction.options.getString("name");
 
     const u = await legacyApi.getUser({

@@ -31,7 +31,7 @@ export default [
     },
     rules: {
       "no-unused-vars": "warn",
-      "no-undef": "warn",
+      "no-undef": "error",
       "no-self-assign": "error",
       "no-empty": "error",
       "no-case-declarations": "error",

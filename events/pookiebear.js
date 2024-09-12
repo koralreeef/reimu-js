@@ -48,7 +48,7 @@ async function buildEmbed(
   color,
 ) {
   newCount += 1;
-  doubleChance = 1;
+  let doubleChance = 1;
   let text = "";
   let text3 = "";
   let text2 = "";

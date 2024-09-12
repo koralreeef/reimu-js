@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { Users } = require("./db/dbObjects.js");
 
 const rainyChance = 900;
 const snowyChance = 950;

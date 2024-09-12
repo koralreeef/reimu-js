@@ -10,8 +10,8 @@ const legacyApi = new LegacyClient(AccessToken);
 const regex = /^\.rs \D{1,}/gm;
 const diff_increasing_mods = ["HR", "DT", "HT", "EZ"];
 function getLength(s) {
-  minutes = Math.trunc(s / 60);
-  seconds = Math.trunc(s - minutes * 60);
+  const minutes = Math.trunc(s / 60);
+  const seconds = Math.trunc(s - minutes * 60);
   if (seconds < 10) return minutes + ":0" + seconds;
   return minutes + ":" + seconds;
 }

@@ -15,8 +15,8 @@ const weatherMap = new Map([
 ]);
 
 function getLength(s) {
-  minutes = Math.trunc(s / 60);
-  seconds = Math.trunc(s - minutes * 60);
+  const minutes = Math.trunc(s / 60);
+  const seconds = Math.trunc(s - minutes * 60);
   if (seconds < 60 && minutes == 0) {
     return seconds + " seconds!";
   }
