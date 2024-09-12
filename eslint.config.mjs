@@ -32,7 +32,7 @@ export default [
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "warn",
-      "no-self-assign": "warn",
+      "no-self-assign": "error",
       "no-empty": "warn",
       "no-case-declarations": "warn",
       "no-const-assign": "error",
