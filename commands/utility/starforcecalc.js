@@ -60,7 +60,7 @@ module.exports = {
     if (star) starMultiplier = 15;
     if (allIn) all = 3;
     if (location == "star peak") starMultiplier += 10;
-    const scaler = (pookie.match(regex) || []).length - 1;
+    const scaler = (pookie.match(regex) || []).length;
 
     const rollToBeat = 50 - amount * 2 - all - starMultiplier + 8 * scaler;
     const final = 100 - rollToBeat;
@@ -80,7 +80,7 @@ module.exports = {
         all +
         " - " +
         starMultiplier +
-        " + (5(" +
+        " + (8(" +
         scaler +
         "))\nallIn: " +
         allIn +

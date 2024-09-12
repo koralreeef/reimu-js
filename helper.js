@@ -13,7 +13,7 @@ const tierMap = new Map([
   [1, "starry night pookies"],
   [2, "starry night pookies"],
   [3, "plus pookies"],
-  [4, "plus pookies"],
+  [4, "plus plus pookies"],
 ]);
 
 const locationMap = new Map([

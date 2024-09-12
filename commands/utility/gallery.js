@@ -6,7 +6,7 @@ const {
   SlashCommandBuilder,
   AttachmentBuilder,
 } = require("discord.js");
-const { Pookiebears } = require("../../db/dbObjects.js");
+const { Users, Pookiebears } = require("../../db/dbObjects.js");
 const { blue, gold, white, yellow, cornsilk } = require("color-name");
 const { common } = require("../../helper.js");
 
@@ -38,21 +38,29 @@ module.exports = {
   // sort by rarity maybe eh
   async execute(interaction) {
     const pookieList = await Pookiebears.findAll({ where: { rarity: common } }); // find all where rarity common and rarity ssr + summon_count > 0
+    const user = await Users.findOne({
+      where: { user_id: interaction.user.id },
+    });
     if (pookieList.length < 1) {
       return await interaction.reply("No pookiebears found!");
     }
 
     const forward = new ButtonBuilder()
-      .setCustomId("forward")
+      .setCustomId(user.user_id)
       .setLabel("⟶")
       .setStyle(ButtonStyle.Primary);
 
     const backward = new ButtonBuilder()
-      .setCustomId("backward")
+      .setCustomId(user.user_id + "1")
       .setLabel("⟵")
       .setStyle(ButtonStyle.Primary);
 
-    const row = new ActionRowBuilder().addComponents(backward, forward);
+    const stop = new ButtonBuilder()
+      .setCustomId(user.user_id + "2")
+      .setLabel("stop search")
+      .setStyle(ButtonStyle.Danger);
+
+    const row = new ActionRowBuilder().addComponents(backward, forward, stop);
 
     // console.log(pookieList[0]);
     const attachment = new AttachmentBuilder(pookieList[0].file_path);
@@ -63,11 +71,14 @@ module.exports = {
       components: [row],
     });
     const filter = (i) => i.user.id === interaction.user.id;
-    const collector = interaction.channel.createMessageComponentCollector();
+    const collector = interaction.channel.createMessageComponentCollector(
+      filter,
+      (time = 120_000),
+    );
     let index = 0;
 
     collector.on("collect", async (i) => {
-      if (i.customId === "backward") {
+      if (i.customId === user.user_id + "1") {
         if (index == 0) {
           await i.update({ content: "cant go under first entry!" });
         } else {
@@ -83,7 +94,7 @@ module.exports = {
           });
         }
       }
-      if (i.customId === "forward") {
+      if (i.customId === user.user_id) {
         if (index == pookieList.length - 1) {
           await i.update({ content: "cant go past last entry!" });
         } else {
@@ -99,6 +110,16 @@ module.exports = {
           });
         }
       }
+      if (i.customId === user.user_id + "2") {
+        collector.stop();
+      }
+
+      collector.on("end", async (i) => {
+        await interaction.editReply({
+          content: "stopped gallery search",
+          components: [],
+        });
+      });
     });
   },
 };

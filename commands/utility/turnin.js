@@ -75,6 +75,7 @@ async function makePlusPookie(
   avatarURL,
   username,
   rarity,
+  source,
   tier,
 ) {
   //enum for rewards?
@@ -87,6 +88,7 @@ async function makePlusPookie(
     creatorURL: avatarURL,
     summon_count: 1,
     rarity: rarity + 5,
+    source: source,
   });
   return pookie;
 }

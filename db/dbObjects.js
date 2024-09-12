@@ -91,6 +91,37 @@ Reflect.defineProperty(Users.prototype, "getPookies", {
   },
 });
 
+Reflect.defineProperty(Users.prototype, "getPage", {
+  value: async (userID, pageNumber, sort) => {
+    //this fucking sucks i cant pass variables into sequelize queries?
+    console.log(sort);
+    if (sort == "DESC") {
+      return UserPookies.findAll({
+        where: { user_id: userID },
+        order: [
+          ["rarity", "DESC"],
+          ["amount", "DESC"],
+        ],
+        offset: (pageNumber - 1) * 25,
+        limit: 25,
+        include: ["pookie"],
+      });
+    }
+    if (sort == "ASC") {
+      return UserPookies.findAll({
+        where: { user_id: userID },
+        order: [
+          ["rarity", "ASC"],
+          ["amount", "DESC"],
+        ],
+        offset: (pageNumber - 1) * 25,
+        limit: 25,
+        include: ["pookie"],
+      });
+    }
+  },
+});
+
 Reflect.defineProperty(Users.prototype, "getPookie", {
   value: async (pookie, userID) => {
     const userPookie = await UserPookies.findOne({
