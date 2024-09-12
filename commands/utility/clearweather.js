@@ -23,7 +23,7 @@ module.exports = {
     setRainy(false);
     setRainDuration(0);
     setHurricane(false);
-    (true);
+    true;
     return await interaction.reply("weather cleared");
   },
 };

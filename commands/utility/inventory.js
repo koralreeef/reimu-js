@@ -90,23 +90,19 @@ module.exports = {
     const remainder = user.questLifetime % 5;
     const result = 5 - remainder;
 
+    const epoch = Date.now();
     const forward = new ButtonBuilder()
-      .setCustomId(user.user_id)
+      .setCustomId(user.user_id + "pageforward" + epoch)
       .setLabel("⟶")
       .setStyle(ButtonStyle.Primary);
 
     const backward = new ButtonBuilder()
-      .setCustomId(user.user_id + "1")
+      .setCustomId(user.user_id + "pagebackward" + epoch)
       .setLabel("⟵")
       .setDisabled(true)
       .setStyle(ButtonStyle.Primary);
 
-    const stop = new ButtonBuilder()
-      .setCustomId(user.user_id + "2")
-      .setLabel("stop search")
-      .setStyle(ButtonStyle.Danger);
-
-    const row = new ActionRowBuilder().addComponents(backward, forward, stop);
+    const row = new ActionRowBuilder().addComponents(backward, forward);
     const totalPookies = pookies.length;
     let pageCount = (totalPookies / 25).toFixed(0);
     const invEmbed = await buildEmbed(
@@ -146,7 +142,7 @@ module.exports = {
     let index = 1;
     collector.on("collect", async (i) => {
       //gray out buttons on page end
-      if (i.customId === user.user_id + "1") {
+      if (i.customId === user.user_id + "pagebackward" + epoch) {
         index--;
         if (index == 1) backward.setDisabled(true);
         forward.setDisabled(false);
@@ -167,7 +163,7 @@ module.exports = {
           components: [row],
         });
       }
-      if (i.customId === user.user_id) {
+      if (i.customId === user.user_id + "pageforward" + epoch) {
         index++;
         if (index == pageCount) forward.setDisabled(true);
         backward.setDisabled(false);
@@ -187,9 +183,6 @@ module.exports = {
           files: [attachment],
           components: [row],
         });
-      }
-      if (i.customId === user.user_id + "2") {
-        collector.stop();
       }
 
       collector.on("end", async () => {

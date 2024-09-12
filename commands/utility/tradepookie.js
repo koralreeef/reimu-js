@@ -124,12 +124,12 @@ module.exports = {
       const checkTar = target.checkPookies(targetPookie, tar.id, loss2);
       // console.log(await check);
       const accept = new ButtonBuilder()
-        .setCustomId("accept")
+        .setCustomId(sender.user_id + "accept")
         .setLabel("Accept Trade")
         .setStyle(ButtonStyle.Success);
 
       const deny = new ButtonBuilder()
-        .setCustomId("deny")
+        .setCustomId(sender.user_id + "deny")
         .setLabel("Deny Trade")
         .setStyle(ButtonStyle.Danger);
 
@@ -156,7 +156,7 @@ module.exports = {
             time: 300_000,
           });
 
-          if (confirmation.customId === "accept") {
+          if (confirmation.customId === sender.user_id + "accept") {
             // handle sender trading pookies
             if (
               (await sender.checkAmount(senderPookie, senderID, loss1)) == true
@@ -204,7 +204,7 @@ module.exports = {
                 "**!",
               components: [],
             });
-          } else if (confirmation.customId === "deny") {
+          } else if (confirmation.customId === sender.user_id + "deny") {
             await confirmation.update({
               content: "trade not accepted :(",
               components: [],

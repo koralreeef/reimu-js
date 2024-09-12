@@ -14,12 +14,18 @@ const {
   starry,
 } = require("../../helper.js");
 
-async function buildEmbed(pookie, tier, amount) {
+async function buildEmbed(user, pookie, tier, amount) {
   const embedColor = getEmbedColor(pookie.pookie_name, pookie.rarity);
   const reward = (amount / 2).toFixed(0);
   const pookieEmbed = new EmbedBuilder()
     .setAuthor({ name: "quest tier: " + tier })
-    .setTitle(pookie.pookie_name + "s needed: " + amount)
+    .setTitle(
+      pookie.pookie_name +
+        "s needed: " +
+        amount +
+        "\npookies on hand: " +
+        (await user.getPookie(pookie, user.user_id)),
+    )
     .setThumbnail("attachment://" + pookie.file_path.substring(9))
     .setColor(embedColor)
     .setFooter({
@@ -113,13 +119,14 @@ module.exports = {
     console.log(loss);
     const p = await Pookiebears.findOne({ where: { id: quest.pookie_id } });
 
+    const epoch = Date.now();
     const accept = new ButtonBuilder()
-      .setCustomId("yes")
+      .setCustomId(user.user_id + "yes" + epoch)
       .setLabel("yes")
       .setStyle(ButtonStyle.Success);
 
     const deny = new ButtonBuilder()
-      .setCustomId("no")
+      .setCustomId(user.user_id + "no" + epoch)
       .setLabel("no")
       .setStyle(ButtonStyle.Danger);
 
@@ -130,6 +137,7 @@ module.exports = {
     });
     const check = user.checkPookies(pookie, id, loss);
     const pookieEmbed = await buildEmbed(
+      user,
       pookie,
       quest.questTier,
       quest.due_amount,
@@ -156,7 +164,7 @@ module.exports = {
           filter: collectorFilter,
           time: 60_000,
         });
-        if (confirmation.customId === "yes") {
+        if (confirmation.customId === user.user_id + "yes" + epoch) {
           const reward = quest.reward;
           // idk
           if ((await user.checkAmount(p, id, loss)) == true) {
@@ -262,6 +270,12 @@ module.exports = {
                 "!" +
                 "\nthis starry peak boosts the chances of starforce and allows you to find starry night pookies at any time!";
             }
+            if (user.questTier > 4) {
+              locationString =
+                "congrats! you are now quest tier " +
+                user.questTier +
+                "!\nmore unlocks coming soon...";
+            }
           }
 
           const attachment = new AttachmentBuilder(pookie.file_path);
@@ -277,7 +291,7 @@ module.exports = {
             files: [attachment],
             components: [],
           });
-        } else if (confirmation.customId === "no") {
+        } else if (confirmation.customId === user.user_id + "no" + epoch) {
           await confirmation.update({
             content: "",
             embeds: [pookieEmbed],

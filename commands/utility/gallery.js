@@ -45,22 +45,18 @@ module.exports = {
       return await interaction.reply("No pookiebears found!");
     }
 
+    const epoch = Date.now();
     const forward = new ButtonBuilder()
-      .setCustomId(user.user_id)
+      .setCustomId(user.user_id + "forwards" + epoch)
       .setLabel("⟶")
       .setStyle(ButtonStyle.Primary);
 
     const backward = new ButtonBuilder()
-      .setCustomId(user.user_id + "1")
+      .setCustomId(user.user_id + "backwards" + epoch)
       .setLabel("⟵")
       .setStyle(ButtonStyle.Primary);
 
-    const stop = new ButtonBuilder()
-      .setCustomId(user.user_id + "2")
-      .setLabel("stop search")
-      .setStyle(ButtonStyle.Danger);
-
-    const row = new ActionRowBuilder().addComponents(backward, forward, stop);
+    const row = new ActionRowBuilder().addComponents(backward, forward);
 
     // console.log(pookieList[0]);
     const attachment = new AttachmentBuilder(pookieList[0].file_path);
@@ -74,7 +70,7 @@ module.exports = {
     let index = 0;
 
     collector.on("collect", async (i) => {
-      if (i.customId === user.user_id + "1") {
+      if (i.customId === user.user_id + "backwards" + epoch) {
         if (index == 0) {
           await i.update({ content: "cant go under first entry!" });
         } else {
@@ -90,7 +86,7 @@ module.exports = {
           });
         }
       }
-      if (i.customId === user.user_id) {
+      if (i.customId === user.user_id + "forwards" + epoch) {
         if (index == pookieList.length - 1) {
           await i.update({ content: "cant go past last entry!" });
         } else {
@@ -105,9 +101,6 @@ module.exports = {
             components: [row],
           });
         }
-      }
-      if (i.customId === user.user_id + "2") {
-        collector.stop();
       }
 
       collector.on("end", async () => {

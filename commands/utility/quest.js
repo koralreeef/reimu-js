@@ -162,7 +162,7 @@ async function rewardGenerator(tier, p) {
   return pookie;
 }
 module.exports = {
-  cooldown: 1,
+  cooldown: 10,
   data: new SlashCommandBuilder()
     .setName("quest")
     .setDescription("check current quest")
@@ -203,19 +203,19 @@ module.exports = {
 
     // const userTier = Math.floor(user.quest/4);
     // figure out how to assign boss quests
-
+    const epoch = Date.now();
     const reroll = new ButtonBuilder()
-      .setCustomId(user.user_id)
+      .setCustomId(user.user_id + "reroll" + epoch)
       .setLabel("🎲")
       .setStyle(ButtonStyle.Primary);
 
     const accept = new ButtonBuilder()
-      .setCustomId(user.user_id + "1")
+      .setCustomId(user.user_id + "acceptquest" + epoch)
       .setLabel("accept")
       .setStyle(ButtonStyle.Success);
 
     const deny = new ButtonBuilder()
-      .setCustomId(user.user_id + "2")
+      .setCustomId(user.user_id + "stopquestsearch" + epoch)
       .setLabel("stop search")
       .setStyle(ButtonStyle.Danger);
 
@@ -253,7 +253,7 @@ module.exports = {
         time: 60_000,
       });
       collector.on("collect", async (i) => {
-        if (i.customId === user.user_id) {
+        if (i.customId === user.user_id + "reroll" + epoch) {
           let ms = Date.now();
           currentQuestPookie = await pookieGenerator(tier);
           amount = await amountGenerator(tier, currentQuestPookie);
@@ -277,12 +277,12 @@ module.exports = {
         }
 
         // If quest interactions are accepted or deny, kill collector and keep track of state
-        if (i.customId === user.user_id + "1") {
+        if (i.customId === user.user_id + "acceptquest" + epoch) {
           questState = "ACCEPTED";
           lastInteraction = i;
           collector.stop();
         }
-        if (i.customId === user.user_id + "2") {
+        if (i.customId === user.user_id + "stopquestsearch" + epoch) {
           questState = "DENIED";
           lastInteraction = i;
           collector.stop();
@@ -332,6 +332,15 @@ let acceptQuest = async (
   amount,
   lastInteraction,
 ) => {
+  const exists = await Quests.findOne({ where: { user_id: user.user_id } });
+  if (exists) {
+    return await lastInteraction.update({
+      content: "you already accepted a quest earlier!",
+      embeds: [],
+      files: [],
+      components: [],
+    });
+  }
   const attachment = new AttachmentBuilder(currentQuestPookie.file_path);
   const pookieEmbed = await buildEmbed(user, currentQuestPookie, tier, amount);
   await lastInteraction.update({
