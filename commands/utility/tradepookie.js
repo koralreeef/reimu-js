@@ -79,8 +79,7 @@ module.exports = {
   },
   async execute(interaction) {
     const u = await Users.findOne({ where: { user_id: interaction.user.id } });
-    if (u) {
-    } else {
+    if (!u) {
       return await interaction.reply("you havent summoned a pookiebear yet!");
     }
     const tar = interaction.options.getUser("target");

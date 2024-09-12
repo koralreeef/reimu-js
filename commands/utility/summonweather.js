@@ -15,8 +15,8 @@ const weatherMap = new Map([
 ]);
 
 function getLength(s) {
-  minutes = Math.trunc(s / 60);
-  seconds = Math.trunc(s - minutes * 60);
+  const minutes = Math.trunc(s / 60);
+  const seconds = Math.trunc(s - minutes * 60);
   if (seconds < 60 && minutes == 0) {
     return seconds + " seconds!";
   }
@@ -118,8 +118,7 @@ module.exports = {
     const user = await Users.findOne({
       where: { user_id: interaction.user.id },
     });
-    if (user) {
-    } else {
+    if (!user) {
       return await interaction.reply("you havent summoned a pookiebear yet!");
     }
     const p1 = await Pookiebears.findOne({ where: { pookie_name: pookie } });

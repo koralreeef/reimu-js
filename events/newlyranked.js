@@ -5,8 +5,8 @@ const { hr, dt } = calcModStat;
 const legacyApi = new LegacyClient(AccessToken);
 
 function getLength(s) {
-  minutes = Math.trunc(s / 60);
-  seconds = Math.trunc(s - minutes * 60);
+  const minutes = Math.trunc(s / 60);
+  const seconds = Math.trunc(s - minutes * 60);
   if (seconds < 10) return minutes + ":0" + seconds;
   return minutes + ":" + seconds;
 }
@@ -168,7 +168,6 @@ module.exports = {
                   });
                   const mapDT = dtBeatmaps[0];
                   const baseAR = mapDT.diff_approach;
-                  dtBPM = dt.bpm(mapDT.bpm);
                   dtLength = dt.length(mapDT.hit_length);
                   // its alright actually
                   if (firstMap == true) {
@@ -252,7 +251,7 @@ module.exports = {
               console.log(
                 `Details: ${response.status} - ${response.statusText}`,
               );
-              consoe.log("JSON: ", await response.json());
+              console.log("JSON: ", await response.json());
             }
             return targetChannel.send("couldn't process new map");
           }

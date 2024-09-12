@@ -34,7 +34,7 @@ module.exports = {
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          content: `/${command.data.name}\ has a cooldown until <t:${expiredTimestamp}:R>.`,
+          content: `/${command.data.name}\\ has a cooldown until <t:${expiredTimestamp}:R>.`,
           ephemeral: true,
         });
       }

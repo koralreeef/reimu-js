@@ -180,11 +180,13 @@ module.exports = {
       return await interaction.reply("you havent summoned a pookiebear yet!");
     }
 
-    const tier = interaction.options.getInteger("questtier") ?? user.questTier;
+    const tier = Math.min(
+      interaction.options.getInteger("questtier") ?? user.questTier,
+      4,
+    );
     const check = await Quests.findOne({
       where: { user_id: interaction.user.id },
     });
-    if (user.questTier > 4) tier = 4;
     if (check) {
       console.log(await check);
       return await interaction.reply("you already have a quest!");
@@ -296,34 +298,16 @@ module.exports = {
             });
             break;
 
-          case "ACCEPTED":
-            const attachment = new AttachmentBuilder(
-              currentQuestPookie.file_path,
-            );
-            const pookieEmbed = await buildEmbed(
-              user,
+          case "ACCEPTED": {
+            await acceptQuest(
               currentQuestPookie,
+              user,
               tier,
               amount,
+              lastInteraction,
             );
-            await lastInteraction.update({
-              content:
-                "**quest accepted!**\nuse /turnin whenever you have enough pookies.",
-              embeds: [pookieEmbed],
-              files: [attachment],
-              components: [],
-            });
-            const reward = await rewardGenerator(tier, currentQuestPookie);
-            const quest = await Quests.create({
-              user_id: user.user_id,
-              pookie_id: currentQuestPookie.id,
-              due_amount: amount,
-              reward: reward,
-              reward_amount: (amount / 2).toFixed(0),
-              questTier: tier,
-            });
-            console.log(quest);
             break;
+          }
 
           case "DENIED":
             await lastInteraction.update({
@@ -339,4 +323,32 @@ module.exports = {
     }
     // await interaction.reply(questString);
   },
+};
+
+let acceptQuest = async (
+  currentQuestPookie,
+  user,
+  tier,
+  amount,
+  lastInteraction,
+) => {
+  const attachment = new AttachmentBuilder(currentQuestPookie.file_path);
+  const pookieEmbed = await buildEmbed(user, currentQuestPookie, tier, amount);
+  await lastInteraction.update({
+    content:
+      "**quest accepted!**\nuse /turnin whenever you have enough pookies.",
+    embeds: [pookieEmbed],
+    files: [attachment],
+    components: [],
+  });
+  const reward = await rewardGenerator(tier, currentQuestPookie);
+  const quest = await Quests.create({
+    user_id: user.user_id,
+    pookie_id: currentQuestPookie.id,
+    due_amount: amount,
+    reward: reward,
+    reward_amount: (amount / 2).toFixed(0),
+    questTier: tier,
+  });
+  console.log(quest);
 };

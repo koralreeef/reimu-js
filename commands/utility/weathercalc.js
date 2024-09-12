@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { Users } = require("./db/dbObjects.js");
 
 const rainyChance = 900;
 const snowyChance = 950;
@@ -40,7 +41,6 @@ module.exports = {
   async execute(interaction) {
     let roll = interaction.options.getInteger("minutes");
     const select = interaction.options.getInteger("chance");
-    roll = roll;
     const chance = select / 10000;
     let final = 1 - Math.pow(chance, roll);
     final = final.toFixed(2) * 100;
