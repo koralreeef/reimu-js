@@ -36,7 +36,7 @@ export default [
       "no-empty": "error",
       "no-case-declarations": "error",
       "no-const-assign": "error",
-      "no-useless-escape": "warn",
+      "no-useless-escape": "error",
     },
   },
   eslintConfigPrettier,
