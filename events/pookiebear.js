@@ -8,6 +8,62 @@ const { Users, Pookiebears } = require("../db/dbObjects.js");
 const { pookiewatch } = require(".././config.json");
 const h = require("../helper.js");
 
+const rollPookie = async (starry, ssr) => {
+  const starryMultiplier = starry ? h.starry : 0;
+  const ssrMultiplier = ssr ? h.ssr : 0;
+
+  const rarity = starryMultiplier + ssrMultiplier;
+
+  return await fetchFittingPookie({ rarity: rarity });
+};
+
+const getHurricanePookie = async () => {
+  const pookieToGet = h.getHurricanePookie();
+  return await fetchFittingPookie({ pookie_name: pookieToGet });
+};
+
+const fetchFittingPookie = async (conditions) => {
+  const possiblePookies = await Pookiebears.findAll({
+    where: conditions,
+  });
+
+  return possiblePookies[h.getRandomInt(possiblePookies.length)];
+};
+
+const buildEmbed = (pookie, summonerName, summonAttempts, pookiesToSummon) => {
+  const extraPookiesAddendum = ` *${pookiesToSummon} ! \n **L U C K Y !**`;
+  const title = `${pookie.pookie_name}${pookiesToSummon > 1 ? extraPookiesAddendum : ""}`;
+  const footer = `${getPookieEmbedMessage(pookie.rarity)}Total summon count: ${pookie.summon_count}`;
+  const pookieImage = pookie.file_path.substring(9);
+
+  const attachment = new AttachmentBuilder(pookie.file_path);
+
+  const embed = new EmbedBuilder()
+    .setAuthor({
+      name:
+        "summoned by: " + summonerName + "\nattempt count: " + summonAttempts,
+    })
+    .setTitle(title)
+    .setImage("attachment://" + pookieImage)
+    .setColor(h.getEmbedColor(pookie.pookie_name, pookie.rarity))
+    .setFooter({ text: footer, iconURL: "attachment://" + pookieImage });
+
+  return { embeds: [embed], files: [attachment] };
+};
+
+const getPookieEmbedMessage = (rarity) => {
+  switch (rarity) {
+    case h.ssr:
+      return `Holy shit! An SSR pookiebear!\n`;
+    case h.starry:
+      return `A pookiebear found on a starry night\n`;
+    case h.starry_ssr:
+      return `OH MY STARS!! A starry night makes anything possible!\n`;
+    default:
+      return `What a lovely pookiebear!\n`;
+  }
+};
+
 module.exports = {
   name: Events.MessageCreate,
   async execute(message) {
@@ -64,61 +120,11 @@ module.exports = {
       files: messagePayload.files,
     });
   },
+  rollPookie: rollPookie,
+  getHurricanePookie: getHurricanePookie,
+  fetchFittingPookie: fetchFittingPookie,
+  buildEmbed: buildEmbed,
+  getPookieEmbedMessage: getPookieEmbedMessage,
 };
 
-const rollPookie = async (starry, ssr) => {
-  const starryMultiplier = starry ? h.starry : 0;
-  const ssrMultiplier = ssr ? h.ssr : 0;
-
-  const rarity = starryMultiplier + ssrMultiplier;
-
-  return await fetchFittingPookie({ rarity: rarity });
-};
-
-const getHurricanePookie = async () => {
-  const pookieToGet = h.getHurricanePookie();
-  return await fetchFittingPookie({ pookie_name: pookieToGet });
-};
-
-const fetchFittingPookie = async (conditions) => {
-  const possiblePookies = await Pookiebears.findAll({
-    where: conditions,
-  });
-
-  return possiblePookies[h.getRandomInt(possiblePookies.length)];
-};
-
-const buildEmbed = (pookie, summonerName, summonAttempts, pookiesToSummon) => {
-  const extraPookiesAddendum = ` *${pookiesToSummon} ! \n **L U C K Y !**`;
-  const title = `${pookie.pookie_name}${pookiesToSummon > 1 ? extraPookiesAddendum : ""}`;
-  const footer = `${getPookieEmbedMessage(pookie.rarity)}Total summon count: ${pookie.summon_count}`;
-  const pookieImage = pookie.file_path.substring(9);
-
-  const attachment = new AttachmentBuilder(pookie.file_path);
-
-  const embed = new EmbedBuilder()
-    .setAuthor({
-      name:
-        "summoned by: " + summonerName + "\nattempt count: " + summonAttempts,
-    })
-    .setTitle(title)
-    .setImage("attachment://" + pookieImage)
-    .setColor(h.getEmbedColor(pookie.pookie_name.rarity))
-    .setFooter({ text: footer, iconURL: "attachment://" + pookieImage });
-
-  return { embeds: [embed], files: [attachment] };
-};
-
-const getPookieEmbedMessage = (rarity) => {
-  switch (rarity) {
-    case h.ssr:
-      return `Holy shit! An SSR pookiebear!\n`;
-    case h.starry:
-      return `A pookiebear found on a starry night\n`;
-    case h.starry_ssr:
-      return `OH MY STARS!! A starry night makes anything possible!\n`;
-    default:
-      return `What a lovely pookiebear!\n`;
-  }
-};
 // https://stackoverflow.com/questions/37614649/how-can-i-download-and-save-a-file-using-the-fetch-api-node-js
