@@ -45,7 +45,12 @@ async function buildEmbed(
   let doubleChance = 1;
   let text = "";
   let text3 = "";
-  let text2 = "";
+  let text4 
+  
+  
+  
+  
+  = "";
 
   // add pookiebear to inventory
   const pookie = await Pookiebears.findOne({ where: { id: pookie_id } });
@@ -55,7 +60,7 @@ async function buildEmbed(
       if (h.getRandomInt(100) > 50) {
         doubleChance = 2;
         text3 = "**L U C K Y !**";
-        text2 = " * 2!";
+        text4 = " * 2!";
         newCount += 1;
       }
     }
@@ -81,7 +86,7 @@ async function buildEmbed(
           "\nattempt count: " +
           h.getBalance(userID),
       })
-      .setTitle(pookie_name + text2 + "\n" + text3)
+      .setTitle(pookie_name + text4 + "\n" + text3)
       .setImage("attachment://" + pookieFileName)
       .setColor(color)
       .setFooter({ text: text, iconURL: "attachment://" + pookieFileName });
