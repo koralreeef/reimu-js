@@ -1,6 +1,12 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { Pookiebears } = require("../../db/dbObjects.js");
-const { downloadFile, common, ssr } = require("../../helper.js");
+const {
+  downloadFile,
+  common,
+  ssr,
+  starry,
+  starry_ssr,
+} = require("../../helper.js");
 const sharp = require("sharp");
 
 const regex = /[^èéòàùì\w\s]/gi;
@@ -109,6 +115,27 @@ module.exports = {
         rarity: ssr,
         source: source,
       });
+
+      await Pookiebears.create({
+        pookie_name: `starry night ${name}`,
+        file_path: "./images/" + fileName,
+        creator: interaction.user.username,
+        creatorURL: avatarURL,
+        summon_count: 0,
+        rarity: starry,
+        source: source,
+      });
+
+      await Pookiebears.create({
+        pookie_name: `starry night ${name} ssr`,
+        file_path: "./images/" + fileName,
+        creator: interaction.user.username,
+        creatorURL: avatarURL,
+        summon_count: 0,
+        rarity: starry_ssr,
+        source: source,
+      });
+
       interaction.reply(`pookiebear ${pookie.pookie_name} added.`);
       const user = interaction.client.users.cache.get(interaction.user.id);
       return await interaction.client.users.send(
