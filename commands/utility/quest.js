@@ -180,11 +180,13 @@ module.exports = {
       return await interaction.reply("you havent summoned a pookiebear yet!");
     }
 
-    const tier = interaction.options.getInteger("questtier") ?? user.questTier;
+    const tier = Math.min(
+      interaction.options.getInteger("questtier") ?? user.questTier,
+      4,
+    );
     const check = await Quests.findOne({
       where: { user_id: interaction.user.id },
     });
-    if (user.questTier > 4) tier = 4;
     if (check) {
       console.log(await check);
       return await interaction.reply("you already have a quest!");
