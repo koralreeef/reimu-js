@@ -1,4 +1,6 @@
-const { POOKIEVILLE_EXTRA_ROLL_CHANCE } = require("../constants/locationConstants.js");
+const {
+  POOKIEVILLE_EXTRA_ROLL_CHANCE,
+} = require("../constants/locationConstants.js");
 const {
   SNOW_EXTRA_SSR_CHANCE,
   RAIN_EXTRA_ROLL_CHANCE,
