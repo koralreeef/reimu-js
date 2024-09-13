@@ -1,8 +1,8 @@
-import { POOKIEVILLE_EXTRA_ROLL_CHANCE } from "../constants/locationConstants.js";
-import {
+const { POOKIEVILLE_EXTRA_ROLL_CHANCE } = require("../constants/locationConstants.js");
+const {
   SNOW_EXTRA_SSR_CHANCE,
   RAIN_EXTRA_ROLL_CHANCE,
-} from "../constants/weatherConstants.js";
+} = require("../constants/weatherConstants.js");
 const { Events, EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const { Users, Pookiebears } = require("../db/dbObjects.js");
 const { pookiewatch } = require(".././config.json");
