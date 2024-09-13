@@ -94,8 +94,8 @@ module.exports = {
     if (pookieChance < h.getRandomInt(100)) return;
 
     const pookie = h.getHurricane()
-      ? getHurricanePookie()
-      : rollPookie(starryPookie, ssrPookie);
+      ? await getHurricanePookie()
+      : await rollPookie(starryPookie, ssrPookie);
     const pookiesToSummon =
       userLocation === "pookie forest" && Math.random() >= 0.5 ? 2 : 1;
 
@@ -115,7 +115,7 @@ module.exports = {
     );
     h.wipeBalance(userID);
 
-    message.channel.send({
+    await message.channel.send({
       embeds: messagePayload.embeds,
       files: messagePayload.files,
     });
