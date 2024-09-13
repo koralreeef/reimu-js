@@ -5,7 +5,7 @@ const {
   rainrole,
   snowyrole,
   starryrole,
-} = require("../../config.json");
+} = require("../../../config.json");
 const h = require("../../helper.js");
 
 const weatherMap = new Map([

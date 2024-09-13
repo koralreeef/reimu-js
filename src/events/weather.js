@@ -7,7 +7,7 @@ const {
   starryrole,
   hurricanerole,
   weatherMsg,
-} = require("../config.json");
+} = require("../../config.json");
 // just give it up bruh use h
 const h = require("../helper.js");
 

@@ -7,7 +7,7 @@ const {
 } = require("../constants/weatherConstants.js");
 const { Events, EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const { Users, Pookiebears } = require("../db/dbObjects.js");
-const { pookiewatch } = require(".././config.json");
+const { pookiewatch } = require("../../config.json");
 const h = require("../helper.js");
 
 const rollPookie = async (starry, ssr) => {

@@ -1,24 +1,24 @@
 const mockPookieFindAll = jest.fn();
 const mockPookieUpdate = jest.fn();
 
-import { common, ssr, starry, starry_ssr } from "../../helper";
+import { common, ssr, starry, starry_ssr } from "../../src/helper";
 import { describe, expect, test } from "@jest/globals";
 import {
   getPookieEmbedMessage,
   rollPookie,
   getHurricanePookie,
   buildEmbed,
-} from "../../events/pookiebear";
+} from "../../src/events/pookiebear";
 
 const randomSpy = jest.spyOn(global.Math, "random");
-const randomIntSpy = jest.spyOn(require("../../helper"), "getRandomInt");
+const randomIntSpy = jest.spyOn(require("../../src/helper"), "getRandomInt");
 const hurricanePookieSpy = jest.spyOn(
-  require("../../helper"),
+  require("../../src/helper"),
   "getHurricanePookie",
 );
-const embedColorSpy = jest.spyOn(require("../../helper"), "getEmbedColor");
+const embedColorSpy = jest.spyOn(require("../../src/helper"), "getEmbedColor");
 
-jest.mock("../../db/dbObjects", () => {
+jest.mock("../../src/db/dbObjects", () => {
   return {
     default: {},
     Pookiebears: {

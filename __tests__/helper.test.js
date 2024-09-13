@@ -1,5 +1,5 @@
 import { gold, blue, yellow, cornsilk } from "color-name";
-import { common, getEmbedColor, ssr, starry, starry_ssr } from "../helper";
+import { common, getEmbedColor, ssr, starry, starry_ssr } from "../src/helper";
 import { describe, expect, test } from "@jest/globals";
 
 jest.mock(

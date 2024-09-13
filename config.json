@@ -1,14 +1,19 @@
 {
-    "token": "YOUR BOT TOKEN HERE",
-    "AccessToken": "YOUR OSU TOKEN HERE",
-    "clientId": "YOUR BOT CLIENT ID HERE",
-    "guildId": "YOUR GUILD ID HERE",
-    "pookiewatch": [],
-    "statusChannel": "YOUR POOKIE STATUS CHANNEL HERE",
-    "pookieChannel": "YOUR POOKIE CHANNEL HERE",
-    "rainrole": "YOUR RAINY PING ROLE ID HERE",
-    "snowyrole": "YOUR SNOWY PING ROLE ID HERE",
-    "starryrole": "YOUR STARRY PING ROLE ID HERE",
-    "hurricanerole": "YOUR HURRICANE PIGNG ROLE ID HERE",
-    "weatherMsg": "YOUR WEATHER UPDATE MSG ID HERE"
+    "token": "MTEzMjcxMzg5NTg3NDc4OTQ0Ng.GNPl--._4m69m9v1Ne_IyEeVQWCiNUnC2yTm0CzydJ5lM",
+    "AccessToken": "3633ff30ea366a5cdfb0f6872e475a8b9f68c1f8",
+    "clientId": "1132713895874789446",
+    "guildId": "1132944395805667450",
+    "koralreef": "1132944395805667450",
+    "pookiewatch": [
+        "1281242671343603732",
+        "1273023049221935185",
+        "1132944396363497496"
+    ],
+    "statusChannel": "1132944396363497496",
+    "pookieChannel": "1132944396363497496",
+    "rainrole": "1281405512692404294",
+    "snowyrole": "1281405512692404294",
+    "starryrole": "1281405512692404294",
+    "hurricanerole": "1281405512692404294",
+    "weatherMsg": "1281413365385920602"
 }
