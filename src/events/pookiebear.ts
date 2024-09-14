@@ -9,22 +9,28 @@ import { pookiewatch } from "../../config.json";
 import * as h from "../helper.js";
 
 import { findAll, Pookiebear } from "../db/newModels/pookiebears";
+import { Op } from "sequelize";
 
-export const rollPookie = async (
-  starry: boolean,
-  ssr: boolean,
-): Promise<Pookiebear> => {
-  const starryMultiplier = starry ? h.starry : 0;
-  const ssrMultiplier = ssr ? h.ssr : 0;
-
-  const rarity = starryMultiplier + ssrMultiplier;
-
-  return await fetchFittingPookie({ rarity: rarity });
+export const rollPookie = async (pookieRarity: number): Promise<Pookiebear> => {
+  return await fetchFittingPookie({ rarity: pookieRarity });
 };
 
-export const getHurricanePookie = async (): Promise<Pookiebear> => {
+export const getHurricanePookie = async (
+  pookieRarity: number,
+): Promise<Pookiebear> => {
   const pookieToGet = h.getHurricanePookie();
-  return await fetchFittingPookie({ pookie_name: pookieToGet });
+
+  return await fetchFittingPookie({
+    pookie_name: {
+      [Op.in]: [
+        `starry night ${pookieToGet}`,
+        `starry night ${pookieToGet} ssr`,
+        pookieToGet,
+        `${pookieToGet} ssr`,
+      ],
+    },
+    rarity: pookieRarity,
+  });
 };
 
 export const fetchFittingPookie = async (conditions): Promise<Pookiebear> => {
@@ -101,11 +107,14 @@ module.exports = {
       (userLocation === "star peak" && Math.random() >= 0.7);
     const ssrPookie = h.SSR + snowMultiplier > h.getRandomInt(1000);
 
+    const pookieRarity =
+      h.common + (starryPookie ? h.starry : 0) + (ssrPookie ? h.ssr : 0);
+
     if (pookieChance < h.getRandomInt(100)) return;
 
     const pookie = h.getHurricane()
-      ? await getHurricanePookie()
-      : await rollPookie(starryPookie, ssrPookie);
+      ? await getHurricanePookie(pookieRarity)
+      : await rollPookie(pookieRarity);
     const pookiesToSummon =
       userLocation === "pookie forest" && Math.random() >= 0.5 ? 2 : 1;
 

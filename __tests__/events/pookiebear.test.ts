@@ -16,6 +16,7 @@ import {
   buildEmbed,
 } from "../../src/events/pookiebear";
 import { Pookiebear } from "../../src/db/newModels/pookiebears";
+import { Op } from "sequelize";
 
 jest.mock("../../src/helper", () => ({
   ...jest.requireActual("../../src/helper"),
@@ -69,7 +70,7 @@ describe("rollPookie from pookiebear event", () => {
     mockPookieFindAll.mockReturnValue(
       Promise.resolve(["dummyPookie0", "dummyPookie1"]),
     );
-    expect(await rollPookie(false, false)).toBe("dummyPookie0");
+    expect(await rollPookie(common)).toBe("dummyPookie0");
     expect(mockPookieFindAll).toHaveBeenCalledWith({
       where: { rarity: common },
     });
@@ -79,7 +80,7 @@ describe("rollPookie from pookiebear event", () => {
     mockPookieFindAll.mockReturnValue(
       Promise.resolve(["dummyPookie0", "dummyPookie1"]),
     );
-    expect(await rollPookie(false, true)).toBe("dummyPookie0");
+    expect(await rollPookie(ssr)).toBe("dummyPookie0");
     expect(mockPookieFindAll).toHaveBeenCalledWith({ where: { rarity: ssr } });
   });
 
@@ -87,7 +88,7 @@ describe("rollPookie from pookiebear event", () => {
     mockPookieFindAll.mockReturnValue(
       Promise.resolve(["dummyPookie0", "dummyPookie1"]),
     );
-    expect(await rollPookie(true, false)).toBe("dummyPookie0");
+    expect(await rollPookie(starry)).toBe("dummyPookie0");
     expect(mockPookieFindAll).toHaveBeenCalledWith({
       where: { rarity: starry },
     });
@@ -97,7 +98,7 @@ describe("rollPookie from pookiebear event", () => {
     mockPookieFindAll.mockReturnValue(
       Promise.resolve(["dummyPookie0", "dummyPookie1"]),
     );
-    expect(await rollPookie(true, true)).toBe("dummyPookie0");
+    expect(await rollPookie(starry_ssr)).toBe("dummyPookie0");
     expect(mockPookieFindAll).toHaveBeenCalledWith({
       where: { rarity: starry_ssr },
     });
@@ -109,13 +110,23 @@ describe("getHurricanePookie from pookiebear event", () => {
     jest.clearAllMocks();
   });
 
-  test("Roll a hurricane pookie", async () => {
+  test("Roll a common hurricane pookie", async () => {
     mockHurricanePookie.mockReturnValueOnce("dummyPookie0");
     mockPookieFindAll.mockReturnValue(Promise.resolve(["dummyPookie0"]));
 
-    expect(await getHurricanePookie()).toBe("dummyPookie0");
+    expect(await getHurricanePookie(0)).toBe("dummyPookie0");
     expect(mockPookieFindAll).toHaveBeenCalledWith({
-      where: { pookie_name: "dummyPookie0" },
+      where: {
+        pookie_name: {
+          [Op.in]: [
+            `starry night dummyPookie0`,
+            `starry night dummyPookie0 ssr`,
+            "dummyPookie0",
+            `dummyPookie0 ssr`,
+          ],
+        },
+        rarity: 0,
+      },
     });
   });
 });
