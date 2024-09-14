@@ -1,4 +1,4 @@
-node_modules
+node_modules/**
 database.sqlite
 images
 config.json
@@ -9,4 +9,4 @@ coverage
 .vscode
 main
 dbbackup
-built
+built/**

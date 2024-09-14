@@ -17,6 +17,8 @@ const compat = new FlatCompat({
 export default [
   ...compat.extends("eslint:recommended", "prettier"),
   {
+    ignores: ["**/built/", "**/node_modules/"],
+    files: ["src/**/*.js", "__tests__/**/*.js"],
     languageOptions: {
       globals: {
         ...globals.node,

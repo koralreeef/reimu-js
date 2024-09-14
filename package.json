@@ -102,7 +102,8 @@
   },
   "scripts": {
     "test": "jest",
-    "format": "npx prettier . --write &&  npx eslint \"**/*.js\" --fix",
+    "format": "npx prettier . --write &&  npx eslint --config eslint.config.mjs src/ __tests__/ --fix",
+    "build": "tsc -p tsconfig.json",
     "prepare": "husky",
     "run-dev": "nodemon app.js"
   },
