@@ -104,6 +104,7 @@
     "test": "jest",
     "format": "npx prettier . --write &&  npx eslint --config eslint.config.mjs src/ __tests__/ --fix",
     "build": "tsc -p tsconfig.json",
+    "start": "tsc -p tsconfig.json && node built/src/app.js",
     "prepare": "husky",
     "run-dev": "nodemon app.js"
   },
