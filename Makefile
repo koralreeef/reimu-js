@@ -1,5 +1,5 @@
 run:
-	node app.js 
+	node ./src/app.js 
 delete-commands:
 	node delete-commands.js
 refresh-commands:
@@ -7,4 +7,4 @@ refresh-commands:
 refresh-db:
 	node ./db/dbInit.js -f
 run-dev:
-	nodemon app.js
+	nodemon ./src/app.js

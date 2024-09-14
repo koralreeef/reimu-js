@@ -7,7 +7,7 @@ const {
   ssr,
   getRandomInt,
 } = require("../helper.js");
-const { pookieChannel } = require("../config.json");
+const { pookieChannel } = require("../../config.json");
 const { Events } = require("discord.js");
 
 module.exports = {
