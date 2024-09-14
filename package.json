@@ -107,6 +107,7 @@
     "format": "npx prettier . --write &&  npx eslint --config eslint.config.mjs \"**/*.js\" \"**/*.ts\" --fix",
     "build": "tsc -p tsconfig.json",
     "start": "tsc -p tsconfig.json && pm2 start ecosystem.config.js",
+    "start-dev": "tsc -p tsconfig.json && node built/src/app.js",
     "prepare": "husky",
     "run-dev": "nodemon app.js"
   },
