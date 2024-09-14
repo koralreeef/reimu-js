@@ -1,35 +1,41 @@
 const mockPookieFindAll = jest.fn();
 const mockPookieUpdate = jest.fn();
+const mockHurricanePookie = jest.fn();
 
-import { common, ssr, starry, starry_ssr } from "../../helper";
+const mockRandomInt = jest.fn();
+const mockEmbedColor = jest.fn();
+
+const randomSpy = jest.spyOn(global.Math, "random");
+
+import { common, ssr, starry, starry_ssr } from "../../src/helper";
 import { describe, expect, test } from "@jest/globals";
 import {
   getPookieEmbedMessage,
   rollPookie,
   getHurricanePookie,
   buildEmbed,
-} from "../../events/pookiebear";
+} from "../../src/events/pookiebear";
+import { Pookiebear } from "../../src/db/newModels/pookiebears";
 
-const randomSpy = jest.spyOn(global.Math, "random");
-const randomIntSpy = jest.spyOn(require("../../helper"), "getRandomInt");
-const hurricanePookieSpy = jest.spyOn(
-  require("../../helper"),
-  "getHurricanePookie",
-);
-const embedColorSpy = jest.spyOn(require("../../helper"), "getEmbedColor");
+jest.mock("../../src/helper", () => ({
+  ...jest.requireActual("../../src/helper"),
+  getHurricanePookie: (...args) => mockHurricanePookie(...args),
+  getRandomInt: (...args) => mockRandomInt(...args),
+  getEmbedColor: (...args) => mockEmbedColor(...args),
+}));
 
-jest.mock("../../db/dbObjects", () => {
+jest.mock("../../src/db/newModels/pookiebears", () => {
   return {
     default: {},
-    Pookiebears: {
-      findAll: (...args) => mockPookieFindAll(...args),
-      update: (...args) => mockPookieUpdate(...args),
-    },
+    findAll: (...args) => mockPookieFindAll(...args),
+    update: (...args) => mockPookieUpdate(...args),
   };
 });
 
 describe("getPookieEmbedMessage from pookiebear event", () => {
-  beforeEach(() => {});
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test("common", () => {
     expect(getPookieEmbedMessage(common)).toBe(`What a lovely pookiebear!\n`);
@@ -56,7 +62,7 @@ describe("rollPookie from pookiebear event", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     randomSpy.mockReturnValue(0);
-    randomIntSpy.mockReturnValue(0);
+    mockRandomInt.mockReturnValue(0);
   });
 
   test("Roll a common pookie", async () => {
@@ -104,7 +110,7 @@ describe("getHurricanePookie from pookiebear event", () => {
   });
 
   test("Roll a hurricane pookie", async () => {
-    hurricanePookieSpy.mockReturnValue("dummyPookie0");
+    mockHurricanePookie.mockReturnValueOnce("dummyPookie0");
     mockPookieFindAll.mockReturnValue(Promise.resolve(["dummyPookie0"]));
 
     expect(await getHurricanePookie()).toBe("dummyPookie0");
@@ -120,7 +126,7 @@ describe("buildEmbed from pookiebear event", () => {
   });
 
   test("No double roll", () => {
-    embedColorSpy.mockReturnValue("#FFFFFF");
+    mockEmbedColor.mockReturnValueOnce("#FFFFFF");
 
     const pookie = {
       pookie_name: "jill stingray ssr",
@@ -132,7 +138,7 @@ describe("buildEmbed from pookiebear event", () => {
     const summonAttempts = 1;
     const pookiesToSummon = 1;
     const returned = buildEmbed(
-      pookie,
+      pookie as unknown as Pookiebear,
       summonerName,
       summonAttempts,
       pookiesToSummon,
@@ -161,7 +167,7 @@ describe("buildEmbed from pookiebear event", () => {
   });
 
   test("Double roll", () => {
-    embedColorSpy.mockReturnValue("#FFFFFF");
+    mockEmbedColor.mockReturnValue("#FFFFFF");
 
     const pookie = {
       pookie_name: "jill stingray ssr",
@@ -173,7 +179,7 @@ describe("buildEmbed from pookiebear event", () => {
     const summonAttempts = 1;
     const pookiesToSummon = 2;
     const returned = buildEmbed(
-      pookie,
+      pookie as unknown as Pookiebear,
       summonerName,
       summonAttempts,
       pookiesToSummon,
@@ -210,7 +216,7 @@ describe("buildEmbed from pookiebear event", () => {
   });
 
   test("No double roll", () => {
-    embedColorSpy.mockReturnValue("#FFFFFF");
+    mockEmbedColor.mockReturnValue("#FFFFFF");
 
     const pookie = {
       pookie_name: "jill stingray ssr",
@@ -222,7 +228,7 @@ describe("buildEmbed from pookiebear event", () => {
     const summonAttempts = 1;
     const pookiesToSummon = 1;
     const returned = buildEmbed(
-      pookie,
+      pookie as unknown as Pookiebear,
       summonerName,
       summonAttempts,
       pookiesToSummon,
@@ -251,7 +257,7 @@ describe("buildEmbed from pookiebear event", () => {
   });
 
   test("Double roll", () => {
-    embedColorSpy.mockReturnValue("#FFFFFF");
+    mockEmbedColor.mockReturnValue("#FFFFFF");
 
     const pookie = {
       pookie_name: "jill stingray ssr",
@@ -263,7 +269,7 @@ describe("buildEmbed from pookiebear event", () => {
     const summonAttempts = 1;
     const pookiesToSummon = 2;
     const returned = buildEmbed(
-      pookie,
+      pookie as unknown as Pookiebear,
       summonerName,
       summonAttempts,
       pookiesToSummon,

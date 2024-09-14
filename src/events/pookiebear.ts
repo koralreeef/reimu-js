@@ -1,16 +1,19 @@
-const {
-  POOKIEVILLE_EXTRA_ROLL_CHANCE,
-} = require("../constants/locationConstants.js");
-const {
+import { POOKIEVILLE_EXTRA_ROLL_CHANCE } from "../constants/locationConstants.js";
+import {
   SNOW_EXTRA_SSR_CHANCE,
   RAIN_EXTRA_ROLL_CHANCE,
-} = require("../constants/weatherConstants.js");
-const { Events, EmbedBuilder, AttachmentBuilder } = require("discord.js");
-const { Users, Pookiebears } = require("../db/dbObjects.js");
-const { pookiewatch } = require(".././config.json");
-const h = require("../helper.js");
+} from "../constants/weatherConstants.js";
+import { Events, EmbedBuilder, AttachmentBuilder, Message } from "discord.js";
+import { Users, Pookiebears } from "../db/dbObjects.js";
+import { pookiewatch } from "../../config.json";
+import * as h from "../helper.js";
 
-const rollPookie = async (starry, ssr) => {
+import { findAll, Pookiebear } from "../db/newModels/pookiebears";
+
+export const rollPookie = async (
+  starry: boolean,
+  ssr: boolean,
+): Promise<Pookiebear> => {
   const starryMultiplier = starry ? h.starry : 0;
   const ssrMultiplier = ssr ? h.ssr : 0;
 
@@ -19,20 +22,25 @@ const rollPookie = async (starry, ssr) => {
   return await fetchFittingPookie({ rarity: rarity });
 };
 
-const getHurricanePookie = async () => {
+export const getHurricanePookie = async (): Promise<Pookiebear> => {
   const pookieToGet = h.getHurricanePookie();
   return await fetchFittingPookie({ pookie_name: pookieToGet });
 };
 
-const fetchFittingPookie = async (conditions) => {
-  const possiblePookies = await Pookiebears.findAll({
+export const fetchFittingPookie = async (conditions): Promise<Pookiebear> => {
+  const possiblePookies = await findAll({
     where: conditions,
   });
 
   return possiblePookies[h.getRandomInt(possiblePookies.length)];
 };
 
-const buildEmbed = (pookie, summonerName, summonAttempts, pookiesToSummon) => {
+export const buildEmbed = (
+  pookie: Pookiebear,
+  summonerName: string,
+  summonAttempts: number,
+  pookiesToSummon: number,
+) => {
   const extraPookiesAddendum = ` *${pookiesToSummon} ! \n **L U C K Y !**`;
   const title = `${pookie.pookie_name}${pookiesToSummon > 1 ? extraPookiesAddendum : ""}`;
   const footer = `${getPookieEmbedMessage(pookie.rarity)}Total summon count: ${pookie.summon_count}`;
@@ -53,7 +61,7 @@ const buildEmbed = (pookie, summonerName, summonAttempts, pookiesToSummon) => {
   return { embeds: [embed], files: [attachment] };
 };
 
-const getPookieEmbedMessage = (rarity) => {
+export const getPookieEmbedMessage = (rarity) => {
   switch (rarity) {
     case h.ssr:
       return `Holy shit! An SSR pookiebear!\n`;
@@ -68,7 +76,7 @@ const getPookieEmbedMessage = (rarity) => {
 
 module.exports = {
   name: Events.MessageCreate,
-  async execute(message) {
+  async execute(message: Message) {
     if (
       message.content.toLowerCase() !== "pookiebear" ||
       !pookiewatch.includes(message.channel.id)
@@ -76,7 +84,7 @@ module.exports = {
       return;
 
     const userID = message.author.id;
-    h.addBalance(userID, 1); // This creates the user if it didn't exist yet. This means the user cannot be undefined later
+    await h.addBalance(userID, 1); // This creates the user if it didn't exist yet. This means the user cannot be undefined later
 
     const u = await Users.findOne({ where: { user_id: userID } });
 
