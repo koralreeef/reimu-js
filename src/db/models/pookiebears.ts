@@ -1,4 +1,17 @@
-module.exports = (sequelize, DataTypes) => {
+//const { Model, InferAttributes, InferCreationAttributes, Optional, ModelDefined } = require("sequelize");
+import { ModelDefined } from "sequelize";
+interface PookiebearAttributes {
+  pookie_name: string;
+  file_path: string;
+  creator: string;
+  creatorURL: string;
+  summon_count: number;
+  rarity: number;
+  source: string
+}
+
+
+export const a = (sequelize, DataTypes): ModelDefined<PookiebearAttributes, PookiebearAttributes> => {
   return sequelize.define(
     "pookiebears",
     {

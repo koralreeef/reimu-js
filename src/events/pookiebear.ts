@@ -1,16 +1,16 @@
-const {
+import {
   POOKIEVILLE_EXTRA_ROLL_CHANCE,
-} = require("../constants/locationConstants.js");
-const {
+} from "../constants/locationConstants.js";
+import {
   SNOW_EXTRA_SSR_CHANCE,
   RAIN_EXTRA_ROLL_CHANCE,
-} = require("../constants/weatherConstants.js");
-const { Events, EmbedBuilder, AttachmentBuilder } = require("discord.js");
-const { Users, Pookiebears } = require("../db/dbObjects.js");
-const { pookiewatch } = require("../../config.json");
-const h = require("../helper.js");
+} from "../constants/weatherConstants.js";
+import { Events, EmbedBuilder, AttachmentBuilder } from "discord.js";
+import { Users, Pookiebears } from "../db/dbObjects.js";
+import { pookiewatch } from "../../config.json";
+import * as h from "../helper.js";
 
-const rollPookie = async (starry, ssr) => {
+const rollPookie = async (starry: boolean, ssr: boolean): Promise<any> => {
   const starryMultiplier = starry ? h.starry : 0;
   const ssrMultiplier = ssr ? h.ssr : 0;
 
@@ -25,6 +25,7 @@ const getHurricanePookie = async () => {
 };
 
 const fetchFittingPookie = async (conditions) => {
+  console.log("a");
   const possiblePookies = await Pookiebears.findAll({
     where: conditions,
   });
@@ -69,6 +70,7 @@ const getPookieEmbedMessage = (rarity) => {
 module.exports = {
   name: Events.MessageCreate,
   async execute(message) {
+    console.log("hey");
     if (
       message.content.toLowerCase() !== "pookiebear" ||
       !pookiewatch.includes(message.channel.id)

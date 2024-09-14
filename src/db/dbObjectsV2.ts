@@ -1,25 +1,61 @@
-const Sequelize = require("sequelize");
+import { Sequelize, DataTypes } from "sequelize";
 const sequelize = new Sequelize("database", "username", "password", {
   host: "localhost",
   dialect: "sqlite",
   logging: false,
   storage: "database.sqlite",
 });
+import { Pookiebears } from "./newModels/pookiebears"
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
+Pookiebears.init(
+  {
+    pookie_name: {
+      type: DataTypes.STRING,
+      defaultValue: "hakurei gooner",
+      unique: true,
+      allowNull: false,
+    },
+    file_path: {
+      type: DataTypes.TEXT,
+      defaultValue: "", // will always be called as 'attachment://'+fileName
+    },
+    creator: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    creatorURL: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    summon_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    rarity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    source: {
+      type: DataTypes.STRING,
+      defaultValue: 0,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: '',
+    timestamps: true,
+  }
+);
+
 const Users = require("./models/Users.js")(sequelize, Sequelize.DataTypes);
 const UserPookies = require("./models/UserPookies.js")(
-  sequelize,
-  Sequelize.DataTypes,
-);
-const Pookiebears = require("./models/pookiebears.js")(
-  sequelize,
-  Sequelize.DataTypes,
-);
-const osuUsers = require("./models/osuUsers.js")(
   sequelize,
   Sequelize.DataTypes,
 );
@@ -171,4 +207,4 @@ Reflect.defineProperty(Users.prototype, "checkPookies", {
   },
 });
 
-module.exports = { Users, UserPookies, Pookiebears, osuUsers, Quests };
+export { Users, UserPookies, Pookiebears, Quests };

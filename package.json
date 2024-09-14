@@ -5,6 +5,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@babel/parser": "^7.25.6",
+    "@babel/types": "^7.25.6",
     "@napi-rs/canvas": "^0.1.53",
     "acorn": "^8.12.1",
     "acorn-jsx": "^5.3.2",
@@ -15,6 +17,7 @@
     "axios": "^1.7.4",
     "balanced-match": "^1.0.2",
     "brace-expansion": "^1.1.11",
+    "bun": "^1.1.27",
     "callsites": "^3.1.0",
     "chalk": "^4.1.2",
     "color-convert": "^2.0.1",
@@ -92,8 +95,9 @@
     "ts-mixer": "^6.0.4",
     "tslib": "^2.6.2",
     "type-check": "^0.4.0",
+    "typescript": "^5.6.2",
     "undici": "^6.13.0",
-    "undici-types": "^6.13.0",
+    "undici-types": "^6.19.8",
     "uri-js": "^4.4.1",
     "which": "^2.0.2",
     "word-wrap": "^1.2.5",
@@ -104,7 +108,8 @@
     "test": "jest",
     "format": "npx prettier . --write &&  npx eslint \"**/*.js\" --fix",
     "prepare": "husky",
-    "run-dev": "nodemon app.js"
+    "run-dev": "nodemon app.js",
+    "build": "bun ./src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -112,6 +117,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
+    "@types/node": "20.0.0",
     "babel-jest": "^29.7.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
