@@ -8,10 +8,6 @@ const sequelize = new Sequelize("database", "username", "password", {
   storage: config.db,
 });
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
 const Users = require("./models/Users.js")(sequelize, Sequelize.DataTypes);
 const UserPookies = require("./models/UserPookies.js")(
   sequelize,
@@ -57,7 +53,8 @@ Reflect.defineProperty(Users.prototype, "destroyPookies", {
     });
     // new random pookie from inventory
     const inventory = await UserPookies.findAll({ where: { user_id: userID } });
-    const r = inventory[getRandomInt(inventory.length - 1)].pookie_id;
+    const r =
+      inventory[Math.floor(Math.random() * (inventory.length - 1))].pookie_id;
     const newpookie = await Pookiebears.findOne({ where: { id: r } });
     const user = await Users.findOne({
       where: { user_id: userID },
