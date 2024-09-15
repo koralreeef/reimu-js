@@ -1,9 +1,11 @@
 const Sequelize = require("sequelize");
+//SORRY ACRID
+const config = require("../../config.json");
 const sequelize = new Sequelize("database", "username", "password", {
   host: "localhost",
   dialect: "sqlite",
   logging: false,
-  storage: "database.sqlite",
+  storage: config.db,
 });
 
 function getRandomInt(max) {

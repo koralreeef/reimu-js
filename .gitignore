@@ -1,9 +1,9 @@
 node_modules
 database.sqlite
+database-old.sqlite
 images
-config.json
-a.json
 config-dev.json
+config-prod.json
 usefulstuff.txt
 seeders
 coverage

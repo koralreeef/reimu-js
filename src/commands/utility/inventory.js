@@ -116,6 +116,7 @@ module.exports = {
       sort,
     );
 
+    await interaction.deferReply();
     //if less than 26 pookies
     if (pageCount == 0) {
       return await interaction.editReply({
@@ -124,7 +125,6 @@ module.exports = {
       });
     }
 
-    await interaction.deferReply();
     await interaction.editReply({
       embeds: [invEmbed],
       files: [attachment],

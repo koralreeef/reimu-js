@@ -1,9 +1,9 @@
 run:
 	node ./src/app.js 
 delete-commands:
-	node delete-commands.js
+	node ./src/delete-commands.js
 refresh-commands:
-	node deploy-commands.js
+	node ./src/deploy-commands.js
 refresh-db:
 	node ./db/dbInit.js -f
 run-dev:
