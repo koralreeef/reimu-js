@@ -4,11 +4,15 @@ import {
   RAIN_EXTRA_ROLL_CHANCE,
 } from "../constants/weatherConstants.js";
 import { Events, EmbedBuilder, AttachmentBuilder, Message } from "discord.js";
-import { Users, Pookiebears } from "../db/dbObjects.js";
 import { pookiewatch } from "../../config.json";
 import * as h from "../helper.js";
 
-import { findAll, Pookiebear } from "../db/newModels/pookiebears";
+import {
+  findAllPookies,
+  Pookiebear,
+  updatePookie,
+} from "../db/newModels/pookiebears";
+import { findUser, User } from "../db/newModels/Users";
 import { Op } from "sequelize";
 
 export const rollPookie = async (pookieRarity: number): Promise<Pookiebear> => {
@@ -34,7 +38,7 @@ export const getHurricanePookie = async (
 };
 
 export const fetchFittingPookie = async (conditions): Promise<Pookiebear> => {
-  const possiblePookies = await findAll({
+  const possiblePookies = await findAllPookies({
     where: conditions,
   });
 
@@ -67,7 +71,7 @@ export const buildEmbed = (
   return { embeds: [embed], files: [attachment] };
 };
 
-export const getPookieEmbedMessage = (rarity) => {
+export const getPookieEmbedMessage = (rarity: number): string => {
   switch (rarity) {
     case h.ssr:
       return `Holy shit! An SSR pookiebear!\n`;
@@ -92,7 +96,7 @@ module.exports = {
     const userID = message.author.id;
     await h.addBalance(userID, 1); // This creates the user if it didn't exist yet. This means the user cannot be undefined later
 
-    const u = await Users.findOne({ where: { user_id: userID } });
+    const u: User = await findUser({ where: { user_id: userID } });
 
     const userLocation = u?.location;
 
@@ -118,9 +122,9 @@ module.exports = {
     const pookiesToSummon =
       userLocation === "pookie forest" && Math.random() >= 0.5 ? 2 : 1;
 
-    u.addPookies(pookie, userID, pookiesToSummon, pookie.rarity);
+    await u.addPookies(pookie, userID, pookiesToSummon, pookie.rarity);
 
-    Pookiebears.update(
+    await updatePookie(
       { summon_count: pookie.summon_count + pookiesToSummon },
       { where: { id: pookie.id } },
     );
