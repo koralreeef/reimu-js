@@ -11,8 +11,17 @@ export interface Pookiebear {
   source: string;
 }
 
-export const findAll = async (conditions): Promise<[Pookiebear]> => {
+export const findAllPookies = async (
+  conditions: object,
+): Promise<[Pookiebear]> => {
   return (await Pookiebears.findAll(conditions)).map((x) => {
     return { ...x.dataValues };
   });
+};
+
+export const updatePookie = async (
+  values: object,
+  conditions: object,
+): Promise<Array<number>> => {
+  return await Pookiebears.update(values, conditions);
 };

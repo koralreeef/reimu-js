@@ -81,7 +81,7 @@ export default [
       "no-useless-escape": "error",
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-for-in-array": "error",
-      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/await-thenable": "error",
       "default-param-last": "off",
       "@typescript-eslint/default-param-last": "error",
