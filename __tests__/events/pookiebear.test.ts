@@ -15,7 +15,7 @@ import {
   getHurricanePookie,
   buildEmbed,
 } from "../../src/events/pookiebear";
-import { findAllPookies, Pookiebear } from "../../src/db/newModels/pookiebears";
+import { Pookiebear } from "../../src/db/newModels/pookiebears";
 import { Op } from "sequelize";
 
 jest.mock("../../src/helper", () => ({
