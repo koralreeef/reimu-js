@@ -15,7 +15,7 @@ const originalDomainToFixed: IHash = {};
 originalDomainToFixed["https://x.com/"] = "https://fxtwitter.com/";
 originalDomainToFixed["https://twitter.com/"] = "https://fxtwitter.com/";
 originalDomainToFixed["https://www.instagram.com/"] =
-  "https://www.ddinstagram.com/";
+  "https://www.instagramez.com/";
 
 const replaceDomainInMessage = async (message: Message): Promise<void> => {
   if (message.author.bot) return;
