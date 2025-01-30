@@ -43,7 +43,7 @@ module.exports = {
     await Reminders.create({
       note:
         note +
-        " (jump to origin: https://discord.com/channels/" +
+        "\n(jump to origin: https://discord.com/channels/" +
         guildId +
         "/" +
         channelId +
