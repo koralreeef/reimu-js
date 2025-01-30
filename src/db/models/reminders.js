@@ -17,6 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         default: "",
       },
+      guildID: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        default: "",
+      },
+      messageID: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        default: "",
+      },
     },
     {
       timestamps: false,

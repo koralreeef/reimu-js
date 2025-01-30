@@ -9,7 +9,7 @@ module.exports = {
       option
         .setName("note")
         .setDescription("what will you say to your future self")
-        .setMaxLength(200)
+        .setMaxLength(120)
         .setRequired(true),
     )
     .addIntegerOption((option) =>
