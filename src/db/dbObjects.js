@@ -22,6 +22,7 @@ const osuUsers = require("./models/osuUsers.js")(
   Sequelize.DataTypes,
 );
 const Quests = require("./models/quests.js")(sequelize, Sequelize.DataTypes);
+const Reminders = require("./models/reminders.js")(sequelize, Sequelize.DataTypes);
 
 Pookiebears.hasMany(UserPookies, { foreignKey: "pookie_id" });
 UserPookies.belongsTo(Pookiebears, { foreignKey: "pookie_id", as: "pookie" });
@@ -170,4 +171,4 @@ Reflect.defineProperty(Users.prototype, "checkPookies", {
   },
 });
 
-module.exports = { Users, UserPookies, Pookiebears, osuUsers, Quests };
+module.exports = { Users, UserPookies, Pookiebears, osuUsers, Quests, Reminders };
