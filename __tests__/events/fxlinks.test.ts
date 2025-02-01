@@ -50,7 +50,7 @@ describe("fxLinks event", () => {
 
     expect(mockSuppressEmbed).toHaveBeenCalled();
     expect(mockChannelSend).toHaveBeenCalledWith(
-      "https://www.ddinstagram.com/p/DCcoKzWxJFU/",
+      "https://www.instagramez.com/p/DCcoKzWxJFU/",
     );
     expect(mockChannelSend).toHaveBeenCalledTimes(1);
   });
