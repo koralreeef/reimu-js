@@ -26,6 +26,10 @@ const Reminders = require("./models/reminders.js")(
   sequelize,
   Sequelize.DataTypes,
 );
+const tumblrPosts = require("./models/tumblrposts.js")(
+  sequelize,
+  Sequelize.DataTypes,
+);
 
 Pookiebears.hasMany(UserPookies, { foreignKey: "pookie_id" });
 UserPookies.belongsTo(Pookiebears, { foreignKey: "pookie_id", as: "pookie" });
@@ -181,4 +185,5 @@ module.exports = {
   osuUsers,
   Quests,
   Reminders,
+  tumblrPosts,
 };
