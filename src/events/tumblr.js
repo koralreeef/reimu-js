@@ -8,7 +8,7 @@ const { Events } = require("discord.js");
 const uuid = "t:FqeYngk0IwriwYGW7p0Rrg"; //lovelessdagger.tumblr.com
 const tag = "chocolate milk and cookies";
 const nation = "934259899435745292";
-const nation2 = "1281401565571452979";
+// const nation2 = "1281401565571452979";
 
 // Make the request
 async function go(channel) {
